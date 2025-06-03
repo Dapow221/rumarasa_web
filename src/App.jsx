@@ -1,21 +1,14 @@
 import React from "react";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Hero from "./components/Hero/Hero.jsx";
-import Banner from "./components/Banner/Banner.jsx";
+import Card from "./components/Card/Card.jsx";
 import About from "./components/About/About.jsx";
 import Services from "./components/Services/Services.jsx";
 import Footer from "./components/Footer/Footer.jsx";
-import Popup from "./components/Popup/Popup.jsx";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 const App = () => {
-  const [orderPopup, setOrderPopup] = React.useState(false);
-
-  const handleOrderPopup = () => {
-    setOrderPopup(!orderPopup);
-  };
-
   React.useEffect(() => {
     AOS.init({
       offset: 100,
@@ -27,14 +20,11 @@ const App = () => {
   }, []);
   return (
     <div className="overflow-x-hidden">
-      <Navbar handleOrderPopup={handleOrderPopup} />
+      <Navbar/>
       <Hero />
-      <Banner />
-      <Services />
-      <About handleOrderPopup={handleOrderPopup} />
-      <Banner />
+      <Card />
+      <About/>
       <Footer />
-      <Popup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
     </div>
   );
 };
