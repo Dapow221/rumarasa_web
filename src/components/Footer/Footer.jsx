@@ -44,9 +44,7 @@ const Footer = () => {
                   <div>
                     <p className="font-medium text-white mb-1">Address</p>
                     <p className="text-sm leading-relaxed">
-                      Jl. Panglima Polim Raya No. 123<br />
-                      Jakarta Selatan 12160<br />
-                      Indonesia
+                      Jl. Taman Mpu Sendok No.45, Selong Jakarta Selatan<br />
                     </p>
                   </div>
                 </div>

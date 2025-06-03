@@ -32,16 +32,7 @@ const About = () => {
             {/* Description */}
             <div className="space-y-4 text-gray-300 leading-relaxed">
               <p className="text-lg">
-                Inspired by the region's culinary wealth,{" "}
-                <span className="font-semibold text-white">Taste of Bali (One Thousand Flavors)</span>{" "}
-                offers delectable local dishes and seafood that embody the richness of 
-                Southeast Asian and Indonesian Flavors.
-              </p>
-              
-              <p className="text-base">
-                Each traditional recipe is prepared with the freshest ingredients and refined by 
-                our Chef's culinary skills, bringing our customers to fascinating gastronomic 
-                journey of <span className="font-semibold text-white">"One Thousand Flavors"</span>.
+                Rumarasa Nusantara adalah Rumah makan keluarga yang menyajikan hidangan Nusantara. Rumarasa Nusantara juga menjadi pusat kuliner terbaik yang menghadirkan pengalaman unik dengan cita rasa dari berbagai tempat. Kami memperkaya hubungan sosial dan kebersamaan di setiap kesempatan, sambil memberikan hidangan inovatif, ruang yang nyaman, serta kopi berkualitas. Dengan oleh-oleh khas dan layanan untuk acara spesial, kami menjadi bagian dari setiap momen kebahagiaan pelanggan kami.
               </p>
             </div>
           </div>

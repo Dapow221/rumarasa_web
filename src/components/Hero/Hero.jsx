@@ -26,19 +26,15 @@ const Hero = () => {
             />
           </div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif tracking-wider text-white mb-4 drop-shadow-2xl">
-            TASTE <span className="italic font-light">OF</span> BALI
+            Taste <span className="italic font-light">Of</span> Authenticity
           </h1>
           <div className="w-32 h-px bg-white mx-auto mb-6"></div>
-          <p className="text-lg md:text-xl font-light tracking-widest text-gray-200 uppercase">
-            Authentic Indonesian Cuisine
-          </p>
         </div>
 
         {/* Description */}
         <div className="mb-12 max-w-2xl mx-auto">
           <p className="text-lg md:text-xl leading-relaxed text-gray-300 font-light">
-            Experience the rich flavors and aromatic spices of Bali in every bite. 
-            Our authentic dishes celebrate Indonesia's culinary heritage with fresh, locally-sourced ingredients.
+            Rumarasa Nusantara adalah Rumah makan keluarga yang menyajikan hidangan Nusantara. Rumarasa Nusantara juga menjadi pusat kuliner terbaik yang menghadirkan pengalaman unik dengan cita rasa dari berbagai tempat. Kami memperkaya hubungan sosial dan kebersamaan di setiap kesempatan, sambil memberikan hidangan inovatif, ruang yang nyaman, serta kopi berkualitas. Dengan oleh-oleh khas dan layanan untuk acara spesial, kami menjadi bagian dari setiap momen kebahagiaan pelanggan kami.
           </p>
         </div>
 
@@ -50,7 +46,7 @@ const Hero = () => {
           </div>
           <div className="flex items-center gap-2">
             <MapPin size={16} />
-            <span>Panglima Polim, Jakarta Selatan</span>
+            <span>Jl. Taman Mpu Sendok No.45, Selong Jakarta Selatan</span>
           </div>
         </div>
       </div>
