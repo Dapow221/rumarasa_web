@@ -1,40 +1,40 @@
 import React from "react";
-import { Calendar, Users, Star, ArrowRight, Clock } from 'lucide-react';
+import { Calendar, Users, Clock } from 'lucide-react';
 
 const Card = () => {
   const events = [
     {
       id: 1,
       title: 'Lunch Package',
-      subtitle: 'Traditional Indonesian Feast',
+      subtitle: 'Nice package for your lunch',
       description: 'Indulge in our authentic rijsttafel featuring 12 traditional Balinese dishes served with aromatic jasmine rice. A complete culinary journey through Indonesia.',
       price: 'Starting from $45',
       originalPrice: '$65',
       discount: '30% OFF',
-      image: './src/assets/1.jpg',
+      image: './src/assets/f2.jpg',
       validity: 'Valid until Dec 31, 2025',
       featured: true
     },
     {
       id: 2,
       type: 'EVENT',
-      title: 'Indonesian Cooking Masterclass',
+      title: 'Dinner Package',
       subtitle: 'Learn from Master Chef Wayan',
       description: 'Join our head chef for an interactive cooking class where you\'ll learn to prepare authentic Balinese dishes using traditional techniques and spices.',
       price: '$85 per person',
       date: 'Every Saturday 2PM - 5PM',
-      image: './src/assets/1.jpg',
+      image: './src/assets/f3.jpg',
       featured: false
     },
     {
       id: 3,
-      title: 'Sunset Dinner Special',
+      title: 'Idul Fitri Package',
       subtitle: 'Romantic Evening for Two',
       description: 'Enjoy a romantic 5-course dinner with our carefully curated wine pairing as you watch the sunset from our terrace dining area.',
       price: '$120 for couple',
       originalPrice: '$150',
       discount: '20% OFF',
-      image: './src/assets/1.jpg',
+      image: './src/assets/f4.jpg',
       validity: 'Available daily 6PM - 8PM',
       featured: false
     },
@@ -110,7 +110,7 @@ const Card = () => {
                 </div>
 
                 {/* Pricing */}
-                <div className="flex items-center justify-between mb-4">
+                {/* <div className="flex items-center justify-between mb-4">
                   <div>
                     <div className="text-lg font-semibold text-gray-900">
                       {event.price}
@@ -121,7 +121,7 @@ const Card = () => {
                       </div>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

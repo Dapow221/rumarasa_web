@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, MapPin, Phone, Clock } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,9 +8,9 @@ const Navbar = () => {
     { name: 'PROMOTIONS', href: '#promotions' },
     { name: 'ABOUT US', href: '#about' },
     { name: 'MENU', href: '#menu' },
-    { name: 'LOCATION', href: '#location' },
     { name: 'NEWS', href: '#news' },
-    { name: 'EVENT & CATERING', href: '#events' }
+    { name: 'EVENTS', href: '#events' },
+    { name: 'LOCATION', href: '#location' }
   ];
 
   return (
@@ -19,6 +19,12 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center">
+            {/* PNG Logo */}
+            {/* <img 
+              src="./src/assets/logo.png" 
+              alt="Rumarasa Nusantara Logo" 
+              className="w-10 h-10 object-contain"
+            /> */}
             <div className="text-white text-2xl font-serif">
               <span className="italic">Rumarasa Nusantara</span>
             </div>
@@ -61,7 +67,6 @@ const Navbar = () => {
                 {item.name}
               </a>
             ))}
-            
           </div>
         )}
       </div>
@@ -69,4 +74,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;

@@ -10,23 +10,18 @@ const Hero = () => {
           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('./src/assets/2.jpg')`
         }}
       />
-      
-      {/* Decorative Elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-32 h-32 border border-orange-300 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-24 h-24 border border-orange-300 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-5 transform -translate-y-1/2">
-          <div className="w-2 h-16 bg-orange-300 opacity-30"></div>
-        </div>
-        <div className="absolute top-1/2 right-5 transform -translate-y-1/2">
-          <div className="w-2 h-16 bg-orange-300 opacity-30"></div>
-        </div>
-      </div>
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
         {/* Restaurant Name */}
         <div className="mb-8">
+          <div className="mb-6 flex justify-center">
+            <img 
+              src="./src/assets/logo_rumarasa.png" 
+              alt="Rumarasa Nusantara Logo" 
+              className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain drop-shadow-2xl"
+            />
+          </div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif tracking-wider text-white mb-4 drop-shadow-2xl">
             TASTE <span className="italic font-light">OF</span> BALI
           </h1>
