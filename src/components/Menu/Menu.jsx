@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import FoodImage from '../../assets/f1.jpeg'
+import FoodImage2 from '../../assets/f2.jpg'
+import FoodImage3 from '../../assets/f3.jpg'
+import FoodImage4 from '../../assets/f4.jpg'
+import FoodImage5 from '../../assets/f5.jpg'
+
 
 const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -29,7 +35,7 @@ const Menu = () => {
       price: "Rp 85,000",
       description:
         "Fresh red snapper in rich coconut curry with aromatic spices",
-      image: "../public/f1.jpeg",
+      image: FoodImage,
     },
     {
       id: 2,
@@ -38,7 +44,7 @@ const Menu = () => {
       price: "Rp 45,000",
       description:
         "Traditional chicken noodles with special sauce and vegetables",
-      image: "../public/f2.jpg",
+      image: FoodImage2,
     },
     {
       id: 3,
@@ -47,7 +53,7 @@ const Menu = () => {
       price: "Rp 95,000",
       description:
         "Grilled duck with spicy green chili sauce and fresh vegetables",
-      image: "../public/f3.jpg",
+      image: FoodImage3,
     },
     {
       id: 4,
@@ -56,7 +62,7 @@ const Menu = () => {
       price: "Rp 25,000",
       description:
         "Traditional mixed ice dessert with tropical fruits and coconut",
-      image: "../public/f4.jpg",
+      image: FoodImage4,
     },
     {
       id: 5,
@@ -64,7 +70,7 @@ const Menu = () => {
       category: "poultry",
       price: "Rp 75,000",
       description: "Balinese grilled chicken with traditional spice paste",
-      image: "../public/f5.jpg",
+      image: FoodImage5,
     },
     {
       id: 6,
@@ -72,7 +78,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 55,000",
       description: "Balinese fish satay wrapped around lemongrass sticks",
-      image: "../public/sate-lilit.jpg",
+      image: FoodImage2,
     },
     {
       id: 7,
@@ -80,7 +86,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 90,000",
       description: "Grilled fish with fresh Balinese sambal matah",
-      image: "../public/f5.jpg",
+      image: FoodImage2,
     },
     {
       id: 8,
@@ -88,7 +94,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 65,000",
       description: "Crispy fried prawns with special seasoning",
-      image: "../public/f5.jpg",
+      image: FoodImage2,
     },
   ];
 

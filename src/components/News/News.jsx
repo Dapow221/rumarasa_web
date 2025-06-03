@@ -1,4 +1,8 @@
 import React from "react";
+import ImageBanner1 from '../../assets/2.jpg'
+import ImageBanner2 from '../../assets/1.jpg'
+import BackgroundImage from '../../assets/3.jpg'
+
 
 const LatestNews = () => {
   const newsItems = [
@@ -7,7 +11,7 @@ const LatestNews = () => {
       date: "07 Juni 2025",
       category: "Rumarasa Nusantara",
       title: "Restoran Seribu Rasa Layak Menjadi Alternatif Utama Untuk Menggelar Acara Buka Puasa Bersama",
-      image: "../public/2.jpg",
+      image: ImageBanner1,
       link: "#"
     },
     {
@@ -15,7 +19,7 @@ const LatestNews = () => {
       date: "04 Mei 2025",
       category: "Rumarasa Nusantara",
       title: "Seribu Rasa, Salah Satu Rekomendasi Restoran Terbaik Untuk Venue Wedding di Jakarta",
-      image: "../public/1.jpg",
+      image: ImageBanner2,
       link: "#"
     }
   ];
@@ -26,7 +30,7 @@ const LatestNews = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('../public/3.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${BackgroundImage}')`
         }}
       />
 

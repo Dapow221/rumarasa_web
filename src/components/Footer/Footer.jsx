@@ -1,5 +1,7 @@
 import React from 'react';
 import { MapPin, Clock, Phone, Mail } from 'lucide-react';
+import BackgroundImage from '../../assets/3.jpg'
+
 
 const Footer = () => {
   return (
@@ -8,7 +10,7 @@ const Footer = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9), rgba(0,0,0,2)), url('../public/2.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9), rgba(0,0,0,2)), url('${BackgroundImage}')`
         }}
       />
 

@@ -1,4 +1,5 @@
 import React from "react";
+import BackgroundImage from '../../assets/4.jpg'
 
 const EventCatering = () => {
   return (
@@ -7,7 +8,7 @@ const EventCatering = () => {
       <div
         className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('../public/4.jpg')`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('${BackgroundImage}')`,
         }}
       />
 

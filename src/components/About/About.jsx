@@ -1,13 +1,14 @@
 import React from "react";
+import backgroundImage from "../../assets/1.jpg";
 
 const About = () => {
   return (
-    <section className="py-20 pb-32 relative overflow-hidden">
+    <section className="py-20 pb-16 relative overflow-hidden">
       {/* Background Image with Overlay - Dark overlay with wider bottom */}
       <div 
         className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('../public/1.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
         }}
       />
 

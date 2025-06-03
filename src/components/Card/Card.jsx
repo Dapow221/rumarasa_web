@@ -1,5 +1,6 @@
 import React from "react";
 import { Calendar, Users, Clock } from 'lucide-react';
+import FoodImage from '../../assets/f2.jpg'
 
 const Card = () => {
   const events = [
@@ -11,7 +12,7 @@ const Card = () => {
       price: 'Starting from $45',
       originalPrice: '$65',
       discount: '30% OFF',
-      image: '../public/f2.jpg',
+      image: FoodImage,
       validity: 'Valid until Dec 31, 2025',
       featured: true
     },
@@ -23,7 +24,7 @@ const Card = () => {
       description: 'Join our head chef for an interactive cooking class where you\'ll learn to prepare authentic Balinese dishes using traditional techniques and spices.',
       price: '$85 per person',
       date: 'Every Saturday 2PM - 5PM',
-      image: '../public/f3.jpg',
+      image: FoodImage,
       featured: false
     },
     {
@@ -34,7 +35,7 @@ const Card = () => {
       price: '$120 for couple',
       originalPrice: '$150',
       discount: '20% OFF',
-      image: '../public/f4.jpg',
+      image: FoodImage,
       validity: 'Available daily 6PM - 8PM',
       featured: false
     },
