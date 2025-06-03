@@ -3,8 +3,10 @@ import Navbar from "./components/Navbar/Navbar.jsx";
 import Hero from "./components/Hero/Hero.jsx";
 import Card from "./components/Card/Card.jsx";
 import About from "./components/About/About.jsx";
-import Services from "./components/Services/Services.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import Menu from "./components/Menu/Menu.jsx";
+import LatestNews from "./components/News/News.jsx";
+import Events from "./components/Events/Event.jsx";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -20,10 +22,13 @@ const App = () => {
   }, []);
   return (
     <div className="overflow-x-hidden">
-      <Navbar/>
+      <Navbar />
       <Hero />
       <Card />
-      <About/>
+      <About />
+      <Menu />
+      <LatestNews />
+      <Events />
       <Footer />
     </div>
   );
