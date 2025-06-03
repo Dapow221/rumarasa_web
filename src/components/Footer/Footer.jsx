@@ -8,7 +8,7 @@ const Footer = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9), rgba(0,0,0,2)), url('./src/assets/2.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9), rgba(0,0,0,2)), url('../public/2.jpg')`
         }}
       />
 

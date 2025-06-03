@@ -7,7 +7,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('./src/assets/2.jpg')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('../public/2.jpg')`
         }}
       />
 
@@ -17,7 +17,7 @@ const Hero = () => {
         <div className="mb-8">
           <div className="mb-6 flex justify-center">
             <img 
-              src="./src/assets/logo_rumarasa.png" 
+              src="../public/logo_rumarasa.png" 
               alt="Rumarasa Nusantara Logo" 
               className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain drop-shadow-2xl"
             />

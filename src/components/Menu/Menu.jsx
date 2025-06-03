@@ -29,7 +29,7 @@ const Menu = () => {
       price: "Rp 85,000",
       description:
         "Fresh red snapper in rich coconut curry with aromatic spices",
-      image: "./src/assets/f1.jpeg",
+      image: "../public/f1.jpeg",
     },
     {
       id: 2,
@@ -38,7 +38,7 @@ const Menu = () => {
       price: "Rp 45,000",
       description:
         "Traditional chicken noodles with special sauce and vegetables",
-      image: "./src/assets/f2.jpg",
+      image: "../public/f2.jpg",
     },
     {
       id: 3,
@@ -47,7 +47,7 @@ const Menu = () => {
       price: "Rp 95,000",
       description:
         "Grilled duck with spicy green chili sauce and fresh vegetables",
-      image: "./src/assets/f3.jpg",
+      image: "../public/f3.jpg",
     },
     {
       id: 4,
@@ -56,7 +56,7 @@ const Menu = () => {
       price: "Rp 25,000",
       description:
         "Traditional mixed ice dessert with tropical fruits and coconut",
-      image: "./src/assets/f4.jpg",
+      image: "../public/f4.jpg",
     },
     {
       id: 5,
@@ -64,7 +64,7 @@ const Menu = () => {
       category: "poultry",
       price: "Rp 75,000",
       description: "Balinese grilled chicken with traditional spice paste",
-      image: "./src/assets/f5.jpg",
+      image: "../public/f5.jpg",
     },
     {
       id: 6,
@@ -72,7 +72,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 55,000",
       description: "Balinese fish satay wrapped around lemongrass sticks",
-      image: "./src/assets/sate-lilit.jpg",
+      image: "../public/sate-lilit.jpg",
     },
     {
       id: 7,
@@ -80,7 +80,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 90,000",
       description: "Grilled fish with fresh Balinese sambal matah",
-      image: "./src/assets/f5.jpg",
+      image: "../public/f5.jpg",
     },
     {
       id: 8,
@@ -88,7 +88,7 @@ const Menu = () => {
       category: "seafood",
       price: "Rp 65,000",
       description: "Crispy fried prawns with special seasoning",
-      image: "./src/assets/f5.jpg",
+      image: "../public/f5.jpg",
     },
   ];
 
