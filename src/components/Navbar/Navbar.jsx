@@ -20,13 +20,13 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             {/* PNG Logo */}
-            {/* <img 
-              src="./src/assets/logo.png" 
+            <img 
+              src="./src/assets/logo_rumarasa.png" 
               alt="Rumarasa Nusantara Logo" 
-              className="w-10 h-10 object-contain"
-            /> */}
+              className="w-10 h-10 object-contain mr-3"
+            />
             <div className="text-white text-2xl font-serif">
-              <span className="italic">Rumarasa Nusantara</span>
+              <span className="italic">Rumarasa</span>
             </div>
           </div>
 

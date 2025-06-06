@@ -6,7 +6,6 @@ import BackgroundImage from '../../assets/3.jpg'
 const Footer = () => {
   return (
     <footer className="relative overflow-hidden">
-      {/* Background Image with Darkening Gradient */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
@@ -19,7 +18,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             
             {/* Restaurant Info */}
             <div className="space-y-6">
@@ -126,6 +125,35 @@ const Footer = () => {
                 </div>
               </div>
             </div>
+
+            {/* Google Maps Section */}
+            <div className="space-y-6">
+              <h4 className="text-xl font-serif text-white mb-4">Our Location</h4>
+              <div className="relative group">
+                <div className="relative overflow-hidden rounded-lgborder border-white/20 backdrop-blur-sm">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2369042503838!2d106.80981227583807!3d-6.232469293755726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f1ba037e27b7%3A0x91ed7440c2e1644a!2sRumarasa%20Nusantara!5e0!3m2!1sid!2snl!4v1749199164352!5m2!1sid!2snl" 
+                    width="100%" 
+                    height="280" 
+                    style={{ border: 0, filter: 'grayscale(20%) contrast(1.1)' }}
+                    allowFullScreen="" 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="transition-all duration-300 hover:filter-none"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+                </div>
+                <div className="mt-3 text-center">
+                  <a 
+                    href="https://goo.gl/maps/your-restaurant-link" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors"
+                  >
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Bottom Bar */}
@@ -144,5 +172,6 @@ const Footer = () => {
     </footer>
   );
 };
+    
 
 export default Footer;
