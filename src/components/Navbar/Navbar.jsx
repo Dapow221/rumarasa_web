@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Logo from '../../assets/logo_rumarasa.png'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -95,7 +96,7 @@ const Navbar = () => {
           <div className="flex items-center">
             {/* PNG Logo with motion */}
             <motion.img 
-              src="./src/assets/logo_rumarasa.png" 
+              src={Logo}
               alt="Rumarasa Nusantara Logo" 
               className="w-10 h-10 object-contain mr-3"
               variants={logoVariants}
