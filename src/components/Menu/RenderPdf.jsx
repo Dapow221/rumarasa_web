@@ -11,10 +11,13 @@ GlobalWorkerOptions.workerSrc = new URL(
 
 const MenuPdf = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
+      const width = window.innerWidth;
+      setScreenWidth(width);
+      setIsMobile(width < 768);
     };
 
     checkScreenSize();
@@ -23,11 +26,12 @@ const MenuPdf = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <Root
         source="/menu_pdf.pdf"
-        className={`w-full ${isMobile ? 'h-[50vh] min-h-[300px]' : 'h-[600px]'} border overflow-hidden rounded-lg`}
+        className='h-[700px] w-full border overflow-hidden rounded-lg'
         loader={
           <div className="flex items-center justify-center h-full">
             <div className="text-center p-6">
@@ -37,21 +41,8 @@ const MenuPdf = () => {
           </div>
         }
       >
-        <Pages 
-          className={`
-            ${isMobile ? 'p-2' : 'p-6'} 
-            h-full 
-            overflow-auto
-          `}
-        >
-          <Page
-            className={`
-              ${isMobile ? 'scale-75 origin-top' : 'scale-100'} 
-              transition-transform 
-              duration-300 
-              mx-auto
-            `}
-          >
+        <Pages>
+          <Page>
             <CanvasLayer />
             <TextLayer />
           </Page>

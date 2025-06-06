@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from 'framer-motion';
 import { Calendar, Users, Clock } from 'lucide-react';
 import FoodImage from '../../assets/f2.jpg'
 
@@ -41,28 +42,175 @@ const Card = () => {
     },
   ];
 
+  // Variants untuk section header
+  const headerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.8, 
+        ease: "easeOut" 
+      }
+    }
+  };
+
+  // Variants untuk subtitle
+  const subtitleVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.8, 
+        ease: "easeOut",
+        delay: 0.3
+      }
+    }
+  };
+
+  // Variants untuk card animation
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      scale: 0.9
+    },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: i * 0.2 + 0.5,
+        duration: 0.8,
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 100
+      }
+    })
+  };
+
+  // Variants untuk card content
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut",
+        delay: 0.2
+      }
+    }
+  };
+
+  // Variants untuk title animation
+  const titleVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Variants untuk subtitle dalam card
+  const cardSubtitleVariants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut",
+        delay: 0.1
+      }
+    }
+  };
+
+  // Variants untuk description
+  const descriptionVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut",
+        delay: 0.2
+      }
+    }
+  };
+
+  // Variants untuk event details
+  const detailItemVariants = {
+    hidden: { opacity: 0, x: -15 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: 0.3 + (i * 0.1),
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    })
+  };
+
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif text-gray-900 mb-4">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-serif text-gray-900 mb-4"
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            whileHover={{ 
+              scale: 1.02,
+              transition: { duration: 0.2 }
+            }}
+          >
             Discover Our Ongoing
-          </h2>
-          <h3 className="text-3xl md:text-4xl font-serif italic text-orange-600 mb-6">
+          </motion.h2>
+          <motion.h3 
+            className="text-3xl md:text-4xl font-serif italic text-orange-600 mb-6"
+            variants={subtitleVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            whileHover={{ 
+              scale: 1.05,
+              color: "#ea580c",
+              transition: { duration: 0.2 }
+            }}
+          >
             Events & Promotions
-          </h3>
+          </motion.h3>
         </div>
 
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {events.map((event) => (
-            <div
+          {events.map((event, index) => (
+            <motion.div
               key={event.id}
               className={`group relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden`}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              custom={index}
+              whileHover={{ 
+                scale: 1.03,
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-          
-
               {/* Image */}
               <div className="relative h-56 overflow-hidden">
                 <div 
@@ -71,60 +219,135 @@ const Card = () => {
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${event.image}')`
                   }}
                 />
-                
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <motion.div 
+                className="p-6"
+                variants={contentVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 <div className="mb-4">
-                  <h4 className="text-xl font-serif text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                  <motion.h4 
+                    className="text-xl font-serif text-gray-900 mb-2 group-hover:text-orange-600 transition-colors"
+                    variants={titleVariants}
+                    whileHover={{ 
+                      x: 5,
+                      color: "#ea580c",
+                      transition: { duration: 0.2 }
+                    }}
+                  >
                     {event.title}
-                  </h4>
-                  <p className="text-sm text-orange-600 font-medium italic mb-3">
+                  </motion.h4>
+                  
+                  <motion.p 
+                    className="text-sm text-orange-600 font-medium italic mb-3"
+                    variants={cardSubtitleVariants}
+                    whileHover={{ 
+                      x: 3,
+                      fontWeight: "600",
+                      transition: { duration: 0.2 }
+                    }}
+                  >
                     {event.subtitle}
-                  </p>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                  </motion.p>
+                  
+                  <motion.p 
+                    className="text-gray-600 text-sm leading-relaxed line-clamp-3"
+                    variants={descriptionVariants}
+                    whileHover={{ 
+                      color: "#374151",
+                      transition: { duration: 0.2 }
+                    }}
+                  >
                     {event.description}
-                  </p>
+                  </motion.p>
                 </div>
 
                 {/* Event Details */}
                 <div className="space-y-2 mb-4">
                   {event.date && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar size={14} />
-                      <span>{event.date}</span>
-                    </div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm text-gray-600"
+                      variants={detailItemVariants}
+                      custom={0}
+                      whileHover={{ 
+                        x: 5,
+                        color: "#ea580c",
+                        transition: { duration: 0.2 }
+                      }}
+                    >
+                      <motion.div
+                        whileHover={{ rotate: 15, scale: 1.1 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Calendar size={14} />
+                      </motion.div>
+                      <motion.span
+                        whileHover={{ fontWeight: "500" }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {event.date}
+                      </motion.span>
+                    </motion.div>
                   )}
+                  
                   {event.capacity && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Users size={14} />
-                      <span>{event.capacity}</span>
-                    </div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm text-gray-600"
+                      variants={detailItemVariants}
+                      custom={1}
+                      whileHover={{ 
+                        x: 5,
+                        color: "#ea580c",
+                        transition: { duration: 0.2 }
+                      }}
+                    >
+                      <motion.div
+                        whileHover={{ scale: 1.2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Users size={14} />
+                      </motion.div>
+                      <motion.span
+                        whileHover={{ fontWeight: "500" }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {event.capacity}
+                      </motion.span>
+                    </motion.div>
                   )}
+                  
                   {event.validity && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Clock size={14} />
-                      <span>{event.validity}</span>
-                    </div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm text-gray-600"
+                      variants={detailItemVariants}
+                      custom={2}
+                      whileHover={{ 
+                        x: 5,
+                        color: "#ea580c",
+                        transition: { duration: 0.2 }
+                      }}
+                    >
+                      <motion.div
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <Clock size={14} />
+                      </motion.div>
+                      <motion.span
+                        whileHover={{ fontWeight: "500" }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {event.validity}
+                      </motion.span>
+                    </motion.div>
                   )}
                 </div>
-
-                {/* Pricing */}
-                {/* <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="text-lg font-semibold text-gray-900">
-                      {event.price}
-                    </div>
-                    {event.originalPrice && (
-                      <div className="text-sm text-gray-500 line-through">
-                        {event.originalPrice}
-                      </div>
-                    )}
-                  </div>
-                </div> */}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           ))}
         </div>
       </div>
