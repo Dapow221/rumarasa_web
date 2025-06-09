@@ -89,7 +89,7 @@ const LatestNews = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
           >
-            LATEST NEWS AND EVENT
+            EVENT AND ACTIVITIES
           </motion.h3>
         </motion.div>
 
@@ -103,16 +103,10 @@ const LatestNews = () => {
         >
           {newsItems.map((item, index) => (
             <motion.div 
-              key={item.id} 
-              className="group cursor-pointer"
+              key={item.id}
               variants={cardVariants}
-              whileHover={{ 
-                scale: 1.05,
-                transition: { duration: 0.3 }
-              }}
-              whileTap={{ scale: 0.95 }}
             >
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl">
                 {/* Image */}
                 <motion.div 
                   className="relative h-64 overflow-hidden"
@@ -122,7 +116,7 @@ const LatestNews = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <div 
-                    className="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full bg-cover bg-center"
                     style={{
                       backgroundImage: `url(${item.image})`
                     }}
@@ -177,7 +171,7 @@ const LatestNews = () => {
                   </motion.div>
 
                   <motion.h3 
-                    className="text-xl font-semibold mb-6 leading-tight group-hover:text-orange-300 transition-colors duration-300"
+                    className="text-xl font-semibold mb-6 leading-tight"
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}

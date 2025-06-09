@@ -45,7 +45,7 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.4 }}
               >
-                A Gastronomic Journey to{" "}
+                About{" "}
                 <motion.span 
                   className="italic text-orange-400"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -53,9 +53,8 @@ const About = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                 >
-                  "One Thousand Flavors"
-                </motion.span>{" "}
-                of Southeast Asian Culinary Tradition
+                  Us
+                </motion.span>
               </motion.h2>
             </motion.div>
 

@@ -7,8 +7,6 @@ import FoodImage3 from '../../assets/f5.jpg';
 import MenuPdf from "./RenderPdf";
 
 const Menu = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const foodImages = [
     { src: FoodImage },
     { src: FoodImage1 },
@@ -20,7 +18,6 @@ const Menu = () => {
     { src: FoodImage3 },
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -28,18 +25,6 @@ const Menu = () => {
       transition: {
         staggerChildren: 0.1,
         duration: 0.6
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
       }
     }
   };
@@ -58,7 +43,7 @@ const Menu = () => {
 
   return (
     <>
-      <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-orange-50/30">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header Section */}
           <motion.div 
@@ -156,29 +141,15 @@ const Menu = () => {
               {foodImages.slice(0, 8).map((image, index) => (
                 <motion.div 
                   key={index} 
-                  className="group relative overflow-hidden rounded-lg aspect-square cursor-pointer transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                  className="relative overflow-hidden rounded-lg aspect-square"
                   variants={imageVariants}
-                  whileHover={{ 
-                    scale: 1.05,
-                    transition: { duration: 0.3 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedImage(image)}
                 >
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-white font-semibold text-sm md:text-base">
-                        {image.alt}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 ring-2 ring-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
                 </motion.div>
               ))}
             </motion.div>
@@ -200,7 +171,7 @@ const Menu = () => {
               transition={{ duration: 0.6 }}
             >
               <h3 className="text-3xl md:text-4xl font-serif text-gray-800 mb-4">
-                Complete Menu
+                Discover Our Menu
               </h3>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Browse our full selection of traditional Indonesian dishes, carefully curated to offer you an authentic dining experience
@@ -214,7 +185,6 @@ const Menu = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <div className="absolute -inset-4 bg-gradient-to-r from-orange-100 via-amber-50 to-orange-100 rounded-3xl opacity-50 blur-xl"></div>
               <div className="relative">
                 <MenuPdf />
               </div>
@@ -222,57 +192,7 @@ const Menu = () => {
           </motion.div>
         </div>
 
-        {/* Image Modal */}
-        <AnimatePresence>
-          {selectedImage && (
-            <motion.div 
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setSelectedImage(null)}
-            >
-              <motion.div 
-                className="relative max-w-4xl max-h-[90vh]"
-                initial={{ opacity: 0, scale: 0.8, y: 50 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: 50 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  className="w-full h-full object-contain rounded-2xl"
-                />
-                <motion.button
-                  onClick={() => setSelectedImage(null)}
-                  className="absolute top-4 right-4 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </motion.button>
-                <motion.div 
-                  className="absolute bottom-4 left-4 right-4 text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <p className="text-white text-lg font-semibold bg-black/50 backdrop-blur-sm rounded-full px-6 py-2 inline-block">
-                    {selectedImage.alt}
-                  </p>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Removed the entire Image Modal section */}
       </section>
     </>
   );

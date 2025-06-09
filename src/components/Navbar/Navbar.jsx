@@ -109,20 +109,19 @@ const Navbar = () => {
               }}
             />
             <motion.div 
-              className="text-white text-2xl font-serif"
+              className="text-white text-2xl font-['Playfair_Display']"
               variants={textVariants}
               initial="hidden"
               animate="visible"
             >
               <motion.span 
-                className="italic"
                 whileHover={{ 
                   scale: 1.05,
                   color: "#fed7aa",
                   transition: { duration: 0.2 }
                 }}
               >
-                Rumarasa
+                Rumarasa Nusantara
               </motion.span>
             </motion.div>
           </div>
