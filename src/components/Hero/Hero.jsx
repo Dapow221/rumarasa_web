@@ -210,7 +210,7 @@ const Hero = () => {
               whileHover={{ letterSpacing: "0.05em" }}
               transition={{ duration: 0.2 }}
             >
-              Open Daily 11:00 AM - 11:00 PM
+              Open Daily 10:00 AM - 22:00 PM
             </motion.span>
           </motion.div>
           
