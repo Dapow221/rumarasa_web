@@ -175,7 +175,7 @@ const Card = () => {
               transition: { duration: 0.2 }
             }}
           >
-            Discover Our Ongoing
+            Discover Our 
           </motion.h2>
           <motion.h3 
             className="text-3xl md:text-4xl font-serif italic text-orange-600 mb-6"
@@ -189,7 +189,7 @@ const Card = () => {
               transition: { duration: 0.2 }
             }}
           >
-            Events & Promotions
+            Ongoing Promotion
           </motion.h3>
         </div>
 
