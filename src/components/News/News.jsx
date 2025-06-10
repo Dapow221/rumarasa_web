@@ -8,23 +8,37 @@ const LatestNews = () => {
   const newsItems = [
     {
       id: 1,
-      date: "07 Juni 2025",
-      category: "Rumarasa Nusantara",
-      title: "Restoran Seribu Rasa Layak Menjadi Alternatif Utama Untuk Menggelar Acara Buka Puasa Bersama",
+      title: "Corporate",
+      description: "Seribu Rasa adalah pilihan tepat untuk mengadakan acara korporat dengan suasana eksklusif dan hidangan berkualitas.",
       image: ImageBanner1,
-      link: "#"
     },
     {
       id: 2,
-      date: "04 Mei 2025",
-      category: "Rumarasa Nusantara",
-      title: "Seribu Rasa, Salah Satu Rekomendasi Restoran Terbaik Untuk Venue Wedding di Jakarta",
+      title: "Wedding",
+      description: "Rayakan hari istimewa Anda di Seribu Rasa, tempat ideal untuk menggelar resepsi pernikahan yang elegan dan berkesan.",
       image: ImageBanner2,
-      link: "#"
-    }
+    },
+    {
+      id: 3,
+      title: "Birthday",
+      description: "Buat momen ulang tahun Anda lebih spesial di Seribu Rasa dengan suasana hangat dan menu istimewa.",
+      image: ImageBanner2,
+    },
+    {
+      id: 4,
+      title: "Community",
+      description: "Seribu Rasa adalah tempat yang cocok untuk berkumpul bersama komunitas, berbagi cerita dan cita rasa Nusantara.",
+      image: ImageBanner2,
+    },
+    {
+      id: 5,
+      title: "Artisan",
+      description: "Rasakan sentuhan seni kuliner di Seribu Rasa, di mana cita rasa tradisional bertemu dengan presentasi modern.",
+      image: ImageBanner2,
+    },
+    
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -59,7 +73,7 @@ const LatestNews = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${BackgroundImage}')`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('${BackgroundImage}')`
         }}
       />
 
@@ -93,96 +107,73 @@ const LatestNews = () => {
           </motion.h3>
         </motion.div>
 
-        {/* News Grid */}
+        {/* News Slider */}
         <motion.div 
-          className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto"
+          className="relative"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
         >
-          {newsItems.map((item, index) => (
-            <motion.div 
-              key={item.id}
-              variants={cardVariants}
-            >
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl">
-                {/* Image */}
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+              {newsItems.map((item, index) => (
                 <motion.div 
-                  className="relative h-64 overflow-hidden"
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  key={item.id}
+                  variants={cardVariants}
+                  className="flex-shrink-0 w-96"
                 >
-                  <div 
-                    className="w-full h-full bg-cover bg-center"
-                    style={{
-                      backgroundImage: `url(${item.image})`
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                </motion.div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl">
+                    {/* Image */}
+                    <motion.div 
+                      className="relative h-64 overflow-hidden"
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                    >
+                      <div 
+                        className="w-full h-full bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url(${item.image})`
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </motion.div>
 
-                {/* Content */}
-                <motion.div 
-                  className="p-6 text-white"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
-                >
-                  {/* Date and Category */}
-                  <motion.div 
-                    className="flex items-center gap-4 mb-4 text-sm text-orange-300"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.4 + (index * 0.1) }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <motion.svg 
-                        className="w-4 h-4" 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                        initial={{ opacity: 0, rotate: -180 }}
-                        whileInView={{ opacity: 1, rotate: 0 }}
+                    {/* Content */}
+                    <motion.div 
+                      className="p-6 text-white"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
+                    >
+                      <motion.h1 
+                        className="text-xl font-semibold mb-3 leading-tight"
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.5 + (index * 0.1) }}
                       >
-                        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                      </motion.svg>
-                      <span>{item.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <motion.svg 
-                        className="w-4 h-4" 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                        initial={{ opacity: 0, rotate: -180 }}
-                        whileInView={{ opacity: 1, rotate: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.6 + (index * 0.1) }}
-                      >
-                        <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                      </motion.svg>
-                      <span>{item.category}</span>
-                    </div>
-                  </motion.div>
+                        {item.title}
+                      </motion.h1>
 
-                  <motion.h3 
-                    className="text-xl font-semibold mb-6 leading-tight"
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.5 + (index * 0.1) }}
-                  >
-                    {item.title}
-                  </motion.h3>
+                      <motion.h3 
+                        className="text-base text-gray-200 leading-relaxed"
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.5 + (index * 0.1) }}
+                      >
+                        {item.description}
+                      </motion.h3>
+                    </motion.div>
+                  </div>
                 </motion.div>
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

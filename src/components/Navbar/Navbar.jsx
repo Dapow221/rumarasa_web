@@ -10,9 +10,11 @@ const Navbar = () => {
     { name: 'PROMOTIONS', href: '#promotions' },
     { name: 'ABOUT US', href: '#about' },
     { name: 'MENU', href: '#menu' },
-    { name: 'NEWS', href: '#news' },
-    { name: 'EVENTS', href: '#events' },
+    { name: 'ACTIVITY', href: '#news' },
+    { name: 'RESERVATION', href: '#reservation' },
+    { name: 'BECOME MEMBER', href: '#member' },
     { name: 'LOCATION', href: '#location' }
+
   ];
 
   // Variants untuk logo animation
