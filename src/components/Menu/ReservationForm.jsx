@@ -20,7 +20,6 @@ const ReservationForm = () => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -78,18 +77,30 @@ const ReservationForm = () => {
 
     const message = `Halo Rumarasa Nusantara! 👋
 
-    Saya ingin melakukan reservasi dengan detail sebagai berikut:
+Saya ingin melakukan reservasi dengan detail sebagai berikut:
 
-    👤 *Nama:* ${formData.name}
-    📞 *Nomor Telepon:* ${formData.phone}
-    📅 *Tanggal:* ${formattedDate}
-    ⏰ *Waktu:* ${formData.time}
-    👥 *Jumlah Tamu:* ${formData.guests} orang
-    ${formData.specialRequests ? `💬 *Permintaan Khusus:* ${formData.specialRequests}` : ''}
+👤 *Nama:* ${formData.name}
+📞 *Nomor Telepon:* ${formData.phone}
+📅 *Tanggal:* ${formattedDate}
+⏰ *Waktu:* ${formData.time}
+👥 *Jumlah Tamu:* ${formData.guests} orang
+${formData.specialRequests ? `💬 *Permintaan Khusus:* ${formData.specialRequests}` : ''}
 
-    Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
+Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
 
     return encodeURIComponent(message);
+  };
+
+  const clearForm = () => {
+    setFormData({
+      name: '',
+      phone: '',
+      date: '',
+      time: '',
+      guests: '',
+      specialRequests: ''
+    });
+    setErrors({});
   };
 
   const handleSubmit = (e) => {    
@@ -98,23 +109,13 @@ const ReservationForm = () => {
       const whatsappNumber = "6287794108007"; // Replace with your actual WhatsApp number
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
       
+      // Clear the form first
+      clearForm();
+      
+      // Then redirect to WhatsApp
       window.open(whatsappURL, '_blank');
     }
   };
-
-  // Generate time options
-  const generateTimeOptions = () => {
-    const times = [];
-    for (let hour = 10; hour <= 22; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        times.push(timeString);
-      }
-    }
-    return times;
-  };
-
-  const timeOptions = generateTimeOptions();
 
   // Get today's date for min attribute
   const today = new Date().toISOString().split('T')[0];
@@ -181,8 +182,6 @@ const ReservationForm = () => {
                   </div>
                 </div>
                 
-                
-                
                 <div className="mt-4 p-4 bg-orange-600 text-white rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <MessageCircle className="w-4 h-4" />
@@ -221,7 +220,6 @@ const ReservationForm = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Masukkan nama lengkap Anda"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
@@ -241,7 +239,6 @@ const ReservationForm = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.phone ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Contoh: 08123456789"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
@@ -275,19 +272,17 @@ const ReservationForm = () => {
                   Waktu
                   <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="time"
-                  value={formData.time}
-                  onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
-                    errors.time ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Pilih waktu</option>
-                  {timeOptions.map(time => (
-                    <option key={time} value={time}>{time} WIB</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <input
+                    type="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
+                      errors.time ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                  />
+                </div>
                 {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
               </div>
             </div>
@@ -309,7 +304,6 @@ const ReservationForm = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.guests ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Masukkan jumlah tamu"
               />
               {errors.guests && <p className="text-red-500 text-sm mt-1">{errors.guests}</p>}
             </div>
@@ -326,7 +320,6 @@ const ReservationForm = () => {
                 onChange={handleInputChange}
                 rows="3"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none"
-                placeholder="Contoh: Meja dekat jendela, makanan vegetarian, ulang tahun, dll."
               />
             </div>
 
@@ -334,7 +327,7 @@ const ReservationForm = () => {
             <div className="pt-4">
               <button
                 onClick={handleSubmit}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-3"
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-3"
               >
                 <MessageCircle className="w-5 h-5" />
                 Kirim Reservasi via WhatsApp

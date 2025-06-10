@@ -6,21 +6,21 @@ import MembershipForm from './MemberForm'
 
 const Menu = () => {
   const foodImages = [
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", alt: "Rendang" },
-    { src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop", alt: "Sate Ayam" },
-    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", alt: "Nasi Padang" },
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", alt: "Ayam Bakar" },
-    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", alt: "Nasi Padang" },
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", alt: "Ayam Bakar" },
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
   ];
 
   const beverageImages = [
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", alt: "Es Teh Manis" },
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", alt: "Es Cendol" },
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", alt: "Jus Alpukat" },
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", alt: "Wedang Jahe" },
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", alt: "Jus Alpukat" },
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", alt: "Wedang Jahe" },
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
   ];
 
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
@@ -262,11 +262,11 @@ const Menu = () => {
             <MenuPdf />
           </div>
 
-          <div className="mt-7" id="reservation">
+          <div className="mt-12" id="reservation">
             <ReservationForm/>
           </div>
 
-          <div>
+          <div id="member">
             <MembershipForm/>
           </div>
         </div>

@@ -8,7 +8,6 @@ const MembershipForm = () => {
     phone: '',
     birthDate: '',
     address: '',
-    referralCode: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -79,22 +78,32 @@ const MembershipForm = () => {
 
     const message = `Halo Rumarasa Nusantara! 👋
 
-    Saya ingin mendaftar menjadi member dengan detail sebagai berikut:
+Saya ingin mendaftar menjadi member dengan detail sebagai berikut:
 
-    🌟 *PENDAFTARAN MEMBER BARU*
+🌟 *PENDAFTARAN MEMBER BARU*
 
-    👤 *Nama Lengkap:* ${formData.name}
-    📧 *Email:* ${formData.email}
-    📞 *Nomor Telepon:* ${formData.phone}
-    🎂 *Tanggal Lahir:* ${formattedBirthDate}
-    🏠 *Alamat:* ${formData.address}
-    ${formData.referralCode ? `🎁 *Kode Referral:* ${formData.referralCode}` : ''}
+👤 *Nama Lengkap:* ${formData.name}
+📧 *Email:* ${formData.email}
+📞 *Nomor Telepon:* ${formData.phone}
+🎂 *Tanggal Lahir:* ${formattedBirthDate}
+🏠 *Alamat:* ${formData.address}
+   
 
-    Mohon proses pendaftaran member saya dan informasikan mengenai kartu member serta benefit yang akan saya dapatkan. Terima kasih! 🙏
-
-    #RumarasaMember #KulinerNusantara`;
+Mohon proses pendaftaran member saya dan informasikan mengenai kartu member serta benefit yang akan saya dapatkan. Terima kasih! 🙏`;
 
     return encodeURIComponent(message);
+  };
+
+  const clearForm = () => {
+    setFormData({
+      name: '',
+      phone: '',
+      date: '',
+      time: '',
+      guests: '',
+      specialRequests: ''
+    });
+    setErrors({});
   };
 
   const handleSubmit = () => {    
@@ -102,6 +111,8 @@ const MembershipForm = () => {
       const whatsappMessage = formatWhatsAppMessage();
       const whatsappNumber = "6287794108007"; // Replace with your actual WhatsApp number
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+      clearForm()
       
       window.open(whatsappURL, '_blank');
     }
@@ -117,11 +128,11 @@ const MembershipForm = () => {
       <div className="text-center mb-8 md:mb-12">
         <div className="inline-flex items-center gap-3 bg-orange-100 px-6 py-3 rounded-full mb-6">
           <Star className="w-5 h-5 text-orange-600" />
-          <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif text-orange-700">Member Eksklusif</h3>
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif text-orange-700">Become Member</h3>
           <Star className="w-5 h-5 text-orange-600" />
         </div>
         <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
-          Bergabunglah dengan komunitas pecinta kuliner Nusantara dan nikmati berbagai keuntungan eksklusif sebagai member Rumarasa.
+          Bergabunglah dengan kami dan nikmati berbagai keuntungan eksklusif sebagai member Rumarasa.
         </p>
       </div>
 
@@ -147,8 +158,8 @@ const MembershipForm = () => {
                       <Percent className="w-5 h-5 text-orange-600" />
                     </div>
                     <div>
-                      <h5 className="font-semibold text-orange-700 mb-1">Diskon Khusus</h5>
-                      <p className="text-sm text-gray-600">Dapatkan diskon 10% untuk setiap pembelian makanan dan minuman</p>
+                      <h5 className="font-semibold text-orange-700 mb-1">Benefits Point</h5>
+                      <p className="text-sm text-gray-600">Untuk setiap pembelian makanan dan minuman dirumarasa akan mendapatkan point yang nanti nya akan ditukarkan dengan hadiah</p>
                     </div>
                   </div>
                   
@@ -241,7 +252,6 @@ const MembershipForm = () => {
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="Masukkan nama lengkap sesuai KTP"
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
@@ -261,7 +271,6 @@ const MembershipForm = () => {
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="contoh@email.com"
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
@@ -281,7 +290,6 @@ const MembershipForm = () => {
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.phone ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="Contoh: 08123456789"
                 />
                 {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
               </div>
@@ -321,30 +329,12 @@ const MembershipForm = () => {
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none ${
                     errors.address ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="Masukkan alamat lengkap untuk pengiriman kartu member"
                 />
                 {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
 
-              {/* Referral Code Field */}
-              <div>
-                <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
-                  <Gift className="w-4 h-4 text-orange-600" />
-                  Kode Referral (Opsional)
-                </label>
-                <input
-                  type="text"
-                  name="referralCode"
-                  value={formData.referralCode}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-                  placeholder="Masukkan kode referral jika ada"
-                />
-                <p className="text-xs text-gray-500 mt-1">Dapatkan bonus khusus dengan kode referral dari teman!</p>
-              </div>
-
               {/* Submit Button */}
-              <div className="pt-4">
+              <div >
                 <button
                   onClick={handleSubmit}
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-3"
