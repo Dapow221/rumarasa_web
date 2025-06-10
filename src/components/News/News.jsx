@@ -9,7 +9,7 @@ const LatestNews = () => {
     {
       id: 1,
       title: "Corporate",
-      description: "Seribu Rasa adalah pilihan tepat untuk mengadakan acara korporat dengan suasana eksklusif dan hidangan berkualitas.",
+      description: "RumaRasa adalah pilihan tepat untuk mengadakan acara korporat dengan suasana eksklusif dan hidangan berkualitas.",
       image: ImageBanner1,
     },
     {
@@ -27,7 +27,7 @@ const LatestNews = () => {
     {
       id: 4,
       title: "Community",
-      description: "Seribu Rasa adalah tempat yang cocok untuk berkumpul bersama komunitas, berbagi cerita dan cita rasa Nusantara.",
+      description: "RumaRasa adalah tempat yang cocok untuk berkumpul bersama komunitas, berbagi cerita dan cita rasa Nusantara.",
       image: ImageBanner2,
     },
     {
