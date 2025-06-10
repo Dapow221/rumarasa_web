@@ -217,7 +217,7 @@ const Footer = () => {
                   </motion.div>
                   <div>
                     <p className="text-sm">
-                      <span className="text-white font-medium">Daily:</span> 11:00 AM - 11:00 PM
+                      <span className="text-white font-medium">Daily:</span> 10:00 AM - 22:00 PM
                     </p>
                   </div>
                 </motion.div>

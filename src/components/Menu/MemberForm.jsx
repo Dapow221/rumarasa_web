@@ -97,11 +97,10 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
   const clearForm = () => {
     setFormData({
       name: '',
+      email: '',
       phone: '',
-      date: '',
-      time: '',
-      guests: '',
-      specialRequests: ''
+      birthDate: '',
+      address: '',
     });
     setErrors({});
   };
@@ -109,11 +108,13 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
   const handleSubmit = () => {    
     if (validateForm()) {
       const whatsappMessage = formatWhatsAppMessage();
-      const whatsappNumber = "6287794108007"; // Replace with your actual WhatsApp number
+      const whatsappNumber = "625730833070"; // Replace with your actual WhatsApp number
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
-      clearForm()
+      // Clear the form first
+      clearForm();
       
+      // Then redirect to WhatsApp
       window.open(whatsappURL, '_blank');
     }
   };
@@ -220,7 +221,7 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     <span className="font-semibold">Pendaftaran Gratis!</span>
                   </div>
                   <p className="text-sm">
-                    Bergabung sekarang tanpa biaya pendaftaran. Kartu member akan dikirim dalam 3-5 hari kerja.
+                    Bergabung sekarang tanpa biaya pendaftaran.
                   </p>
                 </div>
               </div>
@@ -252,6 +253,7 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="Isikan Nama Lengkap"
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
@@ -271,6 +273,7 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="Isikan alamat email anda"
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
@@ -290,6 +293,7 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                     errors.phone ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="Isi no WA/Telp"
                 />
                 {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
               </div>
@@ -329,6 +333,7 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none ${
                     errors.address ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  placeholder="Isikan alamat lengkap anda"
                 />
                 {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
@@ -337,10 +342,10 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
               <div >
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-3"
+                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-3"
                 >
                   <Star className="w-5 h-5" />
-                  Daftar Member via WhatsApp
+                  Daftar
                 </button>
                 <p className="text-sm text-gray-500 text-center mt-3">
                   * Field wajib diisi. Pendaftaran akan diproses melalui WhatsApp.

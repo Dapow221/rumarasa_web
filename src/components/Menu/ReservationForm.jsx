@@ -106,7 +106,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
   const handleSubmit = (e) => {    
     if (validateForm()) {
       const whatsappMessage = formatWhatsAppMessage();
-      const whatsappNumber = "6287794108007"; // Replace with your actual WhatsApp number
+      const whatsappNumber = "625730833070"; // Replace with your actual WhatsApp number
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
       
       // Clear the form first
@@ -220,6 +220,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
+                placeholder="Nama Lengkap"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
@@ -239,6 +240,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.phone ? 'border-red-500' : 'border-gray-300'
                 }`}
+                placeholder="Isi no WA/Telp"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
@@ -304,6 +306,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                   errors.guests ? 'border-red-500' : 'border-gray-300'
                 }`}
+                placeholder="Isikan Jumlah Tamu"
               />
               {errors.guests && <p className="text-red-500 text-sm mt-1">{errors.guests}</p>}
             </div>
@@ -320,6 +323,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
                 onChange={handleInputChange}
                 rows="3"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none"
+                placeholder="Permintaan khusus contoh (mau meja di area non smoking)"
               />
             </div>
 
@@ -330,7 +334,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
                 className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-3"
               >
                 <MessageCircle className="w-5 h-5" />
-                Kirim Reservasi via WhatsApp
+                 Reservasi
               </button>
               <p className="text-sm text-gray-500 text-center mt-3">
                 * Field wajib diisi. Reservasi akan dikonfirmasi melalui WhatsApp.
