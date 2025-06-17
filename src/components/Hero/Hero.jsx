@@ -1,10 +1,174 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { MapPin, Clock } from 'lucide-react';
+import { MapPin, Clock, Edit, Save, X } from 'lucide-react';
+import { fetchHero, updateHero } from '../../store/heroAction'
 import BackgroundImage from '../../assets/2.jpg'
 import LogoImage from '../../assets/logo_rumarasa.png'
 
 const Hero = () => {
-  // Variants untuk logo animation
+  const dispatch = useDispatch();
+  
+  const { hero, isLoading, isUpdating, error } = useSelector(state => state.hero);
+  
+  const [authToken] = useState(localStorage.getItem('authToken'));
+  const [isEditing, setIsEditing] = useState(false);
+  
+  const isAdmin = authToken !== null;
+  
+  const titleRefs = useRef([]);
+  const descriptionRef = useRef(null);
+  const hoursRef = useRef(null);
+  const addressRef = useRef(null);
+
+  // Default content structure
+  const defaultContent = {
+    title: ['Taste', 'Of', 'Authenticity'],
+    description: 'Rumarasa Nusantara adalah Rumah makan keluarga yang menyajikan hidangan Nusantara...',
+    openingHours: 'Open Daily 10:00 AM - 22:00 PM',
+    address: 'Jl. Taman Mpu Sendok No.45, Selong Jakarta Selatan'
+  };
+
+  // Get current content from hero data
+  const getCurrentContent = () => {
+    if (!hero) return defaultContent;
+
+    let titleArray = defaultContent.title;
+    if (hero.title) {
+      if (Array.isArray(hero.title)) {
+        titleArray = hero.title;
+      } else if (typeof hero.title === 'string') {
+        titleArray = hero.title.split(' ');
+      }
+    }
+    
+    return {
+      title: titleArray,
+      description: hero.description || defaultContent.description,
+      openingHours: hero.openingHours || defaultContent.openingHours,
+      address: hero.address || defaultContent.address
+    };
+  };
+
+  const content = getCurrentContent();
+
+  // Fetch hero data on component mount
+  useEffect(() => {
+    dispatch(fetchHero());
+  }, [dispatch]);
+
+  // Update refs when content changes
+  useEffect(() => {
+    if (!isEditing) {
+      // Update refs with current content
+      if (titleRefs.current) {
+        titleRefs.current.forEach((ref, index) => {
+          if (ref) ref.textContent = content.title[index] || '';
+        });
+      }
+      if (descriptionRef.current) descriptionRef.current.textContent = content.description;
+      if (hoursRef.current) hoursRef.current.textContent = content.openingHours;
+      if (addressRef.current) addressRef.current.textContent = content.address;
+    }
+  }, [hero, isEditing]);
+
+  // Save content
+  const saveContent = async () => {
+    if (!hero?.id) {
+      alert('Hero ID not found. Please refresh the page and try again.');
+      return;
+    }
+
+    const newContent = {
+      title: titleRefs.current.map(ref => ref?.textContent || '').join(' '),
+      description: descriptionRef.current?.textContent || '',
+      openingHours: hoursRef.current?.textContent || '',
+      address: addressRef.current?.textContent || ''
+    };
+    
+    try {
+      const result = await dispatch(updateHero(hero.id, newContent));
+      
+      if (result.success) {
+        setIsEditing(false);
+        // Show success message
+        console.log('Hero content updated successfully');
+      } else {
+        alert('Failed to save changes: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error saving content:', error);
+      alert('Failed to save changes. Please try again.');
+    }
+  };
+
+  // Cancel editing
+  const cancelEdit = () => {
+    setIsEditing(false);
+    // Reset content to saved version
+    if (titleRefs.current) {
+      titleRefs.current.forEach((ref, index) => {
+        if (ref) ref.textContent = content.title[index] || '';
+      });
+    }
+    if (descriptionRef.current) descriptionRef.current.textContent = content.description;
+    if (hoursRef.current) hoursRef.current.textContent = content.openingHours;
+    if (addressRef.current) addressRef.current.textContent = content.address;
+  };
+
+  // Handle key press for contenteditable elements
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      saveContent();
+    }
+    if (e.key === 'Escape') {
+      cancelEdit();
+    }
+  };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${BackgroundImage})`
+          }}
+        />
+        <div className="relative z-10 text-white text-center">
+          <div className="animate-spin rounded-full h-15 w-15 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-xl">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error && !hero) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${BackgroundImage})`
+          }}
+        />
+        <div className="relative z-10 text-white text-center">
+          <p className="text-xl mb-4">Error loading content: {error}</p>
+          <button 
+            onClick={() => dispatch(fetchHero())}
+            className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded text-white"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Animation variants
   const logoVariants = {
     hidden: { opacity: 0, scale: 0.5, y: 50 },
     visible: { 
@@ -20,7 +184,6 @@ const Hero = () => {
     }
   };
 
-  // Variants untuk title animation
   const titleVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
@@ -34,7 +197,6 @@ const Hero = () => {
     }
   };
 
-  // Variants untuk divider line
   const dividerVariants = {
     hidden: { width: 0, opacity: 0 },
     visible: { 
@@ -48,7 +210,6 @@ const Hero = () => {
     }
   };
 
-  // Variants untuk description
   const descriptionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -62,7 +223,6 @@ const Hero = () => {
     }
   };
 
-  // Variants untuk info bar items
   const infoItemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -76,7 +236,6 @@ const Hero = () => {
     })
   };
 
-  // Variants untuk word animation in title
   const wordVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -92,13 +251,58 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Main Hero Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${BackgroundImage})`
         }}
       />
+
+      {/* Admin Edit Controls */}
+      {isAdmin && (
+        <div className="absolute top-4 right-4 z-20 flex gap-2 mt-20">
+          {!isEditing ? (
+            <motion.button
+              onClick={() => setIsEditing(true)}
+              className="bg-orange-600 hover:bg-orange-700 text-white p-2 rounded-full shadow-lg transition-colors duration-200"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Edit size={16} />
+            </motion.button>
+          ) : (
+            <div className="flex gap-2">
+              <motion.button
+                onClick={saveContent}
+                disabled={isUpdating}
+                className={`${
+                  isUpdating 
+                    ? 'bg-gray-600 cursor-not-allowed' 
+                    : 'bg-green-600 hover:bg-green-700'
+                } text-white p-2 rounded-full shadow-lg transition-colors duration-200`}
+                whileHover={!isUpdating ? { scale: 1.1 } : {}}
+                whileTap={!isUpdating ? { scale: 0.9 } : {}}
+              >
+                {isUpdating ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <Save size={16} />
+                )}
+              </motion.button>
+              <motion.button
+                onClick={cancelEdit}
+                disabled={isUpdating}
+                className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-colors duration-200"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <X size={16} />
+              </motion.button>
+            </div>
+          )}
+        </div>
+      )}
+
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
@@ -126,38 +330,35 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            <motion.span
-              variants={wordVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0}
-              className="inline-block"
-            >
-              Taste
-            </motion.span>
-            {' '}
-            <motion.span 
-              variants={wordVariants}
-              initial="hidden"
-              animate="visible"
-              custom={1}
-              className="italic font-light inline-block"
-            >
-              Of
-            </motion.span>
-            {' '}
-            <motion.span
-              variants={wordVariants}
-              initial="hidden"
-              animate="visible"
-              custom={2}
-              className="inline-block"
-            >
-              Authenticity
-            </motion.span>
+            {content.title.map((word, index) => (
+              <motion.span
+                key={index}
+                ref={el => titleRefs.current[index] = el}
+                contentEditable={isAdmin && isEditing}
+                suppressContentEditableWarning={true}
+                onKeyDown={handleKeyPress}
+                variants={wordVariants}
+                initial="hidden"
+                animate="visible"
+                custom={index}
+                className={`inline-block ${
+                  index === 1 ? 'italic font-light' : ''
+                } ${
+                  isAdmin && isEditing 
+                    ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded px-2 mx-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
+                    : ''
+                }`}
+                style={{
+                  minWidth: isAdmin && isEditing ? '100px' : 'auto'
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+            {content.title.map((_, index) => index < content.title.length - 1 && ' ')}
           </motion.h1>
           
-          <div className="w-24 sm:w-32 h-px bg-white mx-auto mb-4 sm:mb-6 overflow-hidden">
+          <div className="w-24 mt-6 sm:w-32 h-px bg-white mx-auto mb-4 sm:mb-6 overflow-hidden">
             <motion.div 
               className="h-full bg-white"
               variants={dividerVariants}
@@ -175,13 +376,21 @@ const Hero = () => {
           animate="visible"
         >
           <motion.p 
-            className="text-sm sm:text-base md:text-xl leading-relaxed text-gray-300 font-light"
+            ref={descriptionRef}
+            contentEditable={isAdmin && isEditing}
+            suppressContentEditableWarning={true}
+            onKeyDown={handleKeyPress}
+            className={`text-sm sm:text-base md:text-xl leading-relaxed text-gray-300 font-light ${
+              isAdmin && isEditing 
+                ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-400' 
+                : ''
+            }`}
             whileHover={{ 
               scale: 1.02,
               transition: { duration: 0.3 }
             }}
           >
-            Rumarasa Nusantara adalah Rumah makan keluarga yang menyajikan hidangan Nusantara. Rumarasa Nusantara juga menjadi pusat kuliner terbaik yang menghadirkan pengalaman unik dengan cita rasa dari berbagai tempat. Kami memperkaya hubungan sosial dan kebersamaan di setiap kesempatan, sambil memberikan hidangan inovatif, ruang yang nyaman, serta kopi berkualitas. Dengan oleh-oleh khas dan layanan untuk acara spesial, kami menjadi bagian dari setiap momen kebahagiaan pelanggan kami.
+            {content.description}
           </motion.p>
         </motion.div>
 
@@ -206,11 +415,19 @@ const Hero = () => {
               <Clock size={14} className="sm:w-4 sm:h-4" />
             </motion.div>
             <motion.span 
-              className="text-center"
+              ref={hoursRef}
+              contentEditable={isAdmin && isEditing}
+              suppressContentEditableWarning={true}
+              onKeyDown={handleKeyPress}
+              className={`text-center ${
+                isAdmin && isEditing 
+                  ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
+                  : ''
+              }`}
               whileHover={{ letterSpacing: "0.05em" }}
               transition={{ duration: 0.2 }}
             >
-              Open Daily 10:00 AM - 22:00 PM
+              {content.openingHours}
             </motion.span>
           </motion.div>
           
@@ -233,11 +450,19 @@ const Hero = () => {
               <MapPin size={14} className="sm:w-4 sm:h-4" />
             </motion.div>
             <motion.span 
-              className="text-center sm:text-left"
+              ref={addressRef}
+              contentEditable={isAdmin && isEditing}
+              suppressContentEditableWarning={true}
+              onKeyDown={handleKeyPress}
+              className={`text-center sm:text-left ${
+                isAdmin && isEditing 
+                  ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
+                  : ''
+              }`}
               whileHover={{ letterSpacing: "0.02em" }}
               transition={{ duration: 0.2 }}
             >
-              Jl. Taman Mpu Sendok No.45, Selong Jakarta Selatan
+              {content.address}
             </motion.span>
           </motion.div>
         </div>
