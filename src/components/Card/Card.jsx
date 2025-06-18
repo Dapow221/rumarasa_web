@@ -11,6 +11,7 @@ const Card = () => {
   const { promotions, loading, error, updateLoading } = useSelector(state => state.promotion);
   
   const [authToken] = useState(localStorage.getItem('authToken'));
+  const fileInputRef = useRef({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPromotionId, setEditingPromotionId] = useState(null);
   
@@ -138,7 +139,44 @@ const Card = () => {
     });
   };
 
-  // Handle key press for contenteditable elements
+  const handleImageClick = (promotionId) => {
+    if (isAdmin && editingPromotionId === promotionId && fileInputRef.current[promotionId]) {
+      fileInputRef.current[promotionId].click();
+    }
+  };
+
+  const handleFileChange = async (event, promotionId) => {
+    const file = event.target.files[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPEG, PNG, or GIF)');
+        return;
+      }
+  
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      try {
+        const result = await dispatch(updatePromotion(promotionId, formData));
+        if (result.success) {
+          console.log('Image updated successfully');
+          dispatch(fetchPromotions());
+        } else {
+          alert('Failed to update image: ' + (result.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error updating image:', error);
+        alert('Failed to update image. Please try again.');
+      }
+    }
+  };
+
   const handleKeyPress = (e, promotionId) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -360,13 +398,23 @@ const Card = () => {
               )}
 
               {/* Image */}
-              <div className="relative h-56 overflow-hidden">
+              <div 
+                className={`relative h-56 overflow-hidden ${isAdmin && editingPromotionId === event.id ? 'cursor-pointer' : ''}`}
+                onClick={() => handleImageClick(event.id)}
+              >
                 <div 
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                   style={{
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('http://localhost:3030/${event.image}')`
                   }}
                 />
+                {isAdmin && editingPromotionId === event.id && (
+                  <input 
+                    type="file" 
+                    ref={el => fileInputRef.current[event.id] = el} 
+                    className="hidden" 
+                    onChange={(e) => handleFileChange(e, event.id)} />
+                )}
               </div>
 
               {/* Content */}

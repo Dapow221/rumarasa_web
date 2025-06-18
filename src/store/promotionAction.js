@@ -127,18 +127,24 @@ export const createPromotion = (promotionData) => {
 export const updatePromotion = (promotionId, promotionData) => {
     return async (dispatch) => {
         dispatch(updatePromotionRequest());
-        
+
         try {
-            const response = await fetch(`${API_BASE_URL}/api/v1/promotions/${promotionId}`, {
+            const isFormData = promotionData instanceof FormData;
+            
+            const requestOptions = {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(promotionData)
-            });
+                body: isFormData ? promotionData : JSON.stringify(promotionData),
+            };
+
+            if (!isFormData) {
+                requestOptions.headers = {
+                    'Content-Type': 'application/json'
+                };
+            }
+
+            const response = await fetch(`${API_BASE_URL}/api/v1/promotions/${promotionId}`, requestOptions);
 
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to update promotion');
             }
