@@ -8,7 +8,7 @@ import FoodImage from '../../assets/f2.jpg'
 const Card = () => {
   const dispatch = useDispatch();
   
-  const { promotions, loading, error, updateLoading } = useSelector(state => state.promotions);
+  const { promotions, loading, error, updateLoading } = useSelector(state => state.promotion);
   
   const [authToken] = useState(localStorage.getItem('authToken'));
   const [isEditing, setIsEditing] = useState(false);
@@ -187,11 +187,8 @@ const Card = () => {
       y: 0,
       scale: 1,
       transition: {
-        delay: i * 0.2 + 0.5,
         duration: 0.8,
         ease: "easeOut",
-        type: "spring",
-        stiffness: 100
       }
     })
   };
@@ -290,10 +287,6 @@ const Card = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            whileHover={{ 
-              scale: 1.02,
-              transition: { duration: 0.2 }
-            }}
           >
             Discover Our 
           </motion.h2>
@@ -303,11 +296,6 @@ const Card = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            whileHover={{ 
-              scale: 1.05,
-              color: "#ea580c",
-              transition: { duration: 0.2 }
-            }}
           >
             Ongoing Promotion
           </motion.h3>
@@ -318,17 +306,12 @@ const Card = () => {
           {events.map((event, index) => (
             <motion.div
               key={event.id}
-              className={`group relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden`}
+              className={`group relative bg-white rounded-lg shadow-lg overflow-hidden`}
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
               custom={index}
-              whileHover={{ 
-                scale: 1.03,
-                y: -10,
-                transition: { duration: 0.3 }
-              }}
               whileTap={{ scale: 0.98 }}
             >
               {/* Admin Edit Controls */}
@@ -381,7 +364,7 @@ const Card = () => {
                 <div 
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                   style={{
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${event.image || FoodImage}')`
+                    backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('http://localhost:3030/${event.image}')`
                   }}
                 />
               </div>
@@ -400,17 +383,12 @@ const Card = () => {
                     contentEditable={isAdmin && editingPromotionId === event.id}
                     suppressContentEditableWarning={true}
                     onKeyDown={(e) => handleKeyPress(e, event.id)}
-                    className={`text-xl font-serif text-gray-900 mb-2 group-hover:text-orange-600 transition-colors ${
+                    className={`text-xl font-serif text-gray-900 mb-2 ${
                       isAdmin && editingPromotionId === event.id 
                         ? 'bg-blue-100 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
                         : ''
                     }`}
                     variants={titleVariants}
-                    whileHover={{ 
-                      x: 5,
-                      color: "#ea580c",
-                      transition: { duration: 0.2 }
-                    }}
                   >
                     {event.title}
                   </motion.h4>
@@ -426,11 +404,6 @@ const Card = () => {
                         : ''
                     }`}
                     variants={cardSubtitleVariants}
-                    whileHover={{ 
-                      x: 3,
-                      fontWeight: "600",
-                      transition: { duration: 0.2 }
-                    }}
                   >
                     {event.subtitle}
                   </motion.p>
