@@ -2,16 +2,13 @@ export const ABOUT_ACTION_TYPES = {
     FETCH_ABOUT_REQUEST: 'FETCH_ABOUT_REQUEST',
     FETCH_ABOUT_SUCCESS: 'FETCH_ABOUT_SUCCESS',
     FETCH_ABOUT_FAILURE: 'FETCH_ABOUT_FAILURE',
-    CREATE_ABOUT_REQUEST: 'CREATE_ABOUT_REQUEST',
-    CREATE_ABOUT_SUCCESS: 'CREATE_ABOUT_SUCCESS',
-    CREATE_ABOUT_FAILURE: 'CREATE_ABOUT_FAILURE',
     UPDATE_ABOUT_REQUEST: 'UPDATE_ABOUT_REQUEST',
     UPDATE_ABOUT_SUCCESS: 'UPDATE_ABOUT_SUCCESS',
     UPDATE_ABOUT_FAILURE: 'UPDATE_ABOUT_FAILURE',
 };
 
 const initialState = {
-    about: [],
+    about: null,
     loading: false,
     error: null,
     createLoading: false,
@@ -43,27 +40,6 @@ const aboutReducer = (state = initialState, action) => {
                 error: action.payload
             };
 
-        // Create About
-        case ABOUT_ACTION_TYPES.CREATE_ABOUT_REQUEST:
-            return {
-                ...state,
-                createLoading: true,
-                createError: null
-            };
-        case ABOUT_ACTION_TYPES.CREATE_ABOUT_SUCCESS:
-            return {
-                ...state,
-                createLoading: false,
-                about: [...state.about, action.payload],
-                createError: null
-            };
-        case ABOUT_ACTION_TYPES.CREATE_ABOUT_FAILURE:
-            return {
-                ...state,
-                createLoading: false,
-                createError: action.payload
-            };
-
         // Update About
         case ABOUT_ACTION_TYPES.UPDATE_ABOUT_REQUEST:
             return {
@@ -75,9 +51,7 @@ const aboutReducer = (state = initialState, action) => {
             return {
                 ...state,
                 updateLoading: false,
-                about: state.about.map(item => 
-                    item.id === action.payload.id ? action.payload : item
-                ),
+                about: action.payload,
                 updateError: null
             };
         case ABOUT_ACTION_TYPES.UPDATE_ABOUT_FAILURE:

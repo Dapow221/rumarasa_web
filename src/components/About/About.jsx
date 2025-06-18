@@ -15,6 +15,7 @@ const About = () => {
   
   const isAdmin = authToken !== null;
   
+  // Refs for contenteditable elements
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -92,7 +93,7 @@ const About = () => {
 
   // Handle key press for contenteditable elements
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey && e.target !== descriptionRef.current) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       saveContent();
     }
@@ -111,7 +112,7 @@ const About = () => {
             backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
           }}
         />
-        <div className="relative z-10 flex items-center justify-center min-h-[400px]">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[400px]">
           <div className="text-white text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
             <p className="text-xl">Loading...</p>
@@ -131,7 +132,7 @@ const About = () => {
             backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
           }}
         />
-        <div className="relative z-10 flex items-center justify-center min-h-[400px]">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[400px]">
           <div className="text-white text-center">
             <p className="text-xl mb-4">Error loading content: {error}</p>
             <button 
@@ -231,41 +232,41 @@ const About = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                whileHover={isAdmin && !isEditing ? { scale: 1.02 } : {}}
+                whileHover={isAdmin && !isEditing ? { 
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                } : {}}
               >
                 {content.title}
               </motion.p>
               
               <motion.h2 
-                className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight"
+                ref={subtitleRef}
+                contentEditable={isAdmin && isEditing}
+                suppressContentEditableWarning={true}
+                onKeyDown={handleKeyPress}
+                className={`text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight ${
+                  isAdmin && isEditing 
+                    ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
+                    : ''
+                }`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.4 }}
+                whileHover={isAdmin && !isEditing ? { 
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                } : {}}
               >
                 <motion.span 
-                  ref={subtitleRef}
-                  contentEditable={isAdmin && isEditing}
-                  suppressContentEditableWarning={true}
-                  onKeyDown={handleKeyPress}
-                  className={`${
-                    isAdmin && isEditing 
-                      ? 'bg-blue-900 bg-opacity-30 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
-                      : ''
-                  }`}
+                  className="italic text-orange-400"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.6 }}
-                  whileHover={isAdmin && !isEditing ? { scale: 1.02 } : {}}
                 >
-                  {content.subtitle.split(' ').map((word, index) => 
-                    index === 1 ? (
-                      <span key={index} className="italic text-orange-400">{word}</span>
-                    ) : (
-                      <span key={index}>{word}</span>
-                    )
-                  )}
+                  {content.subtitle}
                 </motion.span>
               </motion.h2>
             </motion.div>
@@ -292,7 +293,10 @@ const About = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.7 }}
-                whileHover={isAdmin && !isEditing ? { scale: 1.01 } : {}}
+                whileHover={isAdmin && !isEditing ? { 
+                  scale: 1.01,
+                  transition: { duration: 0.3 }
+                } : {}}
               >
                 {content.description}
               </motion.p>

@@ -36,7 +36,6 @@ const LatestNews = () => {
       description: "Rasakan sentuhan seni kuliner di Seribu Rasa, di mana cita rasa tradisional bertemu dengan presentasi modern.",
       image: ImageBanner2,
     },
-    
   ];
 
   const containerVariants = {
