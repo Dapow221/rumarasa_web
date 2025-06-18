@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Edit, Save, X } from 'lucide-react';
-import { fetchAbout, createAbout, updateAbout } from '../../store/aboutAction';
+import { fetchAbout, updateAbout } from '../../store/aboutAction';
 import backgroundImage from "../../assets/1.jpg";
 
 const About = () => {
@@ -55,6 +55,11 @@ const About = () => {
 
   // Save content
   const saveContent = async () => {
+    if (!about?.id) {
+      alert('About ID not found. Please refresh the page and try again.');
+      return;
+    }
+
     const newContent = {
       title: titleRef.current?.textContent || '',
       subtitle: subtitleRef.current?.textContent || '',
@@ -62,19 +67,11 @@ const About = () => {
     };
     
     try {
-      let result;
+      const result = await dispatch(updateAbout(about.id, newContent));
       
-      if (about?.id) {
-        // Update existing about
-        result = await dispatch(updateAbout(about.id, newContent));
-      } else {
-        // Create new about
-        result = await dispatch(createAbout(newContent));
-      }
-      
-      if (result.success || result.payload) {
+      if (result.success) {
         setIsEditing(false);
-        console.log('About content saved successfully');
+        console.log('About content updated successfully');
       } else {
         alert('Failed to save changes: ' + (result.error || 'Unknown error'));
       }
