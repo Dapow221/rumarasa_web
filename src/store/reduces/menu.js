@@ -4,10 +4,6 @@ export const MENU_ACTION_TYPES = {
     FETCH_MENU_SUCCESS: 'FETCH_MENU_SUCCESS',
     FETCH_MENU_FAILURE: 'FETCH_MENU_FAILURE',
 
-    CREATE_MENU_REQUEST: 'CREATE_MENU_REQUEST',
-    CREATE_MENU_SUCCESS: 'CREATE_MENU_SUCCESS',
-    CREATE_MENU_FAILURE: 'CREATE_MENU_FAILURE',
-    
     UPDATE_MENU_REQUEST: 'UPDATE_MENU_REQUEST',
     UPDATE_MENU_SUCCESS: 'UPDATE_MENU_SUCCESS',
     UPDATE_MENU_FAILURE: 'UPDATE_MENU_FAILURE',
@@ -49,26 +45,6 @@ const menuReducer = (state = initialState, action) => {
                 error: action.payload
             };
 
-        // Create Menu
-        case MENU_ACTION_TYPES.CREATE_MENU_REQUEST:
-            return {
-                ...state,
-                createLoading: true,
-                createError: null
-            };
-        case MENU_ACTION_TYPES.CREATE_MENU_SUCCESS:
-            return {
-                ...state,
-                createLoading: false,
-                menus: [...state.menus, action.payload], // Add new menu to existing array
-                createError: null
-            };
-        case MENU_ACTION_TYPES.CREATE_MENU_FAILURE:
-            return {
-                ...state,
-                createLoading: false,
-                createError: action.payload
-            };
 
         // Update Menu
         case MENU_ACTION_TYPES.UPDATE_MENU_REQUEST:

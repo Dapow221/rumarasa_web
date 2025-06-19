@@ -1,45 +1,65 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed, Plus, Edit, Save, X, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed, Edit } from "lucide-react";
+import { motion } from 'framer-motion';
 import MenuPdf from './RenderPdf'
 import ReservationForm from './ReservationForm'
 import MembershipForm from './MemberForm'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenus, createMenu, updateMenu } from '../../store/menuAction';
+import { fetchMenus, updateMenu } from '../../store/menuAction'; 
 
 const Menu = () => {
   const dispatch = useDispatch();
   const { menus, loading, error, updateLoading } = useSelector(state => state.menu);
   
-  const [authToken] = useState(localStorage.getItem('authToken'));
-  const isAdmin = authToken !== null;
-  
-  const fileInputRef = useRef({});
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingMenuId, setEditingMenuId] = useState(null);
-  
-  // Filter menus by category
-  const foodMenus = menus?.filter(menu => menu.category === 'food') || [];
-  const beverageMenus = menus?.filter(menu => menu.category === 'beverages') || [];
-  
-  // Convert menu data to image format - removed default fallback
-  const foodImages = foodMenus.map(menu => ({
-    id: menu.id,
-    src: `http://localhost:3030/${menu.image}`,
-    alt: `Food Item ${menu.id}`,
-    isFromAPI: true
-  }));
+  // Default fallback images
+  const defaultFoodImages = [
+    { id: 'default-food-1', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
+    { id: 'default-food-2', src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop", category: 'food' },
+    { id: 'default-food-3', src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", category: 'food' },
+    { id: 'default-food-4', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
+    { id: 'default-food-5', src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", category: 'food' },
+    { id: 'default-food-6', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
+  ];
 
-  const beverageImages = beverageMenus.map(menu => ({
-    id: menu.id,
-    src: `http://localhost:3030/${menu.image}`,
-    alt: `Beverage Item ${menu.id}`,
-    isFromAPI: true
-  }));
+  const defaultBeverageImages = [
+    { id: 'default-beverage-1', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
+    { id: 'default-beverage-2', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
+    { id: 'default-beverage-3', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
+    { id: 'default-beverage-4', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
+    { id: 'default-beverage-5', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
+    { id: 'default-beverage-6', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
+  ];
 
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
   const [currentBeverageIndex, setCurrentBeverageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  
+  // Admin functionality
+  const [authToken] = useState(localStorage.getItem('authToken'));
+  const fileInputRef = useRef({});
+  const isAdmin = authToken !== null;
+
+  // Group images by category
+  const foodImages = menus && menus.length > 0 
+    ? menus.filter(menu => menu.category === 'food').map(menu => ({
+        id: menu.id,
+        src: `http://localhost:3030/${menu.image}`,
+        category: menu.category,
+        created_at: menu.created_at,
+        updated_at: menu.updated_at
+      }))
+    : defaultFoodImages;
+
+  const beverageImages = menus && menus.length > 0 
+    ? menus.filter(menu => menu.category === 'beverage').map(menu => ({
+        id: menu.id,
+        src: `http://localhost:3030/${menu.image}`,
+        category: menu.category,
+        created_at: menu.created_at,
+        updated_at: menu.updated_at
+      }))
+    : defaultBeverageImages;
 
   // Fetch menus on component mount
   useEffect(() => {
@@ -72,7 +92,7 @@ const Menu = () => {
 
   // Auto-slide functionality with pause on hover
   useEffect(() => {
-    if (isPaused || foodImages.length === 0 || beverageImages.length === 0) return;
+    if (isPaused) return;
 
     const foodInterval = setInterval(() => {
       setCurrentFoodIndex((prev) => {
@@ -114,49 +134,15 @@ const Menu = () => {
     setCurrentBeverageIndex((prev) => prev <= 0 ? maxIndex : prev - 1);
   };
 
-  // Admin functions
-  const handleAddImage = (category) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => handleImageUpload(e, category);
-    input.click();
-  };
-
-  const handleImageUpload = async (event, category) => {
-    const file = event.target.files[0];
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-      if (!validTypes.includes(file.type)) {
-        alert('Please select a valid image file (JPEG, PNG, or GIF)');
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('category', category);
-
-      try {
-        const result = await dispatch(createMenu(formData));
-        if (result.success) {
-          console.log('Image uploaded successfully');
-          dispatch(fetchMenus());
-        } else {
-          alert('Failed to upload image: ' + (result.error || 'Unknown error'));
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Failed to upload image. Please try again.');
-      }
+  // Handle image click for editing
+  const handleImageClick = (menuId) => {
+    if (isAdmin && fileInputRef.current[menuId]) {
+      fileInputRef.current[menuId].click();
     }
   };
 
-  const handleImageReplace = async (event, menuId) => {
+  // Handle file change for image upload
+  const handleFileChange = async (event, menuId) => {
     const file = event.target.files[0];
     if (file) {
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -164,22 +150,20 @@ const Menu = () => {
         alert('Please select a valid image file (JPEG, PNG, or GIF)');
         return;
       }
-
+  
       if (file.size > 5 * 1024 * 1024) {
         alert('File size must be less than 5MB');
         return;
       }
-
+  
       const formData = new FormData();
       formData.append('image', file);
-
+      
       try {
         const result = await dispatch(updateMenu(menuId, formData));
         if (result.success) {
-          console.log('Image updated successfully');
+          console.log('Menu image updated successfully');
           dispatch(fetchMenus());
-          setIsEditing(false);
-          setEditingMenuId(null);
         } else {
           alert('Failed to update image: ' + (result.error || 'Unknown error'));
         }
@@ -190,63 +174,8 @@ const Menu = () => {
     }
   };
 
-  const startEditing = (menuId) => {
-    setIsEditing(true);
-    setEditingMenuId(menuId);
-  };
-
-  const cancelEdit = () => {
-    setIsEditing(false);
-    setEditingMenuId(null);
-  };
-
-  const handleImageClick = (menuId) => {
-    if (isAdmin && editingMenuId === menuId && fileInputRef.current[menuId]) {
-      fileInputRef.current[menuId].click();
-    }
-  };
-
-  const SliderComponent = ({ images, currentIndex, nextSlide, prevSlide, title, icon: Icon, category }) => {
-    // Create array with images and add button if admin
-    const displayItems = [...images];
-    if (isAdmin) {
-      displayItems.push({ isAddButton: true });
-    }
-
-    // If no items to display, show empty state
-    if (displayItems.length === 0) {
-      return (
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-3 bg-orange-100 px-6 py-3 rounded-full mb-6">
-              <Icon className="w-5 h-5 text-orange-600" />
-              <h3 className="text-2xl md:text-3xl font-serif text-orange-700">{title}</h3>
-              <Icon className="w-5 h-5 text-orange-600" />
-            </div>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              {title === "Foods" 
-                ? "Authentic Indonesian dishes prepared with traditional recipes and premium ingredients"
-                : "Refreshing beverages to complement your dining experience, from traditional drinks to modern favorites"
-              }
-            </p>
-          </div>
-          <div className="text-center py-16">
-            <p className="text-gray-500 mb-4">No {title.toLowerCase()} available</p>
-            {isAdmin && (
-              <button
-                onClick={() => handleAddImage(category)}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 mx-auto"
-              >
-                <Plus className="w-5 h-5" />
-                Add First {title.slice(0, -1)}
-              </button>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    const maxIndex = getMaxIndex(displayItems.length);
+  const SliderComponent = ({ images, currentIndex, nextSlide, prevSlide, title, icon: Icon }) => {
+    const maxIndex = getMaxIndex(images.length);
     const translateX = currentIndex * (100 / itemsPerView);
 
     return (
@@ -278,110 +207,55 @@ const Menu = () => {
                 gap: windowWidth < 640 ? '16px' : '24px'
               }}
             >
-              {displayItems.map((item, index) => {
-                if (item.isAddButton) {
-                  return (
-                    <div 
-                      key="add-button"
-                      className={`
-                        flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer
-                        ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
-                          windowWidth < 1024 ? 'w-[calc(50%-12px)] aspect-square' : 
-                          'w-[calc(25%-18px)] aspect-square'}
-                        bg-gray-100 hover:bg-gray-200 border-2 border-dashed border-gray-300 hover:border-orange-400
-                        flex items-center justify-center
-                      `}
-                      onClick={() => handleAddImage(category)}
-                    >
-                      <div className="text-center">
-                        <Plus className="w-8 h-8 md:w-12 md:h-12 text-gray-400 group-hover:text-orange-500 mx-auto mb-2 transition-colors duration-200" />
-                        <p className="text-gray-500 group-hover:text-orange-600 text-sm font-medium transition-colors duration-200">Add Image</p>
-                      </div>
+              {images.map((image, index) => (
+                <div 
+                  key={image.id}
+                  className={`
+                    flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group ${isAdmin ? 'cursor-pointer' : ''}
+                    ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
+                      windowWidth < 1024 ? 'w-[calc(50%-12px)] aspect-square' : 
+                      'w-[calc(25%-18px)] aspect-square'}
+                  `}
+                  onClick={() => handleImageClick(image.id)}
+                >
+                  {/* Admin Edit Icon */}
+                  {isAdmin && (
+                    <div className="absolute top-2 right-2 z-10">
+                      <motion.button
+                        className="bg-orange-600 hover:bg-orange-700 text-white p-1.5 rounded-full shadow-lg transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <Edit size={12} />
+                      </motion.button>
                     </div>
-                  );
-                }
+                  )}
 
-                return (
-                  <div 
-                    key={item.id || index}
-                    className={`
-                      flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer
-                      ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
-                        windowWidth < 1024 ? 'w-[calc(50%-12px)] aspect-square' : 
-                        'w-[calc(25%-18px)] aspect-square'}
-                    `}
-                  >
-                    {/* Admin Controls */}
-                    {isAdmin && item.isFromAPI && (
-                      <div className="absolute top-2 right-2 z-10 flex gap-1">
-                        {editingMenuId !== item.id ? (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              startEditing(item.id);
-                            }}
-                            className="bg-orange-600 hover:bg-orange-700 text-white p-1.5 rounded-full shadow-lg transition-colors duration-200 opacity-0 group-hover:opacity-100"
-                          >
-                            <Edit size={12} />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              cancelEdit();
-                            }}
-                            className="bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-colors duration-200"
-                          >
-                            <X size={12} />
-                          </button>
-                        )}
-                      </div>
-                    )}
+                  <img
+                    src={image.src}
+                    alt={`${title} ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  
+                  {/* Hidden file input for admin */}
+                  {isAdmin && (
+                    <input 
+                      type="file" 
+                      ref={el => fileInputRef.current[image.id] = el} 
+                      className="hidden" 
+                      onChange={(e) => handleFileChange(e, image.id)}
+                      accept="image/*"
+                    />
+                  )}
 
-                    <div 
-                      className={`w-full h-full ${isAdmin && editingMenuId === item.id ? 'cursor-pointer' : ''}`}
-                      onClick={() => handleImageClick(item.id)}
-                    >
-                      <img
-                        src={item.src}
-                        alt={item.alt}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      {isAdmin && editingMenuId === item.id && (
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                          <div className="text-white text-center">
-                            <Edit className="w-8 h-8 mx-auto mb-2" />
-                            <p className="text-sm font-medium">Click to replace</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Hidden file input for editing */}
-                    {isAdmin && item.isFromAPI && (
-                      <input 
-                        type="file" 
-                        ref={el => {
-                          if (el) {
-                            fileInputRef.current[item.id] = el;
-                          }
-                        }}
-                        className="hidden" 
-                        accept="image/*"
-                        onChange={(e) => handleImageReplace(e, item.id)} 
-                      />
-                    )}
-
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-3 left-3 right-3">
-                        <h4 className="text-white font-medium text-sm md:text-base mb-1">{item.alt}</h4>
-                        <div className="w-8 h-0.5 bg-orange-500 rounded"></div>
-                      </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h4 className="text-white font-medium text-sm md:text-base mb-1">{`${title} ${index + 1}`}</h4>
+                      <div className="w-8 h-0.5 bg-orange-500 rounded"></div>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -429,7 +303,7 @@ const Menu = () => {
         <div className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600">Loading menu...</p>
+            <p className="text-xl text-gray-600">Loading menu images...</p>
           </div>
         </div>
       </section>
@@ -477,7 +351,6 @@ const Menu = () => {
           prevSlide={prevFoodSlide}
           title="Foods"
           icon={UtensilsCrossed}
-          category="food"
         />
 
         {/* Beverage Slider */}
@@ -488,13 +361,12 @@ const Menu = () => {
           prevSlide={prevBeverageSlide}
           title="Beverages"
           icon={Coffee}
-          category="beverages"
         />
 
         {/* Error State */}
         {error && (
           <div className="text-center mt-8">
-            <p className="text-red-600 mb-4">Error loading menu: {error}</p>
+            <p className="text-red-600 mb-4">Error loading menu images: {error}</p>
             <button 
               onClick={() => dispatch(fetchMenus())}
               className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded text-white"
