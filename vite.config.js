@@ -9,5 +9,9 @@ export default defineConfig({
       // Don't externalize any dependencies - let Vite handle bundling
       external: [],
     },
+  },
+  // Add this for SPA routing support
+  server: {
+    historyApiFallback: true
   }
 })
