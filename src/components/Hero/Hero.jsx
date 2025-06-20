@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, Edit, Save, X } from 'lucide-react';
 import { fetchHero, updateHero } from '../../store/heroAction'
-import BackgroundImage from '../../assets/2.jpg'
+import BackgroundImage from '../../assets/VENUE/IMG_5738.jpg'
 import LogoImage from '../../assets/logo_rumarasa.png'
 
 const Hero = () => {
@@ -254,7 +254,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${BackgroundImage})`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url(${BackgroundImage})`
         }}
       />
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Edit, Save, X } from 'lucide-react';
 import { fetchBooking, updateBooking } from '../../store/bookingAction';
-import BackgroundImage from '../../assets/4.jpg';
+import BackgroundImage from '../../assets/VENUE/IMG_5666.jpg';
 
 const EventCatering = () => {
   const dispatch = useDispatch();
@@ -449,7 +449,7 @@ const EventCatering = () => {
             >
               <div className="flex items-center gap-3 text-gray-300">
                 <motion.a
-                  href="https://wa.me/your-whatsapp-number"
+                  href="https://wa.me/6281110065589"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-gray-300 transition-colors duration-300 cursor-pointer group"

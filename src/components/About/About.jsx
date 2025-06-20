@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Edit, Save, X } from 'lucide-react';
 import { fetchAbout, updateAbout } from '../../store/aboutAction';
-import backgroundImage from "../../assets/1.jpg";
+import backgroundImage from "../../assets/VENUE/IMG_5663.jpg";
 
 const About = () => {
   const dispatch = useDispatch();

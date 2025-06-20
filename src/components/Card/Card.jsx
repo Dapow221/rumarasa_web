@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Calendar, Users, Clock, Edit, Save, X } from 'lucide-react';
 import { fetchPromotions, updatePromotion } from '../../store/promotionAction';
-import FoodImage from '../../assets/f2.jpg'
 
 const Card = () => {
   const dispatch = useDispatch();
@@ -23,37 +22,8 @@ const Card = () => {
   const descriptionRefs = useRef({});
   const validityRefs = useRef({});
 
-  // Default events structure (fallback if no promotions from API)
-  const defaultEvents = [
-    {
-      id: 1,
-      title: 'Lunch Package',
-      subtitle: 'Nice package for your lunch',
-      description: 'Indulge in our authentic rijsttafel featuring 12 traditional Balinese dishes served with aromatic jasmine rice. A complete culinary journey through Indonesia.',
-      image: FoodImage,
-      validity: 'Valid until Dec 31, 2025',
-    },
-    {
-      id: 2,
-      type: 'EVENT',
-      title: 'Dinner Package',
-      subtitle: 'Learn from Master Chef Wayan',
-      description: 'Join our head chef for an interactive cooking class where you\'ll learn to prepare authentic Balinese dishes using traditional techniques and spices.',
-      image: FoodImage,
-      validity: 'Valid until Dec 31, 2025',
-    },
-    {
-      id: 3,
-      title: 'Idul Fitri Package',
-      subtitle: 'Romantic Evening for Two',
-      description: 'Enjoy a romantic 5-course dinner with our carefully curated wine pairing as you watch the sunset from our terrace dining area.',
-      image: FoodImage,
-      validity: 'Available daily 6PM - 8PM',
-    },
-  ];
-
   // Use promotions from Redux or fallback to default
-  const events = promotions && promotions.length > 0 ? promotions : defaultEvents;
+  const events = promotions && promotions.length > 0 ? promotions : [];
 
   // Fetch promotions on component mount
   useEffect(() => {
@@ -153,7 +123,7 @@ const Card = () => {
         alert('Please select a valid image file (JPEG, PNG, or GIF)');
         return;
       }
-  
+
       if (file.size > 5 * 1024 * 1024) {
         alert('File size must be less than 5MB');
         return;
@@ -405,7 +375,7 @@ const Card = () => {
                 <div 
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                   style={{
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('http://localhost:3030/${event.image}')`
+                    backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${event.image}')`
                   }}
                 />
                 {isAdmin && editingPromotionId === event.id && (

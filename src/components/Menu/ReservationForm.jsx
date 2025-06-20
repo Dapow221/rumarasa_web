@@ -106,7 +106,7 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
   const handleSubmit = (e) => {    
     if (validateForm()) {
       const whatsappMessage = formatWhatsAppMessage();
-      const whatsappNumber = "6285730833070"; // Replace with your actual WhatsApp number
+      const whatsappNumber = "6281110065589"; // Replace with your actual WhatsApp number
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
       
       // Clear the form first

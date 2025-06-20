@@ -1,4 +1,4 @@
-import BackgroundImage from '../../assets/2.jpg'
+import BackgroundImage from '../../assets/VENUE/IMG_5664.jpg'
 import { Eye, EyeOff, User, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

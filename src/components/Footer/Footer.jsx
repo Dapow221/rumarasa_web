@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, Phone, Mail } from 'lucide-react';
-import BackgroundImage from '../../assets/3.jpg'
+import BackgroundImage from '../../assets/VENUE/IMG_5664.jpg'
 
 const Footer = () => {
   // Animation variants
@@ -171,7 +171,7 @@ const Footer = () => {
                   </motion.div>
                   <div>
                     <p className="font-medium text-white mb-1">Phone</p>
-                    <p className="text-sm">+62 21 7221 8888</p>
+                    <p className="text-sm">+62 8111 0065 589</p>
                   </div>
                 </motion.div>
 
@@ -187,7 +187,7 @@ const Footer = () => {
                   </motion.div>
                   <div>
                     <p className="font-medium text-white mb-1">Email</p>
-                    <p className="text-sm">info@rumarasanusantara.co.id</p>
+                    <p className="text-sm">rumarasanusantara@gmail.com</p>
                   </div>
                 </motion.div>
               </div>
@@ -242,7 +242,8 @@ const Footer = () => {
                 >
                   {/* Instagram */}
                   <motion.a 
-                    href="#" 
+                    href="https://www.instagram.com/rumarasa.nusantara"
+                    target='_blank'
                     className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-400 hover:text-white transition-all duration-300 group"
                     variants={socialIconVariants}
                     initial="hidden"
@@ -258,7 +259,8 @@ const Footer = () => {
 
                   {/* TikTok */}
                   <motion.a 
-                    href="#" 
+                    href="https://www.tiktok.com/@rumarasanusantara"
+                    target='_blank'
                     className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-400 hover:text-white transition-all duration-300"
                     variants={socialIconVariants}
                     initial="hidden"
@@ -274,7 +276,8 @@ const Footer = () => {
 
                   {/* WhatsApp */}
                   <motion.a 
-                    href="#" 
+                    href="https://wa.me/6281110065589"
+                    target='_blank'
                     className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-400 hover:text-white transition-all duration-300"
                     variants={socialIconVariants}
                     initial="hidden"
@@ -290,7 +293,8 @@ const Footer = () => {
 
                   {/* Google Maps */}
                   <motion.a 
-                    href="#" 
+                    href="https://maps.app.goo.gl/4RbY7djGJQiQFs8J9" 
+                    target='_blank'
                     className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-400 hover:text-white transition-all duration-300"
                     variants={socialIconVariants}
                     initial="hidden"

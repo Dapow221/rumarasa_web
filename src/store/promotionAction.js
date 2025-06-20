@@ -58,7 +58,7 @@ const updatePromotionFailure = (error) => ({
     payload: error
 });
 
-const API_BASE_URL = 'http://localhost:3030';
+const API_BASE_URL = 'https://koa-backend.vercel.app';
 
 // Thunk Actions
 export const fetchPromotions = () => {

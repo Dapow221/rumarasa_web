@@ -38,7 +38,7 @@ const updateHeroFailure = (error) => ({
     payload: error
 });
 
-const API_BASE_URL = 'http://localhost:3030'
+const API_BASE_URL = 'https://koa-backend.vercel.app'
 
 export const fetchHero = () => {
     return async (dispatch) => {

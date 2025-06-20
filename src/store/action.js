@@ -13,7 +13,7 @@ export const GET_USER_FAILURE = 'GET_USER_FAILURE';
 
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
-const BASE_URL = "http://localhost:3030";
+const BASE_URL = "https://koa-backend.vercel.app";
 
 // Action Creators
 export const loginRequest = () => ({
