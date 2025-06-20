@@ -1,5 +1,4 @@
-import { legacy_createStore as createStore, applyMiddleware, combineReducers, compose } from "redux";
-import { thunk } from "redux-thunk";
+import { configureStore } from '@reduxjs/toolkit';
 
 import sessionReducer from "./reduces/session";
 import heroReducer from "./reduces/hero"
@@ -9,7 +8,8 @@ import menuReducer from "./reduces/menu";
 import eventReducer from "./reduces/event";
 import bookingReducer from "./reduces/booking";
 
-const rootReducer = combineReducers({
+const store = configureStore({
+  reducer: {
     session: sessionReducer,
     hero: heroReducer,
     promotion: promotionReducer,
@@ -17,9 +17,9 @@ const rootReducer = combineReducers({
     menu: menuReducer,
     event: eventReducer,
     booking: bookingReducer
-})
+  },
+  // Redux Toolkit includes redux-thunk by default
+  // and sets up Redux DevTools automatically
+});
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
-
-export default store
+export default store;
