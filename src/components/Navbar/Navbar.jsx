@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import Logo from '../../assets/logo_rumarasa.png'
+import { Menu, X, LogOut } from 'lucide-react';
+import LogoRumarasa from '../../assets/logo_rumarasa.png'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   const navItems = [
     { name: 'PROMOTIONS', href: '#promotions' },
@@ -14,8 +15,23 @@ const Navbar = () => {
     { name: 'RESERVATION', href: '#reservation' },
     { name: 'BECOME MEMBER', href: '#member' },
     { name: 'LOCATION', href: '#location' }
-
   ];
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
+    window.location.href = '/';
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
+    }
+  }, []);
 
   // Variants untuk logo animation
   const logoVariants = {
@@ -49,6 +65,21 @@ const Navbar = () => {
         ease: "easeOut"
       }
     })
+  };
+
+  // Variants untuk logout button
+  const logoutButtonVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.3, ease: "easeOut" }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.8,
+      transition: { duration: 0.2 }
+    }
   };
 
   // Variants untuk mobile menu
@@ -98,17 +129,11 @@ const Navbar = () => {
           <div className="flex items-center">
             {/* PNG Logo with motion */}
             <motion.img 
-              src={Logo}
-              alt="Rumarasa Nusantara Logo" 
-              className="w-10 h-10 object-contain mr-3"
+              src={LogoRumarasa}
+              className="w-12 h-12 object-contain mr-3"
               variants={logoVariants}
               initial="hidden"
               animate="visible"
-              whileHover={{ 
-                scale: 1.1,
-                rotate: 5,
-                transition: { duration: 0.2 }
-              }}
             />
             <motion.div 
               className="text-white text-2xl font-['Playfair_Display']"
@@ -149,6 +174,26 @@ const Navbar = () => {
                 {item.name}
               </motion.a>
             ))}
+            
+            {/* Logout button - only show if authenticated */}
+            {isAuthenticated && (
+              <motion.button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 text-white text-sm font-medium hover:text-red-300 transition-colors duration-300 bg-red-600/20 hover:bg-red-600/30 px-3 py-2 rounded-lg border border-red-400/30 ml-4"
+                variants={logoutButtonVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.2 }
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <LogOut size={16} />
+                <span>LOGOUT</span>
+              </motion.button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -196,6 +241,32 @@ const Navbar = () => {
                   {item.name}
                 </motion.a>
               ))}
+              
+              {/* Mobile Logout Button - only show if authenticated */}
+              {isAuthenticated && (
+                <div className="border-t border-white/20 mt-3 pt-3">
+                  <motion.button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 text-white text-sm font-medium hover:text-red-300 transition-colors w-full py-2"
+                    variants={mobileItemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    custom={navItems.length}
+                    whileHover={{ 
+                      x: 10,
+                      color: "#fca5a5",
+                      transition: { duration: 0.2 }
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <LogOut size={16} />
+                    <span>LOGOUT</span>
+                  </motion.button>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

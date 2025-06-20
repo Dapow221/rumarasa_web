@@ -3,30 +3,40 @@ import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed } from "lucide-react
 import MenuPdf from './RenderPdf'
 import ReservationForm from './ReservationForm'
 import MembershipForm from './MemberForm'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMenus } from '../../store/menuAction'; 
 
 const Menu = () => {
-  const foodImages = [
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
-  ];
+  const dispatch = useDispatch();
+  
+  // Redux state
+  const { menus, loading, error } = useSelector(state => state.menu);
 
-  const beverageImages = [
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
-    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
-  ];
-
+  // Slider states
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
   const [currentBeverageIndex, setCurrentBeverageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  // Separate menus by category
+  const foodImages = menus?.filter(menu => menu.category === 'food').map(menu => ({
+    id: menu.id,
+    src: menu.image,
+    category: menu.category,
+    created_at: menu.created_at
+  })) || [];
+
+  const beverageImages = menus?.filter(menu => menu.category === 'beverages').map(menu => ({
+    id: menu.id,
+    src: menu.image,
+    category: menu.category,
+    created_at: menu.created_at
+  })) || [];
+
+  // Fetch menus on component mount
+  useEffect(() => {
+    dispatch(fetchMenus());
+  }, [dispatch]);
 
   // Calculate items per view based on screen size
   const getItemsPerView = useCallback(() => {
@@ -129,9 +139,9 @@ const Menu = () => {
                 gap: windowWidth < 640 ? '16px' : '24px'
               }}
             >
-              {images.map((image, index) => (
+              {images.map((image) => (
                 <div 
-                  key={index}
+                  key={image.id}
                   className={`
                     flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer
                     ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
@@ -139,11 +149,14 @@ const Menu = () => {
                       'w-[calc(25%-18px)] aspect-square'}
                   `}
                 >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  <div className="w-full h-full">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-3 left-3 right-3">
                       <h4 className="text-white font-medium text-sm md:text-base mb-1">{image.alt}</h4>
@@ -191,6 +204,18 @@ const Menu = () => {
       </div>
     );
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-600">Loading menu...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
@@ -244,6 +269,19 @@ const Menu = () => {
           title="Beverages"
           icon={Coffee}
         />
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center mt-8 mb-16">
+            <p className="text-red-600 mb-4">Error loading menu: {error}</p>
+            <button 
+              onClick={() => dispatch(fetchMenus())}
+              className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded text-white"
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         {/* PDF Menu Section */}
         <div className="mb-16 md:mb-24">
