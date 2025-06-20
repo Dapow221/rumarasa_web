@@ -6,13 +6,17 @@ import heroReducer from "./reduces/hero"
 import promotionReducer from "./reduces/promotion";
 import aboutReducer from "./reduces/about";
 import menuReducer from "./reduces/menu";
+import eventReducer from "./reduces/event";
+import bookingReducer from "./reduces/booking";
 
 const rootReducer = combineReducers({
     session: sessionReducer,
     hero: heroReducer,
     promotion: promotionReducer,
     about: aboutReducer,
-    menu: menuReducer
+    menu: menuReducer,
+    event: eventReducer,
+    booking: bookingReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

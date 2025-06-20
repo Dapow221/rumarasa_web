@@ -75,23 +75,32 @@ export const updateMenu = (id, menuData) => {
         dispatch(updateMenuRequest());
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/v1/menu/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(menuData),
-            });
+            const isFormData = menuData instanceof FormData;
+            
+            const requestOptions = {
+                method: 'PUT',
+                body: isFormData ? eventData : JSON.stringify(menuData),
+            };
+
+            if (!isFormData) {
+                requestOptions.headers = {
+                    'Content-Type': 'application/json'
+                };
+            }
+            const response = await fetch(`${API_BASE_URL}/api/v1/menu/${id}`, requestOptions);
 
             const data = await response.json();
-            console.log("Updated menu:", data.data);
-
-            if (response.ok) {
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update event');
+            }
+            
+            if (data.success) {
                 dispatch(updateMenuSuccess(data.data));
+                console.log("Updated menu:", data.data);
                 return { success: true, data: data.data };
             } else {
-                dispatch(updateMenuFailure(data.message || "Failed to update menu"));
-                return { success: false, error: data.message || "Failed to update menu" };
+                throw new Error(data.message || 'Failed to update menu');
             }
         } catch (error) {
             dispatch(updateMenuFailure(error.message));

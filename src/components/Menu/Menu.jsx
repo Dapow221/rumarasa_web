@@ -1,70 +1,35 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed, Edit } from "lucide-react";
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed } from "lucide-react";
 import MenuPdf from './RenderPdf'
 import ReservationForm from './ReservationForm'
 import MembershipForm from './MemberForm'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMenus, updateMenu } from '../../store/menuAction'; 
 
+
 const Menu = () => {
-  const dispatch = useDispatch();
-  const { menus, loading, error, updateLoading } = useSelector(state => state.menu);
-  
-  // Default fallback images
-  const defaultFoodImages = [
-    { id: 'default-food-1', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
-    { id: 'default-food-2', src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop", category: 'food' },
-    { id: 'default-food-3', src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", category: 'food' },
-    { id: 'default-food-4', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
-    { id: 'default-food-5', src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop", category: 'food' },
-    { id: 'default-food-6', src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop", category: 'food' },
+  const foodImages = [
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&h=500&fit=crop"},
   ];
 
-  const defaultBeverageImages = [
-    { id: 'default-beverage-1', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
-    { id: 'default-beverage-2', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
-    { id: 'default-beverage-3', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
-    { id: 'default-beverage-4', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
-    { id: 'default-beverage-5', src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop", category: 'beverage' },
-    { id: 'default-beverage-6', src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop", category: 'beverage' },
+  const beverageImages = [
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&h=500&fit=crop"},
+    { src: "https://images.unsplash.com/photo-1546173159-315724a31696?w=500&h=500&fit=crop"},
   ];
 
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
   const [currentBeverageIndex, setCurrentBeverageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
-  
-  // Admin functionality
-  const [authToken] = useState(localStorage.getItem('authToken'));
-  const fileInputRef = useRef({});
-  const isAdmin = authToken !== null;
-
-  // Group images by category
-  const foodImages = menus && menus.length > 0 
-    ? menus.filter(menu => menu.category === 'food').map(menu => ({
-        id: menu.id,
-        src: `http://localhost:3030/${menu.image}`,
-        category: menu.category,
-        created_at: menu.created_at,
-        updated_at: menu.updated_at
-      }))
-    : defaultFoodImages;
-
-  const beverageImages = menus && menus.length > 0 
-    ? menus.filter(menu => menu.category === 'beverage').map(menu => ({
-        id: menu.id,
-        src: `http://localhost:3030/${menu.image}`,
-        category: menu.category,
-        created_at: menu.created_at,
-        updated_at: menu.updated_at
-      }))
-    : defaultBeverageImages;
-
-  // Fetch menus on component mount
-  useEffect(() => {
-    dispatch(fetchMenus());
-  }, [dispatch]);
 
   // Calculate items per view based on screen size
   const getItemsPerView = useCallback(() => {
@@ -134,46 +99,6 @@ const Menu = () => {
     setCurrentBeverageIndex((prev) => prev <= 0 ? maxIndex : prev - 1);
   };
 
-  // Handle image click for editing
-  const handleImageClick = (menuId) => {
-    if (isAdmin && fileInputRef.current[menuId]) {
-      fileInputRef.current[menuId].click();
-    }
-  };
-
-  // Handle file change for image upload
-  const handleFileChange = async (event, menuId) => {
-    const file = event.target.files[0];
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-      if (!validTypes.includes(file.type)) {
-        alert('Please select a valid image file (JPEG, PNG, or GIF)');
-        return;
-      }
-  
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB');
-        return;
-      }
-  
-      const formData = new FormData();
-      formData.append('image', file);
-      
-      try {
-        const result = await dispatch(updateMenu(menuId, formData));
-        if (result.success) {
-          console.log('Menu image updated successfully');
-          dispatch(fetchMenus());
-        } else {
-          alert('Failed to update image: ' + (result.error || 'Unknown error'));
-        }
-      } catch (error) {
-        console.error('Error updating image:', error);
-        alert('Failed to update image. Please try again.');
-      }
-    }
-  };
-
   const SliderComponent = ({ images, currentIndex, nextSlide, prevSlide, title, icon: Icon }) => {
     const maxIndex = getMaxIndex(images.length);
     const translateX = currentIndex * (100 / itemsPerView);
@@ -209,48 +134,22 @@ const Menu = () => {
             >
               {images.map((image, index) => (
                 <div 
-                  key={image.id}
+                  key={index}
                   className={`
-                    flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group ${isAdmin ? 'cursor-pointer' : ''}
+                    flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer
                     ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
                       windowWidth < 1024 ? 'w-[calc(50%-12px)] aspect-square' : 
                       'w-[calc(25%-18px)] aspect-square'}
                   `}
-                  onClick={() => handleImageClick(image.id)}
                 >
-                  {/* Admin Edit Icon */}
-                  {isAdmin && (
-                    <div className="absolute top-2 right-2 z-10">
-                      <motion.button
-                        className="bg-orange-600 hover:bg-orange-700 text-white p-1.5 rounded-full shadow-lg transition-colors duration-200 opacity-0 group-hover:opacity-100"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <Edit size={12} />
-                      </motion.button>
-                    </div>
-                  )}
-
                   <img
                     src={image.src}
-                    alt={`${title} ${index + 1}`}
+                    alt={image.alt}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  
-                  {/* Hidden file input for admin */}
-                  {isAdmin && (
-                    <input 
-                      type="file" 
-                      ref={el => fileInputRef.current[image.id] = el} 
-                      className="hidden" 
-                      onChange={(e) => handleFileChange(e, image.id)}
-                      accept="image/*"
-                    />
-                  )}
-
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-3 left-3 right-3">
-                      <h4 className="text-white font-medium text-sm md:text-base mb-1">{`${title} ${index + 1}`}</h4>
+                      <h4 className="text-white font-medium text-sm md:text-base mb-1">{image.alt}</h4>
                       <div className="w-8 h-0.5 bg-orange-500 rounded"></div>
                     </div>
                   </div>
@@ -295,20 +194,6 @@ const Menu = () => {
       </div>
     );
   };
-
-  // Show loading state
-  if (loading) {
-    return (
-      <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600">Loading menu images...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
@@ -362,19 +247,6 @@ const Menu = () => {
           title="Beverages"
           icon={Coffee}
         />
-
-        {/* Error State */}
-        {error && (
-          <div className="text-center mt-8">
-            <p className="text-red-600 mb-4">Error loading menu images: {error}</p>
-            <button 
-              onClick={() => dispatch(fetchMenus())}
-              className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded text-white"
-            >
-              Retry
-            </button>
-          </div>
-        )}
 
         {/* PDF Menu Section */}
         <div className="mb-16 md:mb-24">
