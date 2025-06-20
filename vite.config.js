@@ -6,7 +6,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['redux'],
+      external: [],
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        }
+      }
     },
   },
 })
