@@ -79,7 +79,7 @@ export const updateMenu = (id, menuData) => {
             
             const requestOptions = {
                 method: 'PUT',
-                body: isFormData ? eventData : JSON.stringify(menuData),
+                body: isFormData ? menuData : JSON.stringify(menuData),
             };
 
             if (!isFormData) {
@@ -87,12 +87,13 @@ export const updateMenu = (id, menuData) => {
                     'Content-Type': 'application/json'
                 };
             }
+
             const response = await fetch(`${API_BASE_URL}/api/v1/menu/${id}`, requestOptions);
 
             const data = await response.json();
             
             if (!response.ok) {
-                throw new Error(data.message || 'Failed to update event');
+                throw new Error(data.message || 'Failed to update menu');
             }
             
             if (data.success) {

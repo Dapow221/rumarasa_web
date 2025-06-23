@@ -1,16 +1,25 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { ChevronLeft, ChevronRight, Coffee, UtensilsCrossed, Edit, Upload, X, Check } from "lucide-react";
 import MenuPdf from './RenderPdf'
 import ReservationForm from './ReservationForm'
 import MembershipForm from './MemberForm'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenus } from '../../store/menuAction'; 
+import { fetchMenus, updateMenu } from '../../store/menuAction'; 
 
 const Menu = () => {
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
   
   // Redux state
   const { menus, loading, error } = useSelector(state => state.menu);
+
+  // Admin auth state
+  const [authToken] = useState(localStorage.getItem('authToken'));
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  
+  const isAdmin = authToken !== null;
 
   // Slider states
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
@@ -64,7 +73,7 @@ const Menu = () => {
 
   // Auto-slide functionality with pause on hover
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || isEditing) return;
 
     const foodInterval = setInterval(() => {
       setCurrentFoodIndex((prev) => {
@@ -84,7 +93,45 @@ const Menu = () => {
       clearInterval(foodInterval);
       clearInterval(beverageInterval);
     };
-  }, [isPaused, foodImages.length, beverageImages.length, itemsPerView]);
+  }, [isPaused, isEditing, foodImages.length, beverageImages.length, itemsPerView]);
+
+  // Admin edit functions
+  const handleImageClick = (image) => {
+    if (!isAdmin) return;
+    
+    setEditingItem(image);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = async (event) => {
+    const file = event.target.files[0];
+    if (!file || !editingItem) return;
+
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('category', editingItem.category);
+
+      const result = await dispatch(updateMenu(editingItem.id, formData));
+      
+      if (result.success) {
+        // Refetch menus after successful update
+        dispatch(fetchMenus());
+        setEditingItem(null);
+      } else {
+        alert('Failed to update menu item: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error updating menu:', error);
+      alert('Failed to update menu item');
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      event.target.value = '';
+    }
+  };
 
   const nextFoodSlide = () => {
     const maxIndex = getMaxIndex(foodImages.length);
@@ -147,7 +194,9 @@ const Menu = () => {
                     ${windowWidth < 640 ? 'w-full aspect-[4/3]' : 
                       windowWidth < 1024 ? 'w-[calc(50%-12px)] aspect-square' : 
                       'w-[calc(25%-18px)] aspect-square'}
+                    ${isAdmin ? 'ring-2 ring-transparent hover:ring-orange-300' : ''}
                   `}
+                  onClick={() => handleImageClick(image)}
                 >
                   <div className="w-full h-full">
                     <img
@@ -156,6 +205,25 @@ const Menu = () => {
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
+
+                  {/* Admin Edit Overlay */}
+                  {isAdmin && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="bg-white/90 rounded-full p-3">
+                        <Edit className="w-5 h-5 text-orange-600" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Upload Progress Overlay */}
+                  {isUploading && editingItem?.id === image.id && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+                        <p className="text-sm">Uploading...</p>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-3 left-3 right-3">
@@ -219,6 +287,15 @@ const Menu = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+      {/* Hidden file input for admin uploads */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
+
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         {/* Header Section */}
         <div className="text-center mb-16 md:mb-24">
@@ -247,6 +324,11 @@ const Menu = () => {
           <p className="text-base md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
             Discover our authentic Indonesian cuisine crafted with traditional
             recipes and the finest local ingredients, bringing you the true taste of Nusantara
+            {isAdmin && (
+              <span className="block mt-2 text-sm text-orange-600 font-medium">
+                Click on any menu image to update it
+              </span>
+            )}
           </p>
         </div>
 
