@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Calendar, Users, Clock, Edit, Save, X } from 'lucide-react';
+import { Clock, Edit, Save, X } from 'lucide-react';
 import { fetchPromotions, updatePromotion } from '../../store/promotionAction';
+import bg_2 from "../../assets/bg_2.png";
+
 
 const Card = () => {
   const dispatch = useDispatch();
@@ -157,33 +159,6 @@ const Card = () => {
     }
   };
 
-  const headerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: "easeOut" 
-      }
-    }
-  };
-
-  // Variants untuk subtitle
-  const subtitleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: "easeOut",
-        delay: 0.3
-      }
-    }
-  };
-
-  // Variants untuk card animation (removed hover effects)
   const cardVariants = {
     hidden: { 
       opacity: 0, 
@@ -201,80 +176,23 @@ const Card = () => {
     })
   };
 
-  // Variants untuk card content
-  const contentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.6, 
-        ease: "easeOut",
-        delay: 0.2
-      }
-    }
-  };
-
-  // Variants untuk title animation
-  const titleVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        duration: 0.6, 
-        ease: "easeOut"
-      }
-    }
-  };
-
-  // Variants untuk subtitle dalam card
-  const cardSubtitleVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        duration: 0.6, 
-        ease: "easeOut",
-        delay: 0.1
-      }
-    }
-  };
-
-  // Variants untuk description
-  const descriptionVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.6, 
-        ease: "easeOut",
-        delay: 0.2
-      }
-    }
-  };
-
-  // Variants untuk event details
-  const detailItemVariants = {
-    hidden: { opacity: 0, x: -15 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        delay: 0.3 + (i * 0.1),
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    })
-  };
-
   // Show loading state
   if (loading) {
     return (
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section 
+        className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
+        style={{
+          backgroundImage: `url(${bg_2})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        {/* Semi-transparent overlay for better text readability */}
+        <div className="absolute inset-0 bg-white/90"></div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
             <p className="text-xl text-gray-600">Loading promotions...</p>
@@ -285,13 +203,24 @@ const Card = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section 
+      className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
+      style={{
+        backgroundImage: `url(${bg_2})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      {/* Semi-transparent overlay for better text readability */}
+      <div className="absolute inset-0 bg-white/90"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <motion.h2 
             className="text-4xl md:text-5xl font-serif text-gray-900 mb-4"
-            variants={headerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -300,7 +229,6 @@ const Card = () => {
           </motion.h2>
           <motion.h3 
             className="text-3xl md:text-4xl font-serif italic text-orange-600 mb-6"
-            variants={subtitleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -390,7 +318,6 @@ const Card = () => {
               {/* Content */}
               <motion.div 
                 className="p-6"
-                variants={contentVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
@@ -406,7 +333,6 @@ const Card = () => {
                         ? 'bg-blue-100 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
                         : ''
                     }`}
-                    variants={titleVariants}
                   >
                     {event.title}
                   </motion.h4>
@@ -421,7 +347,6 @@ const Card = () => {
                         ? 'bg-blue-100 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
                         : ''
                     }`}
-                    variants={cardSubtitleVariants}
                   >
                     {event.subtitle}
                   </motion.p>
@@ -438,80 +363,17 @@ const Card = () => {
                         ? 'bg-blue-100 border border-blue-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
                         : ''
                     }`}
-                    variants={descriptionVariants}
-                    whileHover={{ 
-                      color: "#374151",
-                      transition: { duration: 0.2 }
-                    }}
                   >
                     {event.description}
                   </motion.p>
                 </div>
 
-                {/* Event Details */}
                 <div className="space-y-2 mb-4">
-                  {event.date && (
-                    <motion.div 
-                      className="flex items-center gap-2 text-sm text-gray-600"
-                      variants={detailItemVariants}
-                      custom={0}
-                      whileHover={{ 
-                        x: 5,
-                        color: "#ea580c",
-                        transition: { duration: 0.2 }
-                      }}
-                    >
-                      <motion.div
-                        whileHover={{ rotate: 15, scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Calendar size={14} />
-                      </motion.div>
-                      <motion.span
-                        whileHover={{ fontWeight: "500" }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {event.date}
-                      </motion.span>
-                    </motion.div>
-                  )}
-                  
-                  {event.capacity && (
-                    <motion.div 
-                      className="flex items-center gap-2 text-sm text-gray-600"
-                      variants={detailItemVariants}
-                      custom={1}
-                      whileHover={{ 
-                        x: 5,
-                        color: "#ea580c",
-                        transition: { duration: 0.2 }
-                      }}
-                    >
-                      <motion.div
-                        whileHover={{ scale: 1.2 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Users size={14} />
-                      </motion.div>
-                      <motion.span
-                        whileHover={{ fontWeight: "500" }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {event.capacity}
-                      </motion.span>
-                    </motion.div>
-                  )}
-                  
                   {event.validity && (
                     <motion.div 
                       className="flex items-center gap-2 text-sm text-gray-600"
-                      variants={detailItemVariants}
                       custom={2}
-                      whileHover={{ 
-                        x: 5,
-                        color: "#ea580c",
-                        transition: { duration: 0.2 }
-                      }}
+                     
                     >
                       <motion.div
                         whileHover={{ rotate: 360 }}
@@ -529,8 +391,6 @@ const Card = () => {
                             ? 'bg-blue-100 border border-blue-400 rounded px-1 focus:outline-none focus:ring-2 focus:ring-blue-400' 
                             : ''
                         }`}
-                        whileHover={{ fontWeight: "500" }}
-                        transition={{ duration: 0.2 }}
                       >
                         {event.validity}
                       </motion.span>
