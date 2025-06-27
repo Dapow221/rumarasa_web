@@ -290,7 +290,7 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
         {/* Restaurant Name */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-6">
           <div className="mb-2 sm:mb-4 mt-20 flex justify-center">
             <motion.img 
               src={LogoImage}
