@@ -168,6 +168,11 @@ const Menu = () => {
     const file = event.target.files[0];
     if (!file || !editingItem) return;
 
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
     setIsUploading(true);
 
     try {
