@@ -424,7 +424,7 @@ const Hero = () => {
 
         {/* Social Media Section */}
         <motion.div 
-          className="mt-6 sm:mt-8 mb-5"
+          className="mt-6 sm:mt-8 mb-10"
           variants={socialVariants}
           initial="hidden"
           animate="visible"
