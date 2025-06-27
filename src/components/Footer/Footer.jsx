@@ -259,7 +259,7 @@ const Footer = () => {
 
                   {/* TikTok */}
                   <motion.a 
-                    href="https://www.tiktok.com/@rumarasanusantara"
+                    href="https://www.tiktok.com/@rumarasanusantara_"
                     target='_blank'
                     className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-400 hover:text-white transition-all duration-300"
                     variants={socialIconVariants}

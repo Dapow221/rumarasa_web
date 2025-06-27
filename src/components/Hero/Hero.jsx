@@ -423,57 +423,35 @@ const Hero = () => {
         </div>
 
         {/* Social Media Section */}
-        <motion.div
-          className="mt-6 sm:mt-8 flex flex-col items-center gap-3"
+        <motion.div 
+          className="mt-8 sm:mt-12"
           variants={socialVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.p 
-            className="text-xs sm:text-sm text-gray-400 font-light tracking-wide uppercase"
-          >
+          <h3 className="text-sm sm:text-base text-gray-300 font-light mb-4 tracking-wide">
             Social Media
-          </motion.p>
-          
-          <div className="flex items-center gap-4">
+          </h3>
+          <div className="flex justify-center items-center gap-6">
             <motion.a
               href="https://www.instagram.com/rumarasa.nusantara"
               target='_blank'
-              className="flex items-center gap-2 text-gray-300 hover:text-orange-400 transition-colors duration-200"
-              whileHover={{ 
-                scale: 1.1,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200"
+              whileHover={{ scale: 1.1, y: -2 }}
+              transition={{ duration: 0.2 }}
             >
-              <motion.div
-                whileHover={{ rotate: 15 }}
-                transition={{ duration: 0.2 }}
-              >
-                <InstagramIcon size={16} className="sm:w-5 sm:h-5" />
-              </motion.div>
-              <span className="text-xs sm:text-sm font-light">Instagram</span>
+              <InstagramIcon size={18} />
+              <span className="text-xs sm:text-sm">Instagram</span>
             </motion.a>
-            
-            <div className="w-px h-4 bg-gray-600"></div>
-            
             <motion.a
-              href="https://www.tiktok.com/@rumarasanusantara"
+              href="https://www.tiktok.com/@rumarasanusantara_"
               target='_blank'
-              className="flex items-center gap-2 text-gray-300 hover:text-orange-400 transition-colors duration-200"
-              whileHover={{ 
-                scale: 1.1,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200"
+              whileHover={{ scale: 1.1, y: -2 }}
+              transition={{ duration: 0.2 }}
             >
-              <motion.div
-                whileHover={{ rotate: -15 }}
-                transition={{ duration: 0.2 }}
-              >
-                <TikTokIcon size={16} className="sm:w-5 sm:h-5" />
-              </motion.div>
-              <span className="text-xs sm:text-sm font-light">TikTok</span>
+              <TikTokIcon size={18} />
+              <span className="text-xs sm:text-sm">TikTok</span>
             </motion.a>
           </div>
         </motion.div>
