@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { X } from "lucide-react";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 // WhatsApp SVG Icon Component
 const WhatsAppIcon = ({ size = 24, className = "" }) => (
@@ -133,14 +131,6 @@ const FloatingWhatsApp = () => {
 
 const App = () => {
   React.useEffect(() => {
-    AOS.init({
-      offset: 100,
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-    });
-    AOS.refresh();
-    
     document.documentElement.style.scrollBehavior = 'smooth';
     
     return () => {

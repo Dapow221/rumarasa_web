@@ -367,7 +367,7 @@ const Hero = () => {
         </motion.div>
 
         {/* Info Bar */}
-        <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-300">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-300">
           <motion.div 
             className="flex items-center gap-2"
             initial="hidden"
@@ -424,7 +424,7 @@ const Hero = () => {
 
         {/* Social Media Section */}
         <motion.div 
-          className="mt-8 sm:mt-12"
+          className="mt-2 sm:mt-6"
           variants={socialVariants}
           initial="hidden"
           animate="visible"
