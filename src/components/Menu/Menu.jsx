@@ -268,7 +268,7 @@ const Menu = () => {
               className="flex transition-transform duration-1000 ease-in-out"
               style={{
                 transform: `translateX(-${translateX}%)`,
-                gap: windowWidth < 640 ? "16px" : "24px",
+                gap: windowWidth < 640 ? "0px" : "24px",
               }}
             >
               {images.map((image) => (
@@ -278,7 +278,7 @@ const Menu = () => {
                     flex-shrink-0 relative overflow-hidden rounded-sm shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer
                     ${
                       windowWidth < 640
-                        ? "w-full aspect-[4/3]"
+                        ? "w-full aspect-[4/3] px-4"
                         : windowWidth < 1024
                         ? "w-[calc(50%-12px)] aspect-square"
                         : "w-[calc(25%-18px)] aspect-square"

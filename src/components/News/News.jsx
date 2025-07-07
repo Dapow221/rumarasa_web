@@ -255,11 +255,18 @@ const LatestNews = () => {
     }
   };
 
-  // Calculate carousel transform
+  // Fixed carousel transform calculation
   const getTransform = () => {
-    const cardWidth = itemsPerView === 1 ? 100 : itemsPerView === 2 ? 50 : 33.333333;
-    const gap = itemsPerView === 1 ? 0 : 1.5; // rem converted to percentage approximation
-    return `translateX(-${currentSlide * (cardWidth + gap)}%)`;
+    if (itemsPerView === 1) {
+      // Mobile: each slide takes full width, perfect centering
+      return `translateX(-${currentSlide * 100}%)`;
+    } else if (itemsPerView === 2) {
+      // Tablet: two items per view
+      return `translateX(-${currentSlide * 50}%)`;
+    } else {
+      // Desktop: three items per view
+      return `translateX(-${currentSlide * 33.333333}%)`;
+    }
   };
 
   // Show loading state
@@ -356,17 +363,21 @@ const LatestNews = () => {
           <div className="overflow-hidden rounded-2xl">
             <motion.div 
               ref={carouselRef}
-              className="flex transition-transform duration-500 ease-in-out gap-6"
-              style={{ transform: getTransform() }}
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ 
+                transform: getTransform(),
+                // Remove gap for mobile, add proper spacing for larger screens
+                gap: itemsPerView === 1 ? '0px' : '24px'
+              }}
             >
               {newsItems.map((item, index) => (
                 <motion.div 
                   key={item.id}
                   variants={cardVariants}
                   className={`flex-shrink-0 group relative ${
-                    itemsPerView === 1 ? 'w-full' : 
-                    itemsPerView === 2 ? 'w-[calc(50%-12px)]' : 
-                    'w-[calc(33.333333%-16px)]'
+                    itemsPerView === 1 ? 'w-full px-4' : // Mobile: full width with padding
+                    itemsPerView === 2 ? 'w-[calc(50%-12px)]' : // Tablet
+                    'w-[calc(33.333333%-16px)]' // Desktop
                   }`}
                 >
                   {/* Admin Edit Controls */}
