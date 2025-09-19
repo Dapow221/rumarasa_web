@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Star, Gift, Percent, Crown, User, Phone, Mail, Calendar } from "lucide-react";
-import bg_3 from '../../assets/bg_3.png'
-
 
 const MembershipForm = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +19,6 @@ const MembershipForm = () => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -95,18 +92,15 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
   const handleSubmit = () => {    
     if (validateForm()) {
       const whatsappMessage = formatWhatsAppMessage();
-      const whatsappNumber = "6281110065589"; // Replace with your actual WhatsApp number
+      const whatsappNumber = "6281110065589"; 
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
-      // Clear the form first
       clearForm();
       
-      // Then redirect to WhatsApp
       window.open(whatsappURL, '_blank');
     }
   };
 
-  // Get max date for birth date (13 years ago)
   const maxBirthDate = new Date();
   maxBirthDate.setFullYear(maxBirthDate.getFullYear() - 13);
   const maxDate = maxBirthDate.toISOString().split('T')[0];
@@ -117,14 +111,13 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
       <div 
         className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
         style={{
-          backgroundImage: `url(${bg_3})`,
+          backgroundImage: `url('/images/bg_3.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed'
         }}
       >
-        {/* Semi-transparent overlay for better text readability */}
         <div className="absolute inset-0 bg-white/90"></div>
         
         <div className="mb-16 md:mb-24 relative z-10">
@@ -141,7 +134,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
 
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-              {/* Left Side - Benefits Information */}
               <div className="space-y-6">
                 <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 md:p-8 border border-orange-200">
                   <div className="flex items-center gap-3 mb-6">
@@ -154,7 +146,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                       Menjadi <span className="font-semibold text-orange-700">Member Rumarasa Nusantara</span> memberikan Anda akses ke berbagai privilese eksklusif dan pengalaman kuliner yang tak terlupakan.
                     </p>
                     
-                    {/* Main Benefits */}
                     <div className="space-y-4">
                       <div className="flex items-start gap-4 p-4 bg-white rounded-lg border border-orange-200">
                         <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -197,7 +188,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                       </div>
                     </div>
                     
-                    {/* Additional Benefits */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                       <div className="flex items-center gap-2 text-sm">
                         <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
@@ -230,7 +220,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                 </div>
               </div>
 
-              {/* Right Side - Form */}
               <div className="bg-white rounded-2xl shadow-lg border border-orange-100 overflow-hidden">
                 <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 md:p-8">
                   <div className="flex items-center justify-center gap-3 text-white">
@@ -240,7 +229,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                 </div>
 
                 <div className="p-6 md:p-8 space-y-6">
-                  {/* Name Field */}
                   <div>
                     <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
                       <User className="w-4 h-4 text-orange-600" />
@@ -260,7 +248,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                   </div>
 
-                  {/* Email Field */}
                   <div>
                     <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
                       <Mail className="w-4 h-4 text-orange-600" />
@@ -280,7 +267,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                   </div>
 
-                  {/* Phone Field */}
                   <div>
                     <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
                       <Phone className="w-4 h-4 text-orange-600" />
@@ -300,7 +286,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                   </div>
 
-                  {/* Birth Date Field */}
                   <div>
                     <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
                       <Calendar className="w-4 h-4 text-orange-600" />
@@ -320,7 +305,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     {errors.birthDate && <p className="text-red-500 text-sm mt-1">{errors.birthDate}</p>}
                   </div>
 
-                  {/* Address Field */}
                   <div>
                     <label className="flex items-center gap-2 text-gray-700 font-medium mb-2">
                       <User className="w-4 h-4 text-orange-600" />
@@ -340,7 +324,6 @@ Mohon proses pendaftaran member saya dan informasikan mengenai kartu member sert
                     {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                   </div>
 
-                  {/* Submit Button */}
                   <div >
                     <button
                       onClick={handleSubmit}

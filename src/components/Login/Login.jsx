@@ -1,4 +1,3 @@
-import BackgroundImage from '../../assets/VENUE/IMG_5664.jpg'
 import { Eye, EyeOff, User, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,26 +27,21 @@ const Login = () => {
       e.preventDefault();
       
       try {
-        // Dispatch login action
         await dispatch(loginUser({
           username: formData.username,
           password: formData.password
         }));
         
-        // Show success alert
         alert('Login successful! Welcome back!');
         
-        // Redirect to home page
         navigate('/');
         
       } catch (error) {
-        // Error handling is managed by Redux, but you can add additional logic here if needed
         console.error('Login failed:', error);
         alert('Login failed. Please check your credentials and try again.');
       }
     };
 
-    // Redirect if already logged in
     useEffect(() => {
       if (isLogin) {
         navigate('/');
@@ -59,14 +53,12 @@ const Login = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(${BackgroundImage})`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('/images/venue/IMG_5664.jpg')`
           }}  
         />
   
-        {/* Login Form */}
         <div className="relative z-10 w-full max-w-md mx-4">
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 p-8">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <User className="w-8 h-8 text-white" />
@@ -75,16 +67,13 @@ const Login = () => {
               <p className="text-gray-300">Please sign in to your account</p>
             </div>
   
-            {/* Error Display */}
             {error && (
               <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
                 <p className="text-red-300 text-sm text-center">{error}</p>
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Username Field */}
               <div className="relative">
                 <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                   Username
@@ -105,7 +94,6 @@ const Login = () => {
                 </div>
               </div>
   
-              {/* Password Field */}
               <div className="relative">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                   Password
@@ -135,7 +123,6 @@ const Login = () => {
               </div>
   
               \
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}

@@ -10,7 +10,6 @@ import LatestNews from "../components/News/News";
 import Events from "../components/Events/Event";
 import Login from "../components/Login/Login";
 
-// Home page component with all sections
 const HomePage = () => {
   return (
     <div className="overflow-x-hidden">

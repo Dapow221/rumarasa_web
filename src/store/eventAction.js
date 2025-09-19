@@ -1,21 +1,17 @@
 export const EVENT_ACTION_TYPES = {
-    // Fetch Events
     FETCH_EVENTS_REQUEST: 'FETCH_EVENTS_REQUEST',
     FETCH_EVENTS_SUCCESS: 'FETCH_EVENTS_SUCCESS',
     FETCH_EVENTS_FAILURE: 'FETCH_EVENTS_FAILURE',
     
-    // Create Event
     CREATE_EVENT_REQUEST: 'CREATE_EVENT_REQUEST',
     CREATE_EVENT_SUCCESS: 'CREATE_EVENT_SUCCESS',
     CREATE_EVENT_FAILURE: 'CREATE_EVENT_FAILURE',
     
-    // Update Event
     UPDATE_EVENT_REQUEST: 'UPDATE_EVENT_REQUEST',
     UPDATE_EVENT_SUCCESS: 'UPDATE_EVENT_SUCCESS',
     UPDATE_EVENT_FAILURE: 'UPDATE_EVENT_FAILURE',
 };
 
-// Action Creators
 const fetchEventsRequest = () => ({
     type: EVENT_ACTION_TYPES.FETCH_EVENTS_REQUEST
 });
@@ -60,7 +56,6 @@ const updateEventFailure = (error) => ({
 
 const API_BASE_URL = 'https://koa-backend.vercel.app';
 
-// Thunk Actions
 export const fetchEvents = () => {
     return async (dispatch) => {
         dispatch(fetchEventsRequest());
@@ -74,7 +69,6 @@ export const fetchEvents = () => {
             });
 
             const data = await response.json();
-            console.log(data)
 
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to fetch events');
@@ -112,7 +106,6 @@ export const createEvent = (eventData) => {
 
             if (data.success) {
                 dispatch(createEventSuccess(data.data));
-                console.log(data.data);
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to create event');
@@ -151,7 +144,6 @@ export const updateEvent = (eventId, eventData) => {
 
             if (data.success) {
                 dispatch(updateEventSuccess(data.data));
-                console.log(data.data);
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to update event');

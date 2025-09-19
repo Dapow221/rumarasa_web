@@ -10,7 +10,6 @@ const MenuPdf = () => {
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="relative h-[700px] w-full border overflow-hidden rounded-lg bg-gray-50">
-        {/* Loading indicator */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
             <div className="text-center p-6">
@@ -20,7 +19,6 @@ const MenuPdf = () => {
           </div>
         )}
         
-        {/* FlipHTML5 Iframe */}
         <iframe
           src="https://online.fliphtml5.com/qqzjx/onwz/"
           width="100%"
@@ -34,9 +32,6 @@ const MenuPdf = () => {
         />
       </div>
       
-      
-      
-      {/* Fallback message */}
       <div className="mt-2 text-center">
         <p className="text-xs text-gray-400">
           If the menu doesn't load, you can{" "}

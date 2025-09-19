@@ -1,4 +1,3 @@
-// Action Types
 export const BOOKING_ACTION_TYPES = {
     FETCH_BOOKING_REQUEST: "FETCH_BOOKING_REQUEST",
     FETCH_BOOKING_SUCCESS: "FETCH_BOOKING_SUCCESS",
@@ -8,7 +7,6 @@ export const BOOKING_ACTION_TYPES = {
     UPDATE_BOOKING_FAILURE: "UPDATE_BOOKING_FAILURE",
   };
   
-  // Action Creators
   const fetchBookingRequest = () => ({
     type: BOOKING_ACTION_TYPES.FETCH_BOOKING_REQUEST,
   });
@@ -39,7 +37,6 @@ export const BOOKING_ACTION_TYPES = {
   
   const API_BASE_URL = "https://koa-backend.vercel.app";
   
-  // Thunk Actions
   export const fetchBooking = () => {
     return async (dispatch) => {
       dispatch(fetchBookingRequest());
@@ -53,7 +50,6 @@ export const BOOKING_ACTION_TYPES = {
         });
   
         const data = await response.json();
-        console.log(data.data);
   
         if (response.ok) {
           dispatch(fetchBookingSuccess(data.data));
@@ -83,7 +79,6 @@ export const BOOKING_ACTION_TYPES = {
         );
   
         const data = await response.json();
-        // console.log(data);
   
         if (!response.ok) {
           throw new Error(data.message || "Failed to update booking");
@@ -91,7 +86,6 @@ export const BOOKING_ACTION_TYPES = {
   
         if (data.success) {
           dispatch(updateBookingSuccess(data.data));
-          console.log(data.data);
           return { success: true, data: data.data };
         } else {
           throw new Error(data.message || "Failed to update booking");

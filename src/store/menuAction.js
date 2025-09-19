@@ -1,4 +1,3 @@
-// Import action types
 export const MENU_ACTION_TYPES = {
     FETCH_MENU_REQUEST: 'FETCH_MENU_REQUEST',
     FETCH_MENU_SUCCESS: 'FETCH_MENU_SUCCESS',
@@ -6,9 +5,8 @@ export const MENU_ACTION_TYPES = {
     UPDATE_MENU_REQUEST: 'UPDATE_MENU_REQUEST',
     UPDATE_MENU_SUCCESS: 'UPDATE_MENU_SUCCESS',
     UPDATE_MENU_FAILURE: 'UPDATE_MENU_FAILURE',
-};; // Adjust path as needed
+};; 
 
-// Action Creators
 const fetchMenuRequest = () => ({
     type: MENU_ACTION_TYPES.FETCH_MENU_REQUEST,
 });
@@ -39,7 +37,6 @@ const updateMenuFailure = (error) => ({
 
 const API_BASE_URL = "https://koa-backend.vercel.app";
 
-// Thunk Actions
 export const fetchMenus = () => {
     return async (dispatch) => {
         dispatch(fetchMenuRequest());
@@ -53,7 +50,6 @@ export const fetchMenus = () => {
             });
 
             const data = await response.json();
-            console.log("Fetched menus:", data.data);
 
             if (response.ok) {
                 dispatch(fetchMenuSuccess(data.data));
@@ -98,7 +94,6 @@ export const updateMenu = (id, menuData) => {
             
             if (data.success) {
                 dispatch(updateMenuSuccess(data.data));
-                console.log("Updated menu:", data.data);
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to update menu');

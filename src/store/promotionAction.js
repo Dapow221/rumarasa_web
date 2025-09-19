@@ -1,21 +1,17 @@
 export const PROMOTION_ACTION_TYPES = {
-    // Fetch Promotions
     FETCH_PROMOTIONS_REQUEST: 'FETCH_PROMOTIONS_REQUEST',
     FETCH_PROMOTIONS_SUCCESS: 'FETCH_PROMOTIONS_SUCCESS',
     FETCH_PROMOTIONS_FAILURE: 'FETCH_PROMOTIONS_FAILURE',
     
-    // Create Promotion
     CREATE_PROMOTION_REQUEST: 'CREATE_PROMOTION_REQUEST',
     CREATE_PROMOTION_SUCCESS: 'CREATE_PROMOTION_SUCCESS',   
     CREATE_PROMOTION_FAILURE: 'CREATE_PROMOTION_FAILURE',
     
-    // Update Promotion
     UPDATE_PROMOTION_REQUEST: 'UPDATE_PROMOTION_REQUEST',
     UPDATE_PROMOTION_SUCCESS: 'UPDATE_PROMOTION_SUCCESS',
     UPDATE_PROMOTION_FAILURE: 'UPDATE_PROMOTION_FAILURE',
 };
 
-// Action Creators
 const fetchPromotionsRequest = () => ({
     type: PROMOTION_ACTION_TYPES.FETCH_PROMOTIONS_REQUEST
 });
@@ -60,7 +56,6 @@ const updatePromotionFailure = (error) => ({
 
 const API_BASE_URL = 'https://koa-backend.vercel.app';
 
-// Thunk Actions
 export const fetchPromotions = () => {
     return async (dispatch) => {
         dispatch(fetchPromotionsRequest());
@@ -74,7 +69,6 @@ export const fetchPromotions = () => {
             });
 
             const data = await response.json();
-            console.log(data)
 
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to fetch promotions');
@@ -112,7 +106,6 @@ export const createPromotion = (promotionData) => {
 
             if (data.success) {
                 dispatch(createPromotionSuccess(data.data));
-                console.log(data.data);
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to create promotion');
@@ -151,7 +144,6 @@ export const updatePromotion = (promotionId, promotionData) => {
 
             if (data.success) {
                 dispatch(updatePromotionSuccess(data.data));
-                console.log(data.data);
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to update promotion');

@@ -1,10 +1,8 @@
 export const HERO_ACTION_TYPES = {
-    // Fetch Hero
     FETCH_HERO_REQUEST: 'FETCH_HERO_REQUEST',
     FETCH_HERO_SUCCESS: 'FETCH_HERO_SUCCESS',
     FETCH_HERO_FAILURE: 'FETCH_HERO_FAILURE',
     
-    // Update Hero
     UPDATE_HERO_REQUEST: 'UPDATE_HERO_REQUEST',
     UPDATE_HERO_SUCCESS: 'UPDATE_HERO_SUCCESS',
     UPDATE_HERO_FAILURE: 'UPDATE_HERO_FAILURE',
@@ -92,7 +90,6 @@ export const updateHero = (heroId, heroData) => {
 
             if (data.success) {
                 dispatch(updateHeroSuccess(data.data));
-                console.log(data.data)
                 return { success: true, data: data.data };
             } else {
                 throw new Error(data.message || 'Failed to update hero');

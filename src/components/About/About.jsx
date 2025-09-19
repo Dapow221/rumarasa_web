@@ -3,31 +3,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Edit, Save, X } from 'lucide-react';
 import { fetchAbout, updateAbout } from '../../store/aboutAction';
-import backgroundImage from "../../assets/VENUE/IMG_5663.jpg";
 
 const About = () => {
   const dispatch = useDispatch();
   
   const { about, isLoading, isUpdating, error } = useSelector(state => state.about);
-  
   const [authToken] = useState(localStorage.getItem('authToken'));
   const [isEditing, setIsEditing] = useState(false);
   
   const isAdmin = authToken !== null;
   
-  // Refs for contenteditable elements
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const descriptionRef = useRef(null);
 
-  // Default content structure
   const defaultContent = {
     title: 'ABOUT RUMARASA NUSANTARA',
     subtitle: 'About Us',
     description: 'Rumarasa Nusantara adalah Rumah makan keluarga yang menyajikan hidangan Nusantara. Rumarasa Nusantara juga menjadi pusat kuliner terbaik yang menghadirkan pengalaman unik dengan cita rasa dari berbagai tempat. Kami memperkaya hubungan sosial dan kebersamaan di setiap kesempatan, sambil memberikan hidangan inovatif, ruang yang nyaman, serta kopi berkualitas. Dengan oleh-oleh khas dan layanan untuk acara spesial, kami menjadi bagian dari setiap momen kebahagiaan pelanggan kami.'
   };
 
-  // Get current content from about data
   const getCurrentContent = () => {
     if (!about) return defaultContent;
     
@@ -40,12 +35,10 @@ const About = () => {
 
   const content = getCurrentContent();
 
-  // Fetch about data on component mount
   useEffect(() => {
     dispatch(fetchAbout());
   }, [dispatch]);
 
-  // Update refs when content changes
   useEffect(() => {
     if (!isEditing) {
       if (titleRef.current) titleRef.current.textContent = content.title;
@@ -54,13 +47,7 @@ const About = () => {
     }
   }, [about, isEditing]);
 
-  // Save content
   const saveContent = async () => {
-    if (!about?.id) {
-      alert('About ID not found. Please refresh the page and try again.');
-      return;
-    }
-
     const newContent = {
       title: titleRef.current?.textContent || '',
       subtitle: subtitleRef.current?.textContent || '',
@@ -72,26 +59,21 @@ const About = () => {
       
       if (result.success) {
         setIsEditing(false);
-        console.log('About content updated successfully');
       } else {
         alert('Failed to save changes: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
-      console.error('Error saving content:', error);
       alert('Failed to save changes. Please try again.');
     }
   };
 
-  // Cancel editing
   const cancelEdit = () => {
     setIsEditing(false);
-    // Reset content to saved version
     if (titleRef.current) titleRef.current.textContent = content.title;
     if (subtitleRef.current) subtitleRef.current.textContent = content.subtitle;
     if (descriptionRef.current) descriptionRef.current.textContent = content.description;
   };
 
-  // Handle key press for contenteditable elements
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -102,14 +84,13 @@ const About = () => {
     }
   };
 
-  // Show loading state
   if (isLoading) {
     return (
       <section className="py-20 pb-16 relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-top bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/images/venue/IMG_5663.jpg')`
           }}
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[400px]">
@@ -122,14 +103,13 @@ const About = () => {
     );
   }
 
-  // Show error state
   if (error && !about) {
     return (
       <section className="py-20 pb-16 relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-top bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/images/venue/IMG_5663.jpg')`
           }}
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[400px]">
@@ -152,11 +132,10 @@ const About = () => {
       <div 
         className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url(${backgroundImage})`
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/images/venue/IMG_5663.jpg')`
         }}
       />
 
-      {/* Admin Edit Controls */}
       {isAdmin && (
         <div className="absolute top-4 right-4 z-20 flex gap-2">
           {!isEditing ? (
@@ -271,7 +250,6 @@ const About = () => {
               </motion.h2>
             </motion.div>
 
-            {/* Description */}
             <motion.div 
               className="space-y-4 text-gray-300 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}

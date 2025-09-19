@@ -5,16 +5,13 @@ import ReservationForm from "./ReservationForm";
 import MembershipForm from "./MemberForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMenus, updateMenu } from "../../store/menuAction";
-import bg_1 from "../../assets/bg_1.png";
 
 const Menu = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
 
-  // Redux state
   const { menus, loading, error } = useSelector((state) => state.menu);
 
-  // Admin auth state
   const [authToken] = useState(localStorage.getItem("authToken"));
   const [isEditing, setIsEditing] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -22,7 +19,6 @@ const Menu = () => {
 
   const isAdmin = authToken !== null;
 
-  // Slider states
   const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
   const [currentBeverageIndex, setCurrentBeverageIndex] = useState(0);
   const [currentFacilityIndex, setCurrentFacilityIndex] = useState(0);
@@ -31,7 +27,6 @@ const Menu = () => {
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
 
-  // Refs for smooth transitions
   const foodIntervalRef = useRef(null);
   const beverageIntervalRef = useRef(null);
   const facilityIntervalRef = useRef(null);
@@ -87,21 +82,17 @@ const Menu = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Calculate max index based on items per view
   const getMaxIndex = (imagesLength) => {
     return Math.max(0, imagesLength - itemsPerView);
   };
 
-  // Enhanced auto-slide functionality with smooth transitions
   const startAutoSlide = useCallback(() => {
-    // Clear existing intervals
     if (foodIntervalRef.current) clearInterval(foodIntervalRef.current);
     if (beverageIntervalRef.current) clearInterval(beverageIntervalRef.current);
     if (facilityIntervalRef.current) clearInterval(facilityIntervalRef.current);
 
     if (isPaused || isEditing) return;
 
-    // Food slider auto-slide
     if (foodImages.length > itemsPerView) {
       foodIntervalRef.current = setInterval(() => {
         setCurrentFoodIndex((prev) => {
@@ -111,7 +102,6 @@ const Menu = () => {
       }, 4000);
     }
 
-    // Beverage slider auto-slide (offset by 1.5 seconds)
     if (beverageImages.length > itemsPerView) {
       setTimeout(() => {
         beverageIntervalRef.current = setInterval(() => {
@@ -123,7 +113,6 @@ const Menu = () => {
       }, 1500);
     }
 
-    // Facility slider auto-slide (offset by 3 seconds)
     if (facilityImages.length > itemsPerView) {
       setTimeout(() => {
         facilityIntervalRef.current = setInterval(() => {
@@ -381,7 +370,6 @@ const Menu = () => {
     );
   };
 
-  // Show loading state
   if (loading) {
     return (
       <section className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
@@ -403,21 +391,18 @@ const Menu = () => {
         className="hidden"
       />
 
-      {/* Main content section with background image */}
       <div
         className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
         style={{
-          backgroundImage: `url(${bg_1})`,
+          backgroundImage: `url('/images/bg_1.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
       >
-        {/* Semi-transparent overlay for better text readability */}
         <div className="absolute inset-0 bg-white/90"></div>
 
-        {/* Content container with relative positioning */}
         <div className="relative z-10">
           <div className="text-center mb-16 md:mb-24">
             <div className="inline-flex items-center gap-3 bg-orange-100 px-6 py-3 rounded-full mb-6">
@@ -454,7 +439,6 @@ const Menu = () => {
             </p>
           </div>
 
-          {/* Food Slider */}
           <SliderComponent
             images={foodImages}
             currentIndex={currentFoodIndex}
@@ -463,7 +447,6 @@ const Menu = () => {
             title="Foods"
           />
 
-          {/* Beverage Slider */}
           <SliderComponent
             images={beverageImages}
             currentIndex={currentBeverageIndex}
@@ -472,7 +455,6 @@ const Menu = () => {
             title="Beverages"
           />
 
-          {/* Facilities Slider */}
           <SliderComponent
             images={facilityImages}
             currentIndex={currentFacilityIndex}
@@ -481,7 +463,6 @@ const Menu = () => {
             title="Facilities"
           />
 
-          {/* Error State */}
           {error && (
             <div className="text-center mt-8 mb-16">
               <p className="text-red-600 mb-4">Error loading menu: {error}</p>
@@ -493,7 +474,6 @@ const Menu = () => {
               </button>
             </div>
           )}
-          {/* PDF Menu Section - still with background */}
           <div className="mb-16 md:mb-24">
             <div className="text-center mb-8 md:mb-12">
               <div className="inline-flex items-center gap-3 bg-orange-100 px-6 py-3 rounded-full mb-6">

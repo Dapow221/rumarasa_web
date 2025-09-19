@@ -1,4 +1,3 @@
-// Action Types
 export const ABOUT_ACTION_TYPES = {
   FETCH_ABOUT_REQUEST: "FETCH_ABOUT_REQUEST",
   FETCH_ABOUT_SUCCESS: "FETCH_ABOUT_SUCCESS",
@@ -8,7 +7,6 @@ export const ABOUT_ACTION_TYPES = {
   UPDATE_ABOUT_FAILURE: "UPDATE_ABOUT_FAILURE",
 };
 
-// Action Creators
 const fetchAboutRequest = () => ({
   type: ABOUT_ACTION_TYPES.FETCH_ABOUT_REQUEST,
 });
@@ -39,7 +37,6 @@ const updateAboutFailure = (error) => ({
 
 const API_BASE_URL = "https://koa-backend.vercel.app";
 
-// Thunk Actions
 export const fetchAbout = () => {
   return async (dispatch) => {
     dispatch(fetchAboutRequest());
@@ -53,7 +50,6 @@ export const fetchAbout = () => {
       });
 
       const data = await response.json();
-      console.log(data.data);
 
       if (response.ok) {
         dispatch(fetchAboutSuccess(data.data));
@@ -83,7 +79,6 @@ export const updateAbout = (id, aboutData) => {
       );
 
       const data = await response.json();
-      // console.log(data);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to update about");
@@ -91,7 +86,6 @@ export const updateAbout = (id, aboutData) => {
 
       if (data.success) {
         dispatch(updateAboutSuccess(data.data));
-        console.log(data.data);
         return { success: true, data: data.data };
       } else {
         throw new Error(data.message || "Failed to update about");

@@ -1,4 +1,3 @@
-// Action Types
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -15,7 +14,6 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 const BASE_URL = "https://koa-backend.vercel.app";
 
-// Action Creators
 export const loginRequest = () => ({
   type: LOGIN_REQUEST
 });
@@ -62,7 +60,6 @@ export const logoutSuccess = () => ({
   type: LOGOUT_SUCCESS
 });
 
-// Thunk Actions for API calls
 export const loginUser = (credentials) => {
   return async (dispatch) => {
     dispatch(loginRequest());
@@ -82,7 +79,6 @@ export const loginUser = (credentials) => {
 
       const result = await response.json();
       
-      console.log(result.data)
       if (result) {
         localStorage.setItem('authToken', result.data.token);
       }

@@ -18,8 +18,6 @@ const store = configureStore({
     event: eventReducer,
     booking: bookingReducer
   },
-  // Redux Toolkit includes redux-thunk by default
-  // and sets up Redux DevTools automatically
 });
 
 export default store;

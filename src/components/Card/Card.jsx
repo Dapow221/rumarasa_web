@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Clock, Edit, Save, X } from 'lucide-react';
 import { fetchPromotions, updatePromotion } from '../../store/promotionAction';
-import bg_2 from "../../assets/bg_2.png";
-
 
 const Card = () => {
   const dispatch = useDispatch();
@@ -18,21 +16,17 @@ const Card = () => {
   
   const isAdmin = authToken !== null;
   
-  // Refs for editable content
   const titleRefs = useRef({});
   const subtitleRefs = useRef({});
   const descriptionRefs = useRef({});
   const validityRefs = useRef({});
 
-  // Use promotions from Redux or fallback to default
   const events = promotions && promotions.length > 0 ? promotions : [];
 
-  // Fetch promotions on component mount
   useEffect(() => {
     dispatch(fetchPromotions());
   }, [dispatch]);
 
-  // Update refs when promotions change
   useEffect(() => {
     if (!isEditing) {
       events.forEach(event => {
@@ -52,13 +46,11 @@ const Card = () => {
     }
   }, [promotions, isEditing, events]);
 
-  // Start editing a specific promotion
   const startEditing = (promotionId) => {
     setIsEditing(true);
     setEditingPromotionId(promotionId);
   };
 
-  // Save content for a specific promotion
   const saveContent = async (promotionId) => {
     const promotion = events.find(e => e.id === promotionId);
     if (!promotion) {
@@ -79,22 +71,18 @@ const Card = () => {
       if (result.success) {
         setIsEditing(false);
         setEditingPromotionId(null);
-        console.log('Promotion updated successfully');
       } else {
         alert('Failed to save changes: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
-      console.error('Error saving content:', error);
       alert('Failed to save changes. Please try again.');
     }
   };
 
-  // Cancel editing
   const cancelEdit = () => {
     setIsEditing(false);
     setEditingPromotionId(null);
     
-    // Reset content to saved version
     events.forEach(event => {
       if (titleRefs.current[event.id]) {
         titleRefs.current[event.id].textContent = event.title || '';
@@ -137,7 +125,6 @@ const Card = () => {
       try {
         const result = await dispatch(updatePromotion(promotionId, formData));
         if (result.success) {
-          console.log('Image updated successfully');
           dispatch(fetchPromotions());
         } else {
           alert('Failed to update image: ' + (result.error || 'Unknown error'));
@@ -176,20 +163,18 @@ const Card = () => {
     })
   };
 
-  // Show loading state
   if (loading) {
     return (
       <section 
         className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
         style={{
-          backgroundImage: `url(${bg_2})`,
+          backgroundImage: `url('/images/bg_2.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
       >
-        {/* Semi-transparent overlay for better text readability */}
         <div className="absolute inset-0 bg-white/90"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -206,18 +191,16 @@ const Card = () => {
     <section 
       className="w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative"
       style={{
-        backgroundImage: `url(${bg_2})`,
+        backgroundImage: `url('/images/bg_2.png')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Semi-transparent overlay for better text readability */}
       <div className="absolute inset-0 bg-white/90"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
         <div className="text-center mb-16">
           <motion.h2 
             className="text-4xl md:text-5xl font-serif text-gray-900 mb-4"
@@ -237,7 +220,6 @@ const Card = () => {
           </motion.h3>
         </div>
 
-        {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event, index) => (
             <motion.div
@@ -250,7 +232,6 @@ const Card = () => {
               custom={index}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Admin Edit Controls */}
               {isAdmin && (
                 <div className="absolute top-2 right-2 z-10 flex gap-1">
                   {editingPromotionId !== event.id ? (
@@ -295,7 +276,6 @@ const Card = () => {
                 </div>
               )}
 
-              {/* Image */}
               <div 
                 className={`relative h-56 overflow-hidden ${isAdmin && editingPromotionId === event.id ? 'cursor-pointer' : ''}`}
                 onClick={() => handleImageClick(event.id)}
@@ -315,7 +295,6 @@ const Card = () => {
                 )}
               </div>
 
-              {/* Content */}
               <motion.div 
                 className="p-6"
                 initial="hidden"
@@ -402,7 +381,6 @@ const Card = () => {
           ))}
         </div>
 
-        {/* Error State */}
         {error && (
           <div className="text-center mt-8">
             <p className="text-red-600 mb-4">Error loading promotions: {error}</p>

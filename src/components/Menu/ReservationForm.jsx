@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Calendar, Clock, Users, User, Phone, MessageCircle } from "lucide-react";
-import bg_3 from '../../assets/bg_3.png'
 
 const ReservationForm = () => {
   const [formData, setFormData] = useState({
@@ -99,18 +98,15 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
   const handleSubmit = (e) => {    
     if (validateForm()) {
       const whatsappMessage = formatWhatsAppMessage();
-      const whatsappNumber = "6281110065589"; // Replace with your actual WhatsApp number
+      const whatsappNumber = "6281110065589"; 
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
       
-      // Clear the form first
       clearForm();
       
-      // Then redirect to WhatsApp
       window.open(whatsappURL, '_blank');
     }
   };
 
-  // Get today's date for min attribute
   const today = new Date().toISOString().split('T')[0];
 
   return (
@@ -119,14 +115,13 @@ Mohon konfirmasi ketersediaan meja untuk reservasi ini. Terima kasih! 🙏`;
       <div 
         className="w-full px-4 sm:px-6 lg:px-8 md:py-20 relative"
         style={{
-          backgroundImage: `url(${bg_3})`,
+          backgroundImage: `url('/images/bg_3.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed'
         }}
       >
-        {/* Semi-transparent overlay for better text readability */}
         <div className="absolute inset-0 bg-white/90"></div>
         
         <div className="mb-16 md:mb-24 relative z-10">
