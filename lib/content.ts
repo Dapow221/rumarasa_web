@@ -4,6 +4,7 @@ export interface Dish {
   price: string;
   description: string;
   imagePlaceholder: string;
+  image?: string;
 }
 
 export interface Promo {
@@ -16,6 +17,7 @@ export interface Promo {
   priceNote: string;
   imagePlaceholder: string;
   featured?: boolean;
+  image?: string;
 }
 
 export interface Facility {
@@ -24,6 +26,7 @@ export interface Facility {
   description: string;
   descriptionEn: string;
   imagePlaceholder: string;
+  image?: string;
 }
 
 export interface Happening {
@@ -31,6 +34,7 @@ export interface Happening {
   schedule: string;
   title: string;
   description: string;
+  image?: string;
 }
 
 export interface MemberBenefit {
