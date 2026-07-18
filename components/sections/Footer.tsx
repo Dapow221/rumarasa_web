@@ -1,17 +1,16 @@
 import Image from "next/image";
-import { siteConfig, waOrderLink } from "@/lib/site";
+import type { SiteData } from "@/lib/api";
 import { InstagramIcon, TikTokIcon } from "@/components/ui/icons";
 import logo from "@/public/logo_rumarasa.png";
 
-const footerLinks = [
-  { href: "#promo", label: "Promo" },
-  { href: "#menu", label: "Menu" },
-  { href: "#reservasi", label: "Reservasi" },
-  { href: "#member", label: "Member" },
-  { href: waOrderLink, label: "WhatsApp", external: true },
-];
-
-export function Footer() {
+export function Footer({ site }: { site: SiteData }) {
+  const footerLinks = [
+    { href: "#promo", label: "Promo" },
+    { href: "#menu", label: "Menu" },
+    { href: "#reservasi", label: "Reservasi" },
+    { href: "#member", label: "Member" },
+    { href: site.waOrderLink, label: "WhatsApp", external: true },
+  ];
   return (
     <footer className="bg-espresso-deep px-5 pt-12 pb-10 text-khaki md:px-14 md:pt-14">
       <div className="mx-auto flex max-w-[1180px] flex-col items-center gap-5 text-center">
@@ -41,7 +40,7 @@ export function Footer() {
         </nav>
         <div className="mt-1 flex gap-4">
           <a
-            href={siteConfig.links.instagram}
+            href={site.links.instagram}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -50,7 +49,7 @@ export function Footer() {
             <InstagramIcon />
           </a>
           <a
-            href={siteConfig.links.tiktok}
+            href={site.links.tiktok}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
@@ -60,7 +59,7 @@ export function Footer() {
           </a>
         </div>
         <p className="text-[13px] font-light text-bronze">
-          © {new Date().getFullYear()} {siteConfig.name} · {siteConfig.tagline}{" "}
+          © {new Date().getFullYear()} {site.name} · {site.tagline}{" "}
           · Jakarta Selatan
         </p>
       </div>

@@ -1,8 +1,10 @@
-import { facilities } from "@/lib/content";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import type { Facility } from "@/lib/content";
+import { EF } from "@/components/admin/Editable";
+import { EImg } from "@/components/admin/EImg";
+import { AddItem, DeleteItem } from "@/components/admin/ItemControls";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export function Facilities() {
+export function Facilities({ facilities }: { facilities: Facility[] }) {
   return (
     <section
       id="fasilitas"
@@ -18,19 +20,34 @@ export function Facilities() {
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {facilities.map((facility) => (
-            <article key={facility.id} className="flex flex-col gap-3.5">
+            <article key={facility.id} className="relative flex flex-col gap-3.5">
+              <DeleteItem collection="facilities" id={facility.id} />
               <div className="h-[220px]">
-                <ImagePlaceholder label={facility.imagePlaceholder} />
+                <EImg image={facility.image} label={facility.imagePlaceholder} c="facilities" id={facility.id} />
               </div>
               <h3 className="font-serif text-xl font-semibold md:text-[23px]">
-                {facility.title}
+                <EF c="facilities" id={facility.id} f="title">{facility.title}</EF>
               </h3>
               <p className="text-sm leading-relaxed font-light text-cocoa">
-                {facility.description}{" "}
-                <em className="text-cocoa-muted">{facility.descriptionEn}</em>
+                <EF c="facilities" id={facility.id} f="description">{facility.description}</EF>{" "}
+                <em className="text-cocoa-muted">
+                  <EF c="facilities" id={facility.id} f="description_en">{facility.descriptionEn}</EF>
+                </em>
               </p>
             </article>
           ))}
+        </div>
+
+        <div className="mt-7 flex justify-center">
+          <AddItem
+            collection="facilities"
+            label="Tambah Fasilitas"
+            template={{
+              title: "Fasilitas Baru",
+              description: "Deskripsi fasilitas.",
+              description_en: "Facility description.",
+            }}
+          />
         </div>
       </div>
     </section>

@@ -1,6 +1,9 @@
-import { siteConfig, waOrderLink } from "@/lib/site";
+interface ReservationProps {
+  phone: string;
+  waOrderLink: string;
+}
 
-export function Reservation() {
+export function Reservation({ phone, waOrderLink }: ReservationProps) {
   return (
     <section id="reservasi" className="scroll-mt-20 bg-sand px-5 py-16 md:px-14 md:py-24">
       <div className="mx-auto flex max-w-[900px] flex-col items-center gap-4 text-center md:gap-[18px]">
@@ -27,7 +30,7 @@ export function Reservation() {
             Reservasi WhatsApp
           </a>
           <a
-            href={`tel:${siteConfig.phone}`}
+            href={`tel:${phone}`}
             className="rounded-full border border-tan-dark px-9 py-4 text-sm tracking-[2px] whitespace-nowrap text-walnut uppercase transition-colors hover:bg-line hover:text-espresso-line"
           >
             Telepon Kami

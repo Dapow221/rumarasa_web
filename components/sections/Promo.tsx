@@ -1,8 +1,14 @@
-import { promos } from "@/lib/content";
-import { waOrderLink } from "@/lib/site";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import type { Promo as PromoItem } from "@/lib/content";
+import { EF } from "@/components/admin/Editable";
+import { EImg } from "@/components/admin/EImg";
+import { AddItem, DeleteItem, FeatureToggle } from "@/components/admin/ItemControls";
 
-export function Promo() {
+interface PromoProps {
+  promos: PromoItem[];
+  waOrderLink: string;
+}
+
+export function Promo({ promos, waOrderLink }: PromoProps) {
   return (
     <section id="promo" className="scroll-mt-20 bg-cream px-5 py-16 md:px-14 md:pt-24 md:pb-[84px]">
       <div className="mx-auto max-w-[1180px]">
@@ -32,47 +38,64 @@ export function Promo() {
           {promos.map((promo) => (
             <article
               key={promo.id}
-              className={`flex flex-col ${
+              className={`relative flex flex-col ${
                 promo.featured
                   ? "bg-espresso text-ivory-dim"
                   : "border border-line bg-cream-card"
               }`}
             >
+              <DeleteItem collection="promos" id={promo.id} />
+              <FeatureToggle id={promo.id} featured={promo.featured ?? false} />
               <div className="h-[190px]">
-                <ImagePlaceholder label={promo.imagePlaceholder} />
+                <EImg image={promo.image} label={promo.imagePlaceholder} c="promos" id={promo.id} />
               </div>
               <div className="flex flex-1 flex-col gap-2.5 px-7 pt-7 pb-8">
                 <p
                   className={`text-xs tracking-[2px] uppercase ${promo.featured ? "text-gold" : "text-copper"}`}
                 >
-                  {promo.badge}
+                  <EF c="promos" id={promo.id} f="badge">{promo.badge}</EF>
                 </p>
                 <h3
                   className={`font-serif text-2xl font-semibold md:text-[27px] ${promo.featured ? "text-ivory" : ""}`}
                 >
-                  {promo.title}
+                  <EF c="promos" id={promo.id} f="title">{promo.title}</EF>
                 </h3>
                 <p
                   className={`text-[15px] leading-relaxed font-light ${promo.featured ? "text-parchment" : "text-cocoa"}`}
                 >
-                  {promo.description}{" "}
+                  <EF c="promos" id={promo.id} f="description">{promo.description}</EF>{" "}
                   <em className={promo.featured ? "text-khaki" : "text-cocoa-muted"}>
-                    {promo.descriptionEn}
+                    <EF c="promos" id={promo.id} f="description_en">{promo.descriptionEn}</EF>
                   </em>
                 </p>
                 <p
                   className={`mt-auto pt-3.5 font-serif text-2xl ${promo.featured ? "text-gold" : "text-copper"}`}
                 >
-                  {promo.price}{" "}
+                  <EF c="promos" id={promo.id} f="price">{promo.price}</EF>{" "}
                   <span
                     className={`text-[15px] ${promo.featured ? "text-khaki" : "text-cocoa-muted"}`}
                   >
-                    {promo.priceNote}
+                    <EF c="promos" id={promo.id} f="price_note">{promo.priceNote}</EF>
                   </span>
                 </p>
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="mt-7 flex justify-center">
+          <AddItem
+            collection="promos"
+            label="Tambah Promo"
+            template={{
+              badge: "Badge promo",
+              title: "Promo Baru",
+              description: "Deskripsi promo.",
+              description_en: "Promo description.",
+              price: "Rp 0",
+              price_note: "/ orang",
+            }}
+          />
         </div>
       </div>
     </section>

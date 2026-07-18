@@ -1,9 +1,15 @@
 import Image from "next/image";
-import { memberBenefits } from "@/lib/content";
-import { waJoinLink } from "@/lib/site";
+import type { MemberBenefit } from "@/lib/content";
+import { EF } from "@/components/admin/Editable";
+import { AddItem, DeleteItem } from "@/components/admin/ItemControls";
 import logo from "@/public/logo_rumarasa.png";
 
-export function Membership() {
+interface MembershipProps {
+  memberBenefits: MemberBenefit[];
+  waJoinLink: string;
+}
+
+export function Membership({ memberBenefits, waJoinLink }: MembershipProps) {
   return (
     <section id="member" className="scroll-mt-20 bg-cream px-5 py-16 md:px-14 md:py-[90px]">
       <div className="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
@@ -19,19 +25,27 @@ export function Membership() {
           </h2>
           <ol className="mt-2 flex flex-col gap-3.5">
             {memberBenefits.map((benefit, index) => (
-              <li key={benefit.id} className="flex items-baseline gap-3.5">
+              <li key={benefit.id} className="relative flex items-baseline gap-3.5 pr-10">
+                <DeleteItem collection="member-benefits" id={benefit.id} />
                 <span className="font-serif text-xl text-copper">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <p className="text-[15px] leading-relaxed font-light text-cocoa">
                   <strong className="font-medium text-espresso">
-                    {benefit.highlight}
+                    <EF c="member-benefits" id={benefit.id} f="highlight">{benefit.highlight}</EF>
                   </strong>{" "}
-                  — {benefit.description}
+                  — <EF c="member-benefits" id={benefit.id} f="description">{benefit.description}</EF>
                 </p>
               </li>
             ))}
           </ol>
+          <div>
+            <AddItem
+              collection="member-benefits"
+              label="Tambah Benefit"
+              template={{ highlight: "Benefit baru", description: "deskripsi benefit." }}
+            />
+          </div>
           <div className="mt-3.5">
             <a
               href={waJoinLink}

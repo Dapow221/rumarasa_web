@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { navLinks, waOrderLink } from "@/lib/site";
+import { navLinks } from "@/lib/site";
 import logo from "@/public/logo_rumarasa.png";
 
-export function Navbar() {
+export function Navbar({ waOrderLink }: { waOrderLink: string }) {
   const [open, setOpen] = useState(false);
 
   return (

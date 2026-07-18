@@ -1,8 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { beverages, foods } from "@/lib/content";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import type { Dish } from "@/lib/content";
+import { EF } from "@/components/admin/Editable";
+import { EImg } from "@/components/admin/EImg";
+import { AddItem, DeleteItem } from "@/components/admin/ItemControls";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const CARD_WIDTH = 352;
@@ -15,7 +17,12 @@ const tabs: { id: Category; label: string }[] = [
   { id: "beverage", label: "Minuman · Beverages" },
 ];
 
-export function MenuShowcase() {
+interface MenuShowcaseProps {
+  foods: Dish[];
+  beverages: Dish[];
+}
+
+export function MenuShowcase({ foods, beverages }: MenuShowcaseProps) {
   const [category, setCategory] = useState<Category>("food");
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -80,24 +87,38 @@ export function MenuShowcase() {
           {dishes.map((dish) => (
             <article
               key={dish.id}
-              className="flex w-[280px] flex-none flex-col gap-3.5 md:w-[352px]"
+              className="relative flex w-[280px] flex-none flex-col gap-3.5 md:w-[352px]"
             >
+              <DeleteItem collection="dishes" id={dish.id} />
               <div className="h-[200px] md:h-[250px]">
-                <ImagePlaceholder label={dish.imagePlaceholder} />
+                <EImg image={dish.image} label={dish.imagePlaceholder} c="dishes" id={dish.id} />
               </div>
               <div className="flex items-baseline justify-between gap-3">
                 <h3 className="font-serif text-xl font-semibold md:text-2xl">
-                  {dish.name}
+                  <EF c="dishes" id={dish.id} f="name">{dish.name}</EF>
                 </h3>
                 <p className="font-serif text-lg whitespace-nowrap text-copper md:text-xl">
-                  {dish.price}
+                  <EF c="dishes" id={dish.id} f="price">{dish.price}</EF>
                 </p>
               </div>
               <p className="text-sm leading-relaxed font-light text-cocoa">
-                {dish.description}
+                <EF c="dishes" id={dish.id} f="description">{dish.description}</EF>
               </p>
             </article>
           ))}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <AddItem
+            collection="dishes"
+            label={category === "food" ? "Tambah Makanan" : "Tambah Minuman"}
+            template={{
+              kind: category,
+              name: category === "food" ? "Menu Baru" : "Minuman Baru",
+              price: "Rp 0",
+              description: "Deskripsi menu.",
+            }}
+          />
         </div>
 
         <div className="mt-7 flex justify-center gap-3.5">

@@ -1,7 +1,6 @@
-import { waOrderLink } from "@/lib/site";
 import { WhatsAppIcon } from "@/components/ui/icons";
 
-export function FloatingWhatsApp() {
+export function FloatingWhatsApp({ waOrderLink }: { waOrderLink: string }) {
   return (
     <a
       href={waOrderLink}

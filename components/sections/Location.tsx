@@ -1,11 +1,17 @@
-import { siteConfig } from "@/lib/site";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { contentImage, type SiteData } from "@/lib/api";
+import { E } from "@/components/admin/Editable";
+import { EImg } from "@/components/admin/EImg";
 import { InstagramIcon, TikTokIcon } from "@/components/ui/icons";
 
 const pillClass =
   "inline-flex items-center gap-2 rounded-full border border-tan-dark px-6 py-3 text-[13px] tracking-[2px] whitespace-nowrap text-walnut uppercase transition-colors hover:bg-line hover:text-espresso-line md:px-7";
 
-export function Location() {
+interface LocationProps {
+  site: SiteData;
+  content: Record<string, string>;
+}
+
+export function Location({ site, content }: LocationProps) {
   return (
     <section
       id="lokasi"
@@ -23,23 +29,28 @@ export function Location() {
             </span>
           </h2>
           <p className="text-[15px] leading-[1.75] font-light text-cocoa md:text-base">
-            {siteConfig.address.street}
+            <E k="site.address_street">{site.addressStreet}</E>
             <br />
-            {siteConfig.address.city}
+            <E k="site.address_city">{site.addressCity}</E>
           </p>
           <dl className="grid max-w-[380px] grid-cols-[auto_1fr] gap-x-7 gap-y-2 text-[15px] font-light text-cocoa">
-            {siteConfig.hours.map((slot) => (
-              <div key={slot.days} className="col-span-2 grid grid-cols-subgrid">
-                <dt className="self-center text-[12.5px] tracking-[1px] text-cocoa-muted uppercase">
-                  {slot.days}
-                </dt>
-                <dd>{slot.time}</dd>
-              </div>
-            ))}
+            {site.hours.map((slot, i) => {
+              const prefix = i === 0 ? "site.hours_weekday" : "site.hours_weekend";
+              return (
+                <div key={prefix} className="col-span-2 grid grid-cols-subgrid">
+                  <dt className="self-center text-[12.5px] tracking-[1px] text-cocoa-muted uppercase">
+                    <E k={`${prefix}_days`}>{slot.days}</E>
+                  </dt>
+                  <dd>
+                    <E k={`${prefix}_time`}>{slot.time}</E>
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
           <div className="mt-2 flex flex-wrap gap-3 md:gap-4">
             <a
-              href={siteConfig.links.maps}
+              href={site.links.maps}
               target="_blank"
               rel="noopener noreferrer"
               className={pillClass}
@@ -47,7 +58,7 @@ export function Location() {
               Buka di Maps
             </a>
             <a
-              href={siteConfig.links.instagram}
+              href={site.links.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className={pillClass}
@@ -56,7 +67,7 @@ export function Location() {
               Instagram
             </a>
             <a
-              href={siteConfig.links.tiktok}
+              href={site.links.tiktok}
               target="_blank"
               rel="noopener noreferrer"
               className={pillClass}
@@ -67,7 +78,11 @@ export function Location() {
           </div>
         </div>
         <div className="h-[280px] sm:h-[360px] lg:h-[440px]">
-          <ImagePlaceholder label="Screenshot peta lokasi / foto fasad" />
+          <EImg
+            image={contentImage(content, "location.image")}
+            label="Screenshot peta lokasi / foto fasad"
+            k="location.image"
+          />
         </div>
       </div>
     </section>
