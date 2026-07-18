@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — Rumarasa Nusantara */
+  --color-cream: #faf6ef;
+  --color-cream-card: #fffdf8;
+  --color-sand: #f3ebdd;
+  --color-line: #eadfce;
+  --color-espresso: #2a1b10;
+  --color-espresso-deep: #1c110a;
+  --color-espresso-line: #4a3826;
+  --color-copper: #b06a2e;
+  --color-copper-light: #c87f3e;
+  --color-gold: #e8b872;
+  --color-tan: #c9a87a;
+  --color-tan-dark: #b08a5c;
+  --color-khaki: #a78b62;
+  --color-caramel: #a08464;
+  --color-cocoa: #5b4732;
+  --color-cocoa-muted: #8a6e50;
+  --color-parchment: #cbb795;
+  --color-ivory: #fbf3e6;
+  --color-ivory-soft: #f5e9d7;
+  --color-ivory-dim: #f0e3ce;
+  --color-ivory-muted: #e4d4bc;
+  --color-walnut: #6b4f30;
+  --color-bronze: #6b5237;
+}
+
+/* Typography — wired to next/font variables set on <body> in app/layout.tsx.
+   Must be `inline` so utilities reference the vars at the element level. */
+@theme inline {
+  --font-sans: var(--font-jost), sans-serif;
+  --font-serif: var(--font-cormorant), serif;
+  --font-script: var(--font-great-vibes), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-espresso);
+  font-family: var(--font-jost), sans-serif;
+}
+
+::selection {
+  background: var(--color-ivory-muted);
+}
