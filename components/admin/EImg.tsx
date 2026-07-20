@@ -11,6 +11,7 @@ type EImgProps = {
   label: string;
   sizes?: string;
   priority?: boolean;
+  quality?: number;
 } & (
   | { k: string; c?: never; id?: never } // content-block image (e.g. hero.image)
   | { k?: never; c: string; id: string } // collection item image_url
@@ -26,6 +27,7 @@ export function EImg({
   label,
   sizes = "(min-width: 768px) 400px, 100vw",
   priority,
+  quality = 70,
   k,
   c,
   id,
@@ -61,7 +63,15 @@ export function EImg({
   return (
     <div className="relative h-full w-full overflow-hidden">
       {image ? (
-        <Image src={image} alt={label} fill sizes={sizes} priority={priority} className="object-cover" />
+        <Image
+          src={image}
+          alt={label}
+          fill
+          sizes={sizes}
+          priority={priority}
+          quality={quality}
+          className="object-cover"
+        />
       ) : (
         <ImagePlaceholder label={label} />
       )}

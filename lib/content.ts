@@ -213,25 +213,46 @@ export const facilities: Facility[] = [
 
 export const happenings: Happening[] = [
   {
-    id: "live-music",
-    schedule: "Setiap Jumat malam",
-    title: "Musik Akustik Live",
+    id: "family-gathering",
+    schedule: "",
+    title: "Family Gathering",
     description:
-      "Lagu-lagu daerah dan tembang kenangan mengiringi makan malam Anda. Live acoustic every Friday.",
+      "Nikmati minuman dan makanan lezat ala Rumarasa Nusantara bersama keluarga tercinta dalam nuansa asri yang menenangkan.",
   },
   {
-    id: "cooking-class",
-    schedule: "Sabtu, 2× sebulan",
-    title: "Kelas Masak Nusantara",
+    id: "arisan",
+    schedule: "",
+    title: "Arisan",
     description:
-      "Belajar meracik bumbu dan memasak hidangan klasik bersama chef kami. Hands-on cooking class.",
+      "Rasakan sentuhan seni kuliner Rumarasa Nusantara, di mana cita rasa tradisional bertemu presentasi modern.",
   },
   {
-    id: "private-events",
-    schedule: "Privat & korporat",
-    title: "Ruang Acara Privat",
+    id: "komunitas",
+    schedule: "",
+    title: "Komunitas",
     description:
-      "Arisan, ulang tahun, hingga gathering kantor hingga 60 tamu. Private dining up to 60 guests.",
+      "Tempat yang pas untuk berkumpul bersama komunitas — berbagi cerita, ide, dan cita rasa Nusantara.",
+  },
+  {
+    id: "ulang-tahun",
+    schedule: "",
+    title: "Ulang Tahun",
+    description:
+      "Buat momen ulang tahun Anda lebih spesial dengan suasana hangat dan menu istimewa dari dapur kami.",
+  },
+  {
+    id: "wedding",
+    schedule: "",
+    title: "Wedding",
+    description:
+      "Rayakan hari istimewa Anda di tempat yang ideal untuk resepsi pernikahan yang elegan dan berkesan.",
+  },
+  {
+    id: "korporat",
+    schedule: "",
+    title: "Korporat",
+    description:
+      "Pilihan tepat untuk acara korporat dengan suasana eksklusif dan hidangan berkualitas.",
   },
 ];
 

@@ -10,7 +10,7 @@ interface PromoProps {
 
 export function Promo({ promos, waOrderLink }: PromoProps) {
   return (
-    <section id="promo" className="scroll-mt-20 bg-cream px-5 py-16 md:px-14 md:pt-24 md:pb-[84px]">
+    <section id="promo" className="bg-batik scroll-mt-20 px-5 py-16 md:px-14 md:pt-24 md:pb-[84px]">
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between md:mb-11">
           <div>

@@ -3,18 +3,18 @@ export const siteConfig = {
   tagline: "Taste of Authenticity",
   description:
     "Cita rasa Nusantara di jantung Jakarta Selatan. The archipelago's authentic flavors, served in the heart of South Jakarta.",
-  whatsappNumber: "6281234567890",
-  phone: "+62215550123",
+  whatsappNumber: "6281110065589",
+  phone: "+62 8111 0065 589",
+  email: "rumarasanusantara@gmail.com",
   address: {
-    street: "Jl. Kemang Raya No. 88",
-    city: "Jakarta Selatan 12730",
+    street: "Jl. Taman Mpu Sendok No.45",
+    city: "Selong, Jakarta Selatan",
   },
-  hours: [
-    { days: "Sen – Jum", time: "11.00 – 22.00 WIB" },
-    { days: "Sab – Min", time: "10.00 – 23.00 WIB" },
-  ],
+  /** Coordinates of the restaurant, used for the map embed. */
+  coords: { lat: -6.2323907, lng: 106.8124392 },
+  hours: { days: "Open Everyday", time: "10.00 - 22.00" },
   links: {
-    maps: "https://maps.google.com/?q=Rumarasa+Nusantara+Jakarta+Selatan",
+    maps: "https://www.google.com/maps/place/Rumarasa+Nusantara/@-6.2323907,106.8124392,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f1ba037e27b7:0x91ed7440c2e1644a!8m2!3d-6.2323907!4d106.8124392",
     instagram: "https://www.instagram.com/rumarasa.nusantara/",
     tiktok: "https://www.tiktok.com/@rumarasa.nusantara",
   },
@@ -38,6 +38,7 @@ export const navLinks = [
   { href: "#tentang", label: "Tentang" },
   { href: "#menu", label: "Menu" },
   { href: "#acara", label: "Acara" },
+  { href: "#venue", label: "Venue" },
   { href: "#fasilitas", label: "Fasilitas" },
   { href: "#member", label: "Member" },
   { href: "#lokasi", label: "Lokasi" },

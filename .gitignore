@@ -31,3 +31,6 @@ pnpm-debug.log*
 # misc
 *.tsbuildinfo
 .vercel
+
+# local Claude mode config (absolute machine-specific path)
+CLAUDE.md

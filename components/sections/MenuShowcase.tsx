@@ -1,14 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { Dish } from "@/lib/content";
 import { EF } from "@/components/admin/Editable";
 import { EImg } from "@/components/admin/EImg";
 import { AddItem, DeleteItem } from "@/components/admin/ItemControls";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { useAutoSlide } from "@/components/ui/useAutoSlide";
 
 const CARD_WIDTH = 352;
 const CARD_GAP = 28;
+const AUTOPLAY_MS = 2000;
 
 type Category = "food" | "beverage";
 
@@ -24,7 +26,7 @@ interface MenuShowcaseProps {
 
 export function MenuShowcase({ foods, beverages }: MenuShowcaseProps) {
   const [category, setCategory] = useState<Category>("food");
-  const scrollerRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useAutoSlide(CARD_WIDTH + CARD_GAP, AUTOPLAY_MS, category);
 
   const dishes = category === "food" ? foods : beverages;
 
@@ -33,15 +35,8 @@ export function MenuShowcase({ foods, beverages }: MenuShowcaseProps) {
     scrollerRef.current?.scrollTo({ left: 0 });
   };
 
-  const scrollBy = (direction: -1 | 1) => {
-    scrollerRef.current?.scrollBy({
-      left: direction * (CARD_WIDTH + CARD_GAP) * 2,
-      behavior: "smooth",
-    });
-  };
-
   return (
-    <section id="menu" className="scroll-mt-20 bg-cream px-5 py-16 md:px-14 md:py-24">
+    <section id="menu" className="bg-batik scroll-mt-20 px-5 py-16 md:px-14 md:py-24">
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-10 md:mb-[52px]">
           <SectionHeading
@@ -93,14 +88,9 @@ export function MenuShowcase({ foods, beverages }: MenuShowcaseProps) {
               <div className="h-[200px] md:h-[250px]">
                 <EImg image={dish.image} label={dish.imagePlaceholder} c="dishes" id={dish.id} />
               </div>
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="font-serif text-xl font-semibold md:text-2xl">
-                  <EF c="dishes" id={dish.id} f="name">{dish.name}</EF>
-                </h3>
-                <p className="font-serif text-lg whitespace-nowrap text-copper md:text-xl">
-                  <EF c="dishes" id={dish.id} f="price">{dish.price}</EF>
-                </p>
-              </div>
+              <h3 className="font-serif text-xl font-semibold md:text-2xl">
+                <EF c="dishes" id={dish.id} f="name">{dish.name}</EF>
+              </h3>
               <p className="text-sm leading-relaxed font-light text-cocoa">
                 <EF c="dishes" id={dish.id} f="description">{dish.description}</EF>
               </p>
@@ -119,23 +109,6 @@ export function MenuShowcase({ foods, beverages }: MenuShowcaseProps) {
               description: "Deskripsi menu.",
             }}
           />
-        </div>
-
-        <div className="mt-7 flex justify-center gap-3.5">
-          <button
-            onClick={() => scrollBy(-1)}
-            aria-label="Sebelumnya"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-tan-dark text-xl text-walnut transition-colors hover:bg-line"
-          >
-            ←
-          </button>
-          <button
-            onClick={() => scrollBy(1)}
-            aria-label="Berikutnya"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-tan-dark text-xl text-walnut transition-colors hover:bg-line"
-          >
-            →
-          </button>
         </div>
       </div>
     </section>

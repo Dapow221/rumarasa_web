@@ -12,6 +12,7 @@ import {
   type Promo,
 } from "./content";
 import { siteConfig } from "./site";
+import { waLink } from "./whatsapp";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 const REVALIDATE_SECONDS = 60;
@@ -21,10 +22,12 @@ export interface SiteData {
   tagline: string;
   description: string;
   phone: string;
+  email: string;
   addressStreet: string;
   addressCity: string;
-  hours: { days: string; time: string }[];
+  hours: { days: string; time: string };
   links: { maps: string; instagram: string; tiktok: string };
+  whatsappNumber: string;
   waOrderLink: string;
   waJoinLink: string;
 }
@@ -35,8 +38,8 @@ export interface PageData {
   foods: Dish[];
   beverages: Dish[];
   promos: Promo[];
-  happenings: Happening[];
   facilities: Facility[];
+  happenings: Happening[];
   memberBenefits: MemberBenefit[];
 }
 
@@ -101,14 +104,6 @@ const toPromo = (r: Row): Promo => ({
   image: imageUrl(r),
 });
 
-const toHappening = (r: Row): Happening => ({
-  id: String(r.id),
-  schedule: str(r, "schedule"),
-  title: str(r, "title"),
-  description: str(r, "description"),
-  image: imageUrl(r),
-});
-
 const toFacility = (r: Row): Facility => ({
   id: String(r.id),
   title: str(r, "title"),
@@ -118,16 +113,19 @@ const toFacility = (r: Row): Facility => ({
   image: imageUrl(r),
 });
 
+const toHappening = (r: Row): Happening => ({
+  id: String(r.id),
+  schedule: str(r, "schedule"),
+  title: str(r, "title"),
+  description: str(r, "description"),
+  image: imageUrl(r),
+});
+
 const toBenefit = (r: Row): MemberBenefit => ({
   id: String(r.id),
   highlight: str(r, "highlight"),
   description: str(r, "description"),
 });
-
-function waLink(whatsappNumber: string, message: string): string {
-  const number = whatsappNumber.replace(/[^0-9]/g, "");
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-}
 
 /**
  * Fetches everything the landing page needs in parallel. Each call is cached
@@ -136,15 +134,14 @@ function waLink(whatsappNumber: string, message: string): string {
  * lib/content.ts and lib/site.ts keeps the site fully rendered.
  */
 export async function getPageData(): Promise<PageData> {
-  const [content, dishRows, promoRows, happeningRows, facilityRows, benefitRows] =
-    await Promise.all([
-      api<Record<string, string>>("content"),
-      api<Row[]>("dishes"),
-      api<Row[]>("promos"),
-      api<Row[]>("happenings"),
-      api<Row[]>("facilities"),
-      api<Row[]>("member-benefits"),
-    ]);
+  const [content, dishRows, promoRows, facilityRows, happeningRows, benefitRows] = await Promise.all([
+    api<Record<string, string>>("content"),
+    api<Row[]>("dishes"),
+    api<Row[]>("promos"),
+    api<Row[]>("facilities"),
+    api<Row[]>("happenings"),
+    api<Row[]>("member-benefits"),
+  ]);
 
   const c = content ?? {};
   const t = (key: string, fallback: string) => text(c, key, fallback);
@@ -155,23 +152,19 @@ export async function getPageData(): Promise<PageData> {
     tagline: t("site.tagline", siteConfig.tagline),
     description: t("site.description", siteConfig.description),
     phone: t("site.phone", siteConfig.phone),
+    email: t("site.email", siteConfig.email),
     addressStreet: t("site.address_street", siteConfig.address.street),
     addressCity: t("site.address_city", siteConfig.address.city),
-    hours: [
-      {
-        days: t("site.hours_weekday_days", siteConfig.hours[0].days),
-        time: t("site.hours_weekday_time", siteConfig.hours[0].time),
-      },
-      {
-        days: t("site.hours_weekend_days", siteConfig.hours[1].days),
-        time: t("site.hours_weekend_time", siteConfig.hours[1].time),
-      },
-    ],
+    hours: {
+      days: t("site.hours_days", siteConfig.hours.days),
+      time: t("site.hours_time", siteConfig.hours.time),
+    },
     links: {
       maps: t("site.link_maps", siteConfig.links.maps),
       instagram: t("site.link_instagram", siteConfig.links.instagram),
       tiktok: t("site.link_tiktok", siteConfig.links.tiktok),
     },
+    whatsappNumber,
     waOrderLink: waLink(whatsappNumber, "Halo Rumarasa Nusantara, saya ingin memesan / reservasi."),
     waJoinLink: waLink(whatsappNumber, "Halo, saya ingin mendaftar member Keluarga Rumarasa."),
   };
@@ -182,8 +175,8 @@ export async function getPageData(): Promise<PageData> {
     foods: dishRows?.filter((r) => r.kind === "food").map(toDish) ?? fallbackFoods,
     beverages: dishRows?.filter((r) => r.kind === "beverage").map(toDish) ?? fallbackBeverages,
     promos: promoRows?.map(toPromo) ?? fallbackPromos,
-    happenings: happeningRows?.map(toHappening) ?? fallbackHappenings,
     facilities: facilityRows?.map(toFacility) ?? fallbackFacilities,
+    happenings: happeningRows?.map(toHappening) ?? fallbackHappenings,
     memberBenefits: benefitRows?.map(toBenefit) ?? fallbackBenefits,
   };
 }

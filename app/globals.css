@@ -48,3 +48,16 @@ body {
 ::selection {
   background: var(--color-ivory-muted);
 }
+
+/* Batik motif section background. The cream layer sits above the tile so the
+   pattern stays a texture rather than competing with the content on top. */
+.bg-batik {
+  background-color: var(--color-cream);
+  background-image:
+    linear-gradient(rgba(250, 246, 239, 0.9), rgba(250, 246, 239, 0.9)),
+    url("/batik-pattern.webp");
+  background-size:
+    auto,
+    240px auto;
+  background-repeat: repeat;
+}

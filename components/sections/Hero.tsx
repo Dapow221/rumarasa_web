@@ -1,6 +1,7 @@
 import { contentImage, text, type SiteData } from "@/lib/api";
 import { E } from "@/components/admin/Editable";
 import { EImg } from "@/components/admin/EImg";
+import { InstagramIcon, TikTokIcon } from "@/components/ui/icons";
 
 interface HeroProps {
   content: Record<string, string>;
@@ -14,8 +15,11 @@ export function Hero({ content, site }: HeroProps) {
         <EImg
           image={contentImage(content, "hero.image")}
           label="Foto suasana restoran / hero dish"
-          sizes="100vw"
+          // The photo sits under a dark overlay and headline, so it can be
+          // encoded softer and capped well below the 2x/3840px bucket.
+          sizes="(max-width: 768px) 100vw, 1600px"
           priority
+          quality={55}
           k="hero.image"
         />
       </div>
@@ -53,6 +57,26 @@ export function Hero({ content, site }: HeroProps) {
               className="rounded-full border border-ivory/55 px-8 py-3.5 text-sm tracking-[2px] whitespace-nowrap text-ivory uppercase transition-colors hover:bg-ivory/15 md:px-[34px] md:py-[15px]"
             >
               Lihat Menu
+            </a>
+          </div>
+          <div className="pointer-events-auto mt-1 flex gap-3">
+            <a
+              href={site.links.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-ivory/55 text-ivory transition-colors hover:bg-ivory/15"
+            >
+              <InstagramIcon />
+            </a>
+            <a
+              href={site.links.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-ivory/55 text-ivory transition-colors hover:bg-ivory/15"
+            >
+              <TikTokIcon />
             </a>
           </div>
         </div>
