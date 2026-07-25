@@ -34,3 +34,4 @@ pnpm-debug.log*
 
 # local Claude mode config (absolute machine-specific path)
 CLAUDE.md
+.env*
