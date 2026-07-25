@@ -18,12 +18,27 @@ export function Facilities({ facilities }: { facilities: Facility[] }) {
             titleEn="Facilities"
           />
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/*
+          One DOM tree for both layouts: a snap slider under `sm` (cards sized in
+          vw so the next one peeks and invites the swipe), a plain grid above it.
+          Bleeding the track past the section padding lets the first card sit
+          flush with the heading while still snapping to centre.
+        */}
+        <div className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden">
           {facilities.map((facility) => (
-            <article key={facility.id} className="relative flex flex-col gap-3.5">
+            <article
+              key={facility.id}
+              className="relative flex w-[78vw] flex-none snap-center flex-col gap-3.5 sm:w-auto"
+            >
               <DeleteItem collection="facilities" id={facility.id} />
               <div className="h-[220px]">
-                <EImg image={facility.image} label={facility.imagePlaceholder} c="facilities" id={facility.id} />
+                <EImg
+                  image={facility.image}
+                  label={facility.imagePlaceholder}
+                  c="facilities"
+                  id={facility.id}
+                  sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 78vw"
+                />
               </div>
               <h3 className="font-serif text-xl font-semibold md:text-[23px]">
                 <EF c="facilities" id={facility.id} f="title">{facility.title}</EF>
@@ -37,6 +52,10 @@ export function Facilities({ facilities }: { facilities: Facility[] }) {
             </article>
           ))}
         </div>
+
+        <p className="mt-1 text-center text-[13px] tracking-[1.5px] text-cocoa-muted uppercase sm:hidden">
+          Geser untuk melihat semua
+        </p>
 
         <div className="mt-7 flex justify-center">
           <AddItem

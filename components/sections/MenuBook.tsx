@@ -4,10 +4,17 @@ import Image from "next/image";
 import { useState } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-const PAGE_COUNT = 40;
+const PAGE_COUNT = 50;
 const SHEETS = PAGE_COUNT / 2;
 const FLIP_MS = 800;
 
+/**
+ * Pages ship pre-sized for the 410px desktop spread (850px wide webp, ~95KB —
+ * about its retina density), so the flipbook renders them `unoptimized`:
+ * /_next/image only added optimizer latency, and a flip finished long before
+ * its page arrived, leaving spreads blank mid-book. The mobile strip keeps the
+ * optimizer, which serves it a smaller variant than the desktop-sized source.
+ */
 const pageSrc = (n: number) => `/menu-book/${n}.webp`;
 
 /**
@@ -40,7 +47,9 @@ export function MenuBook() {
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-10 md:mb-12">
           <SectionHeading eyebrow="Jelajahi menu lengkap" title="Buku Menu" titleEn="Menu Book" />
-          <p className="mx-auto mt-2.5 max-w-[520px] text-center text-[15px] font-light text-cocoa">
+          {/* Mobile gets its own swipe hint under the strip, so this desktop
+              click instruction would only contradict it there. */}
+          <p className="mx-auto mt-2.5 hidden max-w-[520px] text-center text-[15px] font-light text-cocoa md:block">
             Klik sisi kanan atau kiri buku untuk membalik halaman.
           </p>
         </div>
@@ -81,6 +90,7 @@ export function MenuBook() {
                           alt={`Halaman menu ${2 * s + 1}`}
                           fill
                           sizes="410px"
+                          unoptimized
                           className="object-cover"
                         />
                       )}
@@ -95,6 +105,7 @@ export function MenuBook() {
                           alt={`Halaman menu ${2 * s + 2}`}
                           fill
                           sizes="410px"
+                          unoptimized
                           className="object-cover"
                         />
                       )}
