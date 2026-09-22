@@ -40,6 +40,6 @@ export const navLinks = [
   { href: "#acara", label: "Acara" },
   { href: "#venue", label: "Venue" },
   { href: "#fasilitas", label: "Fasilitas" },
-  { href: "#member", label: "Member" },
+  { href: "/membership", label: "Member" },
   { href: "#lokasi", label: "Lokasi" },
 ] as const;

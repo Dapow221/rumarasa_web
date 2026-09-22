@@ -7,7 +7,6 @@ import { MenuShowcase } from "@/components/sections/MenuShowcase";
 import { Venue } from "@/components/sections/Venue";
 import { Facilities } from "@/components/sections/Facilities";
 import { Happenings } from "@/components/sections/Happenings";
-import { Reservation } from "@/components/sections/Reservation";
 import { Membership } from "@/components/sections/Membership";
 import { Location } from "@/components/sections/Location";
 import { Footer } from "@/components/sections/Footer";
@@ -29,8 +28,7 @@ export default async function HomePage() {
         <Venue content={d.content} site={d.site} />
         <Facilities facilities={d.facilities} />
         <Happenings happenings={d.happenings} />
-        <Reservation phone={d.site.phone} whatsappNumber={d.site.whatsappNumber} />
-        <Membership memberBenefits={d.memberBenefits} whatsappNumber={d.site.whatsappNumber} />
+        <Membership memberBenefits={d.memberBenefits} />
         <Location site={d.site} content={d.content} />
       </main>
       <Footer site={d.site} />

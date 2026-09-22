@@ -5,10 +5,10 @@ import logo from "@/public/logo_rumarasa.png";
 
 export function Footer({ site }: { site: SiteData }) {
   const footerLinks = [
-    { href: "#promo", label: "Promo" },
-    { href: "#menu", label: "Menu" },
-    { href: "#reservasi", label: "Reservasi" },
-    { href: "#member", label: "Member" },
+    { href: "/#promo", label: "Promo" },
+    { href: "/#menu", label: "Menu" },
+    { href: "/membership/reservasi", label: "Reservasi" },
+    { href: "/membership", label: "Member" },
     { href: site.waOrderLink, label: "WhatsApp", external: true },
   ];
   return (
