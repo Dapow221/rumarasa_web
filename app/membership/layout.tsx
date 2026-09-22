@@ -15,9 +15,6 @@ export default async function MembershipLayout({ children }: { children: React.R
   return (
     <>
       <MemberHeader />
-      <div className="border-b border-line bg-sand px-5 py-2 text-center text-[12px] tracking-[1.2px] text-cocoa-muted uppercase">
-        Prototipe — data member di halaman ini masih contoh
-      </div>
       <main className="bg-batik min-h-[70vh] px-5 py-12 md:px-14 md:py-16">
         <div className="mx-auto max-w-[1180px]">{children}</div>
       </main>
