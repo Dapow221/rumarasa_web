@@ -9,12 +9,17 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
 interface AdminContextValue {
   isAdmin: boolean;
+  /** False until the refresh-cookie check on first load has finished. */
+  ready: boolean;
+  /** Authenticated API call for the back-office pages; retries once after a token refresh. */
+  apiFetch: (path: string, init?: RequestInit) => Promise<Response>;
   editMode: boolean;
   setEditMode: (v: boolean) => void;
   login: (username: string, password: string) => Promise<string | null>;
@@ -39,6 +44,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const tokenRef = useRef<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [ready, setReady] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -68,7 +74,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   // Restore the session from the refresh cookie on first load.
   useEffect(() => {
-    void tryRefresh();
+    void tryRefresh().finally(() => setReady(true));
     return () => {
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
       if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -97,6 +103,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       return res;
     },
     [tryRefresh],
+  );
+
+  // Stable identity, so back-office pages can list it as an effect dependency.
+  const apiFetch = useCallback(
+    (path: string, init: RequestInit = {}) => authFetch(path, init),
+    [authFetch],
   );
 
   // After a successful save: purge the ISR cache, then re-render server
@@ -134,6 +146,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const value: AdminContextValue = {
     isAdmin,
+    ready,
+    apiFetch,
     editMode,
     setEditMode,
     notify: showToast,
@@ -243,7 +257,12 @@ function AdminBar() {
   const { editMode, setEditMode, logout } = useAdmin();
   return (
     <div className="fixed bottom-5 left-5 z-[60] flex items-center gap-2 rounded-full bg-espresso/95 p-2 pl-4 text-ivory shadow-xl backdrop-blur">
-      <span className="text-xs tracking-[1.5px] uppercase">Admin</span>
+      <Link
+        href="/admin"
+        className="text-xs tracking-[1.5px] uppercase underline-offset-4 hover:underline"
+      >
+        Admin
+      </Link>
       <button
         type="button"
         onClick={() => setEditMode(!editMode)}

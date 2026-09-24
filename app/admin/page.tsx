@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/admin/AdminProvider";
 
@@ -36,6 +37,18 @@ export default function AdminLoginPage() {
             <p className="text-[15px] font-light text-cocoa">
               Anda sudah masuk sebagai admin.
             </p>
+            <Link
+              href="/admin/member"
+              className="rounded-full bg-espresso px-8 py-3.5 text-center text-sm tracking-[2px] text-ivory-soft uppercase transition-colors hover:bg-copper"
+            >
+              Kelola Member
+            </Link>
+            <Link
+              href="/admin/reservasi"
+              className="rounded-full bg-espresso px-8 py-3.5 text-center text-sm tracking-[2px] text-ivory-soft uppercase transition-colors hover:bg-copper"
+            >
+              Kelola Reservasi
+            </Link>
             <button
               type="button"
               onClick={() => {
