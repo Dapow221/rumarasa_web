@@ -45,7 +45,7 @@ export function Modal({ open, onClose, eyebrow, title, description, children }: 
       onClick={(e) => {
         if (e.target === ref.current) onClose();
       }}
-      className="max-h-[92dvh] w-[min(560px,92vw)] overflow-y-auto bg-cream-card p-0 text-espresso shadow-[0_30px_80px_-20px_rgba(42,27,16,0.45)] backdrop:bg-espresso/60 backdrop:backdrop-blur-[2px]"
+      className="m-auto max-h-[92dvh] w-[min(560px,92vw)] overflow-y-auto bg-cream-card p-0 text-espresso shadow-[0_30px_80px_-20px_rgba(42,27,16,0.45)] backdrop:bg-espresso/60 backdrop:backdrop-blur-[2px]"
     >
       <div className="relative px-6 pt-8 pb-7 md:px-10 md:pt-10 md:pb-9">
         <button
