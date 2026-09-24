@@ -10,7 +10,7 @@ export function JoinCallout({ whatsappNumber }: { whatsappNumber: string }) {
       </p>
       <MemberDialog
         whatsappNumber={whatsappNumber}
-        label="Daftar Gratis via WhatsApp"
+        label="Daftar Member Gratis"
         triggerClassName="cursor-pointer rounded-full bg-copper px-8 py-3.5 text-sm tracking-[2px] whitespace-nowrap text-ivory uppercase transition-colors hover:bg-copper-light"
       />
     </div>

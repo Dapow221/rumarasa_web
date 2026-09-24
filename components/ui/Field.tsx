@@ -56,14 +56,63 @@ export function TextAreaField({ label, name, required, ...props }: TextAreaProps
   );
 }
 
+interface CheckboxFieldProps {
+  name: string;
+  required?: boolean;
+  children: ReactNode;
+}
+
+export function CheckboxField({ name, required, children }: CheckboxFieldProps) {
+  return (
+    <label htmlFor={name} className="flex cursor-pointer items-start gap-3 text-[13px] leading-relaxed font-light text-cocoa">
+      <input
+        id={name}
+        name={name}
+        type="checkbox"
+        required={required}
+        className="mt-0.5 size-4 shrink-0 cursor-pointer accent-copper"
+      />
+      <span>{children}</span>
+    </label>
+  );
+}
+
+/**
+ * Hidden trap field: people never see or fill it, naive bots fill every input.
+ * The API silently drops submissions where it is set.
+ */
+export function Honeypot() {
+  return (
+    <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+      <label htmlFor="website">Website</label>
+      <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+    </div>
+  );
+}
+
 /** Submit button matching the site's primary CTA. */
-export function SubmitButton({ children }: { children: ReactNode }) {
+export function SubmitButton({ children, disabled }: { children: ReactNode; disabled?: boolean }) {
   return (
     <button
       type="submit"
-      className="mt-1 w-full cursor-pointer rounded-full bg-copper px-8 py-3.5 text-sm tracking-[2px] text-ivory uppercase transition-colors hover:bg-copper-light"
+      disabled={disabled}
+      className="mt-1 w-full cursor-pointer rounded-full bg-copper px-8 py-3.5 text-sm tracking-[2px] text-ivory uppercase transition-colors hover:bg-copper-light disabled:cursor-wait disabled:opacity-60"
     >
       {children}
     </button>
+  );
+}
+
+/** Secondary CTA that hands the submission to WhatsApp in a new tab. */
+export function WhatsAppButton({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full rounded-full border border-copper px-8 py-3.5 text-center text-sm tracking-[2px] text-copper uppercase transition-colors hover:bg-copper hover:text-ivory"
+    >
+      {children}
+    </a>
   );
 }
