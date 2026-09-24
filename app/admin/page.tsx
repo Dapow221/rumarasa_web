@@ -19,11 +19,7 @@ export default function AdminLoginPage() {
     setError(null);
     const err = await login(username, password);
     setBusy(false);
-    if (err) {
-      setError(err);
-      return;
-    }
-    router.push("/");
+    if (err) setError(err);
   };
 
   return (
