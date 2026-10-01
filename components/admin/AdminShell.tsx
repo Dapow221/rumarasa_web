@@ -57,6 +57,7 @@ export function AdminShell({ title, revision, children }: AdminShellProps) {
   const tabs = [
     { href: "/admin/member", label: "Member", count: summary?.pending_members },
     { href: "/admin/reservasi", label: "Reservasi", count: summary?.pending_reservations },
+    { href: "/admin/voucher", label: "Voucher", count: undefined },
   ];
 
   return (
@@ -175,6 +176,9 @@ const pillTones: Record<string, string> = {
   cancelled: "bg-red-100 text-red-900",
   suspended: "bg-stone-200 text-stone-800",
   no_show: "bg-stone-200 text-stone-800",
+  redeemed: "bg-stone-200 text-stone-800",
+  expired: "bg-amber-100 text-amber-900",
+  void: "bg-red-100 text-red-900",
 };
 
 export function StatusPill({ status, label }: { status: string; label: string }) {

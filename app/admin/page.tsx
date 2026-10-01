@@ -45,6 +45,12 @@ export default function AdminLoginPage() {
             >
               Kelola Reservasi
             </Link>
+            <Link
+              href="/admin/voucher"
+              className="rounded-full bg-espresso px-8 py-3.5 text-center text-sm tracking-[2px] text-ivory-soft uppercase transition-colors hover:bg-copper"
+            >
+              Kelola Voucher
+            </Link>
             <button
               type="button"
               onClick={() => {
