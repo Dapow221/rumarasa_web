@@ -1,6 +1,7 @@
 "use client";
 
-import { StatusPill, actionBtn, formatDay, formatTimestamp, primaryActionBtn, waChat } from "./AdminShell";
+import { rupiah, voucherDay } from "@/lib/voucher";
+import { StatusPill, actionBtn, formatTimestamp, primaryActionBtn, waChat } from "./AdminShell";
 import type { MemberStatus, MemberTier } from "./MemberCard";
 
 export type VoucherStatus = "active" | "redeemed" | "void";
@@ -24,6 +25,9 @@ export interface Voucher {
     status: MemberStatus;
     tier: MemberTier;
   } | null;
+  link_token: string | null;
+  recipient: { name: string; phone: string | null; email: string } | null;
+  redeemed_via: "cashier" | "link" | null;
   assigned_at: string | null;
   sent_at: string | null;
   redeemed_at: string | null;
@@ -41,41 +45,20 @@ export function voucherState(v: Voucher): VoucherFilter {
   return v.expired ? "expired" : v.status;
 }
 
-/** 100000 → "Rp100.000" */
-export function rupiah(n: number): string {
-  return "Rp" + new Intl.NumberFormat("id-ID").format(n);
-}
-
-/** 100000 → "100K", 1500000 → "1,5JT" — the short amount in the voucher title. */
-export function shortRupiah(n: number): string {
-  const fmt = (x: number) => new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(x);
-  return n >= 1_000_000 ? `${fmt(n / 1_000_000)}JT` : `${fmt(n / 1000)}K`;
-}
-
-/** The gift message sent to the member on WhatsApp, in Rumarasa's house format. */
-export function voucherMessage(v: Voucher): string {
-  const m = v.member!;
-  return [
-    `GIFT VOUCHER ${shortRupiah(v.amount)}`,
-    `NAMA                : ${m.name}`,
-    `NO VOUCHER  : ${v.code}`,
-    `EMAIL              : ${m.email}`,
-  ].join("\n");
-}
-
-interface VoucherCardProps {
-  voucher: Voucher;
-  busy: boolean;
+export interface VoucherActions {
   onAssign: () => void;
   onSend: () => void;
   onRedeem: () => void;
+  onCreateLink: () => void;
+  onCopyLink: () => void;
+  onRemoveLink: () => void;
   onSetStatus: (status: VoucherStatus) => void;
   onDelete: () => void;
 }
 
-export function VoucherCard({ voucher: v, busy, onAssign, onSend, onRedeem, onSetStatus, onDelete }: VoucherCardProps) {
+export function VoucherCard({ voucher: v, busy, ...a }: { voucher: Voucher; busy: boolean } & VoucherActions) {
   const state = voucherState(v);
-  const usable = state === "active";
+  const open = state === "active" || state === "expired";
   const memberUsable = v.member?.status === "active";
 
   return (
@@ -83,76 +66,54 @@ export function VoucherCard({ voucher: v, busy, onAssign, onSend, onRedeem, onSe
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <h2 className="font-mono text-xl font-medium tracking-[2px]">{v.code}</h2>
         <StatusPill status={state} label={voucherFilterLabels[state]} />
+        {v.link_token && <StatusPill status="link" label="Via Link" />}
         <span className="font-serif text-xl text-copper">{rupiah(v.amount)}</span>
         <span className="ml-auto text-xs text-cocoa">Dibuat {formatTimestamp(v.created_at)}</span>
       </div>
 
-      <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm font-light text-cocoa sm:grid-cols-2">
-        <div>
-          <dt className="inline">Member: </dt>
-          <dd className="inline">
-            {v.member ? (
-              <>
-                <span className="text-espresso">{v.member.name}</span>
-                {v.member.member_no && <span className="text-xs tracking-[1px]"> · {v.member.member_no}</span>}
-                {" · "}
-                <a href={waChat(v.member.phone)} target="_blank" rel="noopener noreferrer" className="hover:text-copper">
-                  +{v.member.phone}
-                </a>
-                {!memberUsable && <span className="text-red-700"> (member tidak aktif)</span>}
-              </>
-            ) : (
-              <span className="italic">Belum diberikan</span>
-            )}
-          </dd>
-        </div>
-        <div>
-          <dt className="inline">Berlaku sampai: </dt>
-          <dd className="inline">{v.expires_at ? formatDay(v.expires_at) : "Tanpa batas"}</dd>
-        </div>
-        {v.member && (
-          <div>
-            <dt className="inline">WhatsApp: </dt>
-            <dd className="inline">{v.sent_at ? `Terkirim ${formatTimestamp(v.sent_at)}` : "Belum dikirim"}</dd>
-          </div>
-        )}
-        {v.redeemed_at && (
-          <div>
-            <dt className="inline">Dipakai: </dt>
-            <dd className="inline">{formatTimestamp(v.redeemed_at)}</dd>
-          </div>
-        )}
-        {v.note && (
-          <div className="sm:col-span-2">
-            <dt className="sr-only">Catatan</dt>
-            <dd>“{v.note}”</dd>
-          </div>
-        )}
-      </dl>
+      <VoucherDetails voucher={v} />
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        {usable && v.member && memberUsable && (
+        {state === "active" && v.member && memberUsable && (
           <>
-            <button type="button" disabled={busy} onClick={onSend} className={primaryActionBtn}>
+            <button type="button" disabled={busy} onClick={a.onSend} className={primaryActionBtn}>
               {v.sent_at ? "Kirim Ulang WA" : "Kirim via WhatsApp"}
             </button>
-            <button type="button" disabled={busy} onClick={onRedeem} className={actionBtn}>
+            <button type="button" disabled={busy} onClick={a.onRedeem} className={actionBtn}>
               Tandai Terpakai
             </button>
           </>
         )}
-        {(state === "active" || state === "expired") && (
-          <button type="button" disabled={busy} onClick={onAssign} className={v.member ? actionBtn : primaryActionBtn}>
+        {state === "active" && v.link_token && (
+          <>
+            <button type="button" disabled={busy} onClick={a.onSend} className={primaryActionBtn}>
+              Kirim Link via WA
+            </button>
+            <button type="button" disabled={busy} onClick={a.onCopyLink} className={actionBtn}>
+              Salin Link
+            </button>
+            <button type="button" disabled={busy} onClick={a.onRemoveLink} className={actionBtn}>
+              Hapus Link
+            </button>
+          </>
+        )}
+        {open && !v.link_token && (
+          <button type="button" disabled={busy} onClick={a.onAssign} className={v.member ? actionBtn : primaryActionBtn}>
             {v.member ? "Ganti Member" : "Berikan ke Member"}
           </button>
         )}
-        {(state === "active" || state === "expired") && (
-          <button type="button" disabled={busy} onClick={() => onSetStatus("void")} className={actionBtn}>
+        {state === "active" && !v.member && !v.link_token && (
+          <button type="button" disabled={busy} onClick={a.onCreateLink} className={actionBtn}>
+            Buat Link (Non-Member)
+          </button>
+        )}
+        {open && (
+          <button type="button" disabled={busy} onClick={() => a.onSetStatus("void")} className={actionBtn}>
             Batalkan
           </button>
         )}
         {state === "void" && (
-          <button type="button" disabled={busy} onClick={() => onSetStatus("active")} className={actionBtn}>
+          <button type="button" disabled={busy} onClick={() => a.onSetStatus("active")} className={actionBtn}>
             Aktifkan Lagi
           </button>
         )}
@@ -160,7 +121,7 @@ export function VoucherCard({ voucher: v, busy, onAssign, onSend, onRedeem, onSe
           <button
             type="button"
             disabled={busy}
-            onClick={onDelete}
+            onClick={a.onDelete}
             className="ml-auto cursor-pointer text-xs tracking-[1px] text-red-700 uppercase hover:underline"
           >
             Hapus
@@ -168,5 +129,61 @@ export function VoucherCard({ voucher: v, busy, onAssign, onSend, onRedeem, onSe
         )}
       </div>
     </article>
+  );
+}
+
+function VoucherDetails({ voucher: v }: { voucher: Voucher }) {
+  const holder = v.member ? (
+    <>
+      <span className="text-espresso">{v.member.name}</span>
+      {v.member.member_no && <span className="text-xs tracking-[1px]"> · {v.member.member_no}</span>}
+      {" · "}
+      <a href={waChat(v.member.phone)} target="_blank" rel="noopener noreferrer" className="hover:text-copper">
+        +{v.member.phone}
+      </a>
+      {v.member.status !== "active" && <span className="text-red-700"> (member tidak aktif)</span>}
+    </>
+  ) : v.recipient ? (
+    <>
+      <span className="text-espresso">{v.recipient.name}</span> (non-member) · {v.recipient.email}
+      {v.recipient.phone && ` · +${v.recipient.phone}`}
+    </>
+  ) : v.link_token ? (
+    <span className="italic">Dibagikan lewat link — belum dipakai</span>
+  ) : (
+    <span className="italic">Belum diberikan</span>
+  );
+
+  return (
+    <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm font-light text-cocoa sm:grid-cols-2">
+      <div>
+        <dt className="inline">Penerima: </dt>
+        <dd className="inline">{holder}</dd>
+      </div>
+      <div>
+        <dt className="inline">Berlaku sampai: </dt>
+        <dd className="inline">{v.expires_at ? voucherDay(v.expires_at) : "Tanpa batas"}</dd>
+      </div>
+      {(v.member || v.link_token) && v.status !== "redeemed" && (
+        <div>
+          <dt className="inline">WhatsApp: </dt>
+          <dd className="inline">{v.sent_at ? `Terkirim ${formatTimestamp(v.sent_at)}` : "Belum dikirim"}</dd>
+        </div>
+      )}
+      {v.redeemed_at && (
+        <div>
+          <dt className="inline">Dipakai: </dt>
+          <dd className="inline">
+            {formatTimestamp(v.redeemed_at)} {v.redeemed_via === "link" ? "· online lewat link" : "· di kasir"}
+          </dd>
+        </div>
+      )}
+      {v.note && (
+        <div className="sm:col-span-2">
+          <dt className="sr-only">Catatan</dt>
+          <dd>“{v.note}”</dd>
+        </div>
+      )}
+    </dl>
   );
 }

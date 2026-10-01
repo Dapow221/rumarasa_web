@@ -179,6 +179,7 @@ const pillTones: Record<string, string> = {
   redeemed: "bg-stone-200 text-stone-800",
   expired: "bg-amber-100 text-amber-900",
   void: "bg-red-100 text-red-900",
+  link: "bg-sky-100 text-sky-900",
 };
 
 export function StatusPill({ status, label }: { status: string; label: string }) {

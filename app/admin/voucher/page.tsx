@@ -6,14 +6,13 @@ import { AdminShell, FilterChips, Pager, primaryActionBtn, type ListMeta } from 
 import type { Member } from "@/components/admin/MemberCard";
 import {
   VoucherCard,
-  rupiah,
   voucherFilterLabels,
-  voucherMessage,
   type Voucher,
   type VoucherFilter,
   type VoucherStatus,
 } from "@/components/admin/VoucherCard";
 import { Modal } from "@/components/ui/Modal";
+import { linkVoucherMessage, memberVoucherMessage, rupiah, voucherLinkUrl } from "@/lib/voucher";
 
 const filters: { value: VoucherFilter | ""; label: string }[] = [
   { value: "active", label: voucherFilterLabels.active },
@@ -97,9 +96,28 @@ export default function AdminVouchersPage() {
     act(v, "", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }, done);
 
   const send = (v: Voucher) => {
+    // A member gets the chat opened straight to their number; a link goes to
+    // whoever the owner picks in WhatsApp's own contact chooser.
+    const href = v.member
+      ? `https://wa.me/${v.member.phone}?text=${encodeURIComponent(memberVoucherMessage(v, v.member.name, v.member.email))}`
+      : `https://wa.me/?text=${encodeURIComponent(linkVoucherMessage(v, voucherLinkUrl(v.link_token!)))}`;
     // Open WhatsApp inside the click handler so the popup blocker allows it.
-    window.open(`https://wa.me/${v.member!.phone}?text=${encodeURIComponent(voucherMessage(v))}`, "_blank", "noopener");
+    window.open(href, "_blank", "noopener");
     void act(v, "/sent", { method: "POST" }, "Ditandai terkirim ✓");
+  };
+
+  const copyLink = async (v: Voucher) => {
+    try {
+      await navigator.clipboard.writeText(voucherLinkUrl(v.link_token!));
+      notify("Link disalin ✓");
+    } catch {
+      window.prompt("Salin link ini:", voucherLinkUrl(v.link_token!));
+    }
+  };
+
+  const removeLink = (v: Voucher) => {
+    if (!window.confirm(`Hapus link voucher ${v.code}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`)) return;
+    void act(v, "/link", { method: "DELETE" }, "Link dihapus");
   };
 
   const redeem = (v: Voucher) => {
@@ -163,6 +181,9 @@ export default function AdminVouchersPage() {
               onAssign={() => setAssigning(v)}
               onSend={() => send(v)}
               onRedeem={() => redeem(v)}
+              onCreateLink={() => void act(v, "/link", { method: "POST" }, "Link dibuat ✓ — salin atau kirim via WA")}
+              onCopyLink={() => void copyLink(v)}
+              onRemoveLink={() => removeLink(v)}
               onSetStatus={(s) => setVoucherStatus(v, s)}
               onDelete={() => remove(v)}
             />
@@ -172,7 +193,8 @@ export default function AdminVouchersPage() {
 
       <Pager meta={meta} onPage={setPage} />
       <p className="mt-8 text-xs text-cocoa-muted">
-        Di kasir: cari kode voucher, pastikan nama member sesuai dengan tamu, lalu tekan “Tandai Terpakai”.
+        Di kasir: cari kode voucher. Voucher member — pastikan nama sesuai tamu, lalu “Tandai Terpakai”.
+        Voucher link sudah dipakai sendiri oleh tamu di website — cocokkan kode dan nama di layar tamu.
       </p>
 
       <MemberPicker
@@ -272,7 +294,9 @@ function CreateVoucherForm({ onCreated }: { onCreated: (v: Voucher) => void }) {
         <button type="submit" disabled={busy || amountValue < 1000} className={primaryActionBtn}>
           {busy ? "Membuat…" : "Buat Voucher"}
         </button>
-        <span className="text-xs text-cocoa-muted">Setelah dibuat, pilih member penerimanya.</span>
+        <span className="text-xs text-cocoa-muted">
+          Setelah dibuat, berikan ke member atau buat link untuk non-member.
+        </span>
       </div>
     </form>
   );
