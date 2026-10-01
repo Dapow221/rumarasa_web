@@ -40,3 +40,11 @@ export function linkVoucherMessage(v: { amount: number; expires_at: string | nul
     .filter(Boolean)
     .join("\n");
 }
+
+/** Syarat & ketentuan shown to anyone redeeming a voucher. */
+export const VOUCHER_TERMS = [
+  "Setiap transaksi hanya dapat menggunakan 1 voucher.",
+  "Voucher dapat digunakan untuk minimal transaksi Rp200.000 sebelum pajak dan service.",
+  "Voucher tidak dapat diuangkan.",
+  "Voucher tidak dapat digunakan selama bulan Ramadhan.",
+];

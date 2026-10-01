@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { CheckboxField, Honeypot, SubmitButton, TextField } from "@/components/ui/Field";
 import { redeemLinkVoucher, type LinkVoucher } from "@/lib/voucherApi";
+import { VoucherTerms } from "./VoucherTerms";
 
 interface VoucherRedeemFormProps {
   token: string;
@@ -46,6 +47,10 @@ export function VoucherRedeemForm({ token, onRedeemed }: VoucherRedeemFormProps)
         inputMode="tel"
         placeholder="08…"
       />
+      <VoucherTerms />
+      <CheckboxField name="syarat" required>
+        Saya telah membaca dan menyetujui Syarat &amp; Ketentuan voucher di atas.
+      </CheckboxField>
       <CheckboxField name="persetujuan" required>
         Saya setuju data di atas disimpan dan digunakan oleh Rumarasa Nusantara untuk keperluan voucher ini.
       </CheckboxField>

@@ -1,5 +1,6 @@
 import { rupiah } from "@/lib/voucher";
 import type { LinkVoucher } from "@/lib/voucherApi";
+import { VoucherTerms } from "./VoucherTerms";
 
 /** The "used" screen the customer shows the cashier. */
 export function VoucherProof({ voucher: v }: { voucher: LinkVoucher }) {
@@ -27,6 +28,9 @@ export function VoucherProof({ voucher: v }: { voucher: LinkVoucher }) {
         {v.recipient_name && <Row label="Nama">{v.recipient_name}</Row>}
         <Row label="Dipakai">{when} WIB</Row>
       </dl>
+      <div className="mt-6">
+        <VoucherTerms />
+      </div>
       <p className="mt-6 text-xs font-light text-cocoa-muted">Tunjukkan layar ini ke kasir.</p>
     </div>
   );
