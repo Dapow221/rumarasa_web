@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { VoucherProof } from "@/components/voucher/VoucherProof";
 import { VoucherRedeemForm } from "@/components/voucher/VoucherRedeemForm";
 import { fetchLinkVoucher, type LinkVoucher } from "@/lib/voucherApi";
-import { rupiah, voucherDay } from "@/lib/voucher";
+import { VoucherValidity } from "@/components/voucher/VoucherValidity";
+import { rupiah } from "@/lib/voucher";
 
 export default function VoucherLinkPage() {
   const { token } = useParams<{ token: string }>();
@@ -31,10 +32,8 @@ export default function VoucherLinkPage() {
       ) : (
         <>
           <p className="mt-6 font-serif text-5xl font-medium text-espresso">{rupiah(voucher.amount)}</p>
-          <p className="mt-2 text-sm font-light text-cocoa">
-            {voucher.expires_at ? `Berlaku sampai ${voucherDay(voucher.expires_at)}` : "Tanpa batas waktu"}
-          </p>
           {voucher.note && <p className="mt-3 text-sm text-cocoa italic">“{voucher.note}”</p>}
+          <VoucherValidity expiresAt={voucher.expires_at} />
           {voucher.status === "active" ? (
             <VoucherRedeemForm token={token} onRedeemed={setVoucher} />
           ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { rupiah, voucherDay } from "@/lib/voucher";
 import { StatusPill, actionBtn, formatTimestamp, primaryActionBtn, waChat } from "./AdminShell";
 import type { MemberStatus, MemberTier } from "./MemberCard";
@@ -53,6 +54,8 @@ export interface VoucherActions {
   onCopyLink: () => void;
   onRemoveLink: () => void;
   onSetStatus: (status: VoucherStatus) => void;
+  /** null removes the expiry. Resolves true once saved. */
+  onSetExpiry: (date: string | null) => Promise<boolean>;
   onDelete: () => void;
 }
 
@@ -71,7 +74,7 @@ export function VoucherCard({ voucher: v, busy, ...a }: { voucher: Voucher; busy
         <span className="ml-auto text-xs text-cocoa">Dibuat {formatTimestamp(v.created_at)}</span>
       </div>
 
-      <VoucherDetails voucher={v} />
+      <VoucherDetails voucher={v} busy={busy} onSetExpiry={a.onSetExpiry} />
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {state === "active" && v.member && memberUsable && (
@@ -132,7 +135,13 @@ export function VoucherCard({ voucher: v, busy, ...a }: { voucher: Voucher; busy
   );
 }
 
-function VoucherDetails({ voucher: v }: { voucher: Voucher }) {
+interface VoucherDetailsProps {
+  voucher: Voucher;
+  busy: boolean;
+  onSetExpiry: VoucherActions["onSetExpiry"];
+}
+
+function VoucherDetails({ voucher: v, busy, onSetExpiry }: VoucherDetailsProps) {
   const holder = v.member ? (
     <>
       <span className="text-espresso">{v.member.name}</span>
@@ -162,7 +171,13 @@ function VoucherDetails({ voucher: v }: { voucher: Voucher }) {
       </div>
       <div>
         <dt className="inline">Berlaku sampai: </dt>
-        <dd className="inline">{v.expires_at ? voucherDay(v.expires_at) : "Tanpa batas"}</dd>
+        <dd className="inline">
+          {v.status === "redeemed" ? (
+            v.expires_at ? voucherDay(v.expires_at) : "Tanpa batas"
+          ) : (
+            <ExpiryEditor expiresAt={v.expires_at} busy={busy} onSave={onSetExpiry} />
+          )}
+        </dd>
       </div>
       {(v.member || v.link_token) && v.status !== "redeemed" && (
         <div>
@@ -185,5 +200,75 @@ function VoucherDetails({ voucher: v }: { voucher: Voucher }) {
         </div>
       )}
     </dl>
+  );
+}
+
+/** Today in WIB as YYYY-MM-DD, the earliest expiry the API accepts. */
+function todayJakarta(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+}
+
+function ExpiryEditor({ expiresAt, busy, onSave }: { expiresAt: string | null; busy: boolean; onSave: VoucherActions["onSetExpiry"] }) {
+  const [editing, setEditing] = useState(false);
+  const [date, setDate] = useState(expiresAt ?? "");
+
+  const save = async (value: string | null) => {
+    if (await onSave(value)) setEditing(false);
+  };
+
+  if (!editing) {
+    return (
+      <>
+        {expiresAt ? voucherDay(expiresAt) : "Tanpa batas"}{" "}
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            setDate(expiresAt ?? "");
+            setEditing(true);
+          }}
+          className="cursor-pointer text-xs tracking-[1px] text-copper uppercase hover:underline"
+        >
+          Ubah
+        </button>
+      </>
+    );
+  }
+
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2 align-middle">
+      <input
+        type="date"
+        value={date}
+        min={todayJakarta()}
+        onChange={(e) => setDate(e.target.value)}
+        className="border border-line bg-cream px-2 py-1 text-sm outline-none focus:border-copper"
+      />
+      <button
+        type="button"
+        disabled={busy || !date || date === expiresAt}
+        onClick={() => void save(date)}
+        className="cursor-pointer text-xs tracking-[1px] text-copper uppercase hover:underline disabled:cursor-default disabled:opacity-40"
+      >
+        Simpan
+      </button>
+      {expiresAt && (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void save(null)}
+          className="cursor-pointer text-xs tracking-[1px] text-cocoa uppercase hover:underline"
+        >
+          Tanpa batas
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={() => setEditing(false)}
+        className="cursor-pointer text-xs tracking-[1px] text-cocoa uppercase hover:underline"
+      >
+        Batal
+      </button>
+    </span>
   );
 }

@@ -185,6 +185,7 @@ export default function AdminVouchersPage() {
               onCopyLink={() => void copyLink(v)}
               onRemoveLink={() => removeLink(v)}
               onSetStatus={(s) => setVoucherStatus(v, s)}
+              onSetExpiry={(date) => patch(v, { expires_at: date }, "Masa berlaku disimpan ✓")}
               onDelete={() => remove(v)}
             />
           ))
