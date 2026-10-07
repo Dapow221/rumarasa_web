@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { MemberStatusCard } from "@/components/membership/MemberStatusCard";
+import { MemberPageTitle } from "@/components/membership/MemberPageTitle";
+import { TierBadge } from "@/components/membership/TierBadge";
 import { BenefitGrid } from "@/components/membership/BenefitGrid";
 import { RewardCard } from "@/components/membership/RewardCard";
-import { demoMember, getTier, rewards } from "@/lib/membership";
+import { JoinCallout } from "@/components/membership/JoinCallout";
+import { formatRupiah, getTier, rewards, tiers } from "@/lib/membership";
 import { getPageData } from "@/lib/api";
 
 const linkClass =
@@ -10,35 +12,54 @@ const linkClass =
 
 export default async function MembershipHomePage() {
   const d = await getPageData();
-  const tier = getTier(demoMember.tier);
-  const affordable = rewards.filter((r) => r.points <= demoMember.points).slice(-4);
+  const silver = getTier("silver");
 
   return (
     <div className="flex flex-col gap-14 md:gap-16">
-      <MemberStatusCard member={demoMember} />
+      <div className="flex flex-col gap-8">
+        <MemberPageTitle
+          eyebrow="Membership"
+          title="Keluarga Rumarasa"
+          description="Gratis untuk bergabung. Kumpulkan poin dari setiap kunjungan, naik tingkat, dan nikmati benefit eksklusif."
+        />
+        <JoinCallout whatsappNumber={d.site.whatsappNumber} />
+      </div>
 
-      <section>
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="font-serif text-2xl font-medium md:text-[32px]">
-            Benefit {tier.name} Anda
-          </h2>
-          <Link href="/membership/benefit" className={linkClass}>
-            Semua tingkat →
-          </Link>
-        </div>
-        <BenefitGrid benefits={tier.benefits.slice(0, 8)} />
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-5">
+        {tiers.map((tier) => (
+          <div key={tier.id} className="flex flex-col items-center gap-3 border border-line bg-cream-card p-6 text-center">
+            <TierBadge tier={tier.id} />
+            <h2 className="font-serif text-2xl font-medium">{tier.name}</h2>
+            <p className="text-sm text-cocoa">
+              {tier.threshold === 0
+                ? "Langsung saat bergabung"
+                : `Transaksi ${formatRupiah(tier.threshold)} per tahun`}
+            </p>
+            <p className="text-[13px] text-cocoa-muted">{tier.benefits.length} benefit</p>
+          </div>
+        ))}
       </section>
 
       <section>
         <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="font-serif text-2xl font-medium md:text-[32px]">Bisa Anda tukar sekarang</h2>
+          <h2 className="font-serif text-2xl font-medium md:text-[32px]">Benefit member baru</h2>
+          <Link href="/membership/benefit" className={linkClass}>
+            Semua tingkat →
+          </Link>
+        </div>
+        <BenefitGrid benefits={silver.benefits} />
+      </section>
+
+      <section>
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <h2 className="font-serif text-2xl font-medium md:text-[32px]">Tukar poin Anda</h2>
           <Link href="/membership/rewards" className={linkClass}>
             Lihat rewards →
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-          {affordable.map((reward) => (
-            <RewardCard key={reward.id} reward={reward} balance={demoMember.points} whatsappNumber={d.site.whatsappNumber} />
+          {rewards.slice(0, 4).map((reward) => (
+            <RewardCard key={reward.id} reward={reward} whatsappNumber={d.site.whatsappNumber} />
           ))}
         </div>
       </section>

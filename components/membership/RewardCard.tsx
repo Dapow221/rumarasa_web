@@ -3,13 +3,11 @@ import { waLink } from "@/lib/whatsapp";
 
 interface RewardCardProps {
   reward: Reward;
-  balance: number;
   whatsappNumber: string;
 }
 
-/** Redemption goes through WhatsApp until there is a member backend to debit points. */
-export function RewardCard({ reward, balance, whatsappNumber }: RewardCardProps) {
-  const short = reward.points - balance;
+/** Staff check the member's balance and confirm redemption over WhatsApp until members can log in. */
+export function RewardCard({ reward, whatsappNumber }: RewardCardProps) {
   const redeemLink = waLink(
     whatsappNumber,
     `Halo Rumarasa, saya ingin menukar ${formatPoints(reward.points)} poin untuk: ${reward.title}.`,
@@ -28,20 +26,14 @@ export function RewardCard({ reward, balance, whatsappNumber }: RewardCardProps)
           </span>{" "}
           poin
         </p>
-        {short > 0 ? (
-          <p className="rounded-full border border-line py-2.5 text-center text-[12px] tracking-[1.5px] text-cocoa-muted uppercase">
-            Kurang {formatPoints(short)} poin
-          </p>
-        ) : (
-          <a
-            href={redeemLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-espresso py-2.5 text-center text-[12px] tracking-[1.5px] text-ivory-soft uppercase transition-colors hover:bg-copper hover:text-ivory"
-          >
-            Tukar Poin
-          </a>
-        )}
+        <a
+          href={redeemLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-espresso py-2.5 text-center text-[12px] tracking-[1.5px] text-ivory-soft uppercase transition-colors hover:bg-copper hover:text-ivory"
+        >
+          Tukar Poin
+        </a>
       </div>
     </article>
   );

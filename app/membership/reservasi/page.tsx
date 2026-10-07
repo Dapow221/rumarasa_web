@@ -1,24 +1,18 @@
 import type { Metadata } from "next";
 import { MemberPageTitle } from "@/components/membership/MemberPageTitle";
-import { ReservationList } from "@/components/membership/ReservationList";
 import { ReservationDialog } from "@/components/sections/ReservationDialog";
-import { demoMember } from "@/lib/membership";
 import { getPageData } from "@/lib/api";
 
-export const metadata: Metadata = { title: "Reservasi Saya" };
+export const metadata: Metadata = { title: "Reservasi" };
 
-const PROTOTYPE_TODAY = "2026-09-22";
-
-export default async function MyReservationPage() {
+export default async function ReservationPage() {
   const d = await getPageData();
-  const upcoming = demoMember.reservations.filter((r) => r.date >= PROTOTYPE_TODAY);
-  const past = demoMember.reservations.filter((r) => r.date < PROTOTYPE_TODAY);
 
   return (
     <div className="mx-auto max-w-[860px]">
       <MemberPageTitle
         eyebrow="Reservasi"
-        title="Reservasi Saya"
+        title="Reservasi Meja"
         description="Member Gold ke atas mendapat prioritas meja. Balasan dalam hitungan menit selama jam operasional."
       />
       <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
@@ -34,15 +28,6 @@ export default async function MyReservationPage() {
           Telepon Kami
         </a>
       </div>
-
-      <section className="mt-14">
-        <h2 className="mb-5 font-serif text-2xl font-medium md:text-[30px]">Akan Datang</h2>
-        <ReservationList items={upcoming} />
-      </section>
-      <section className="mt-12">
-        <h2 className="mb-5 font-serif text-2xl font-medium md:text-[30px]">Riwayat</h2>
-        <ReservationList items={past} />
-      </section>
     </div>
   );
 }

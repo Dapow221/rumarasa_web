@@ -1,7 +1,6 @@
 /**
- * Prototype data for the /membership area. Tier thresholds, benefits, rewards
- * and the signed-in member are placeholders until the program is finalised
- * and there is a member backend to read them from.
+ * Program catalog for the /membership area: tiers, benefits and rewards.
+ * Member records live in the API; there is no member login yet.
  */
 
 export type TierId = "silver" | "gold" | "platinum";
@@ -97,42 +96,6 @@ export const rewards: Reward[] = [
   { id: "kelas", title: "Kelas Masak Bersama Chef", category: "Pengalaman", points: 2500 },
 ];
 
-export interface MemberReservation {
-  id: string;
-  date: string;
-  time: string;
-  guests: number;
-  area: string;
-  status: "Terkonfirmasi" | "Menunggu" | "Selesai" | "Dibatalkan";
-  note?: string;
-}
-
-export interface Member {
-  name: string;
-  memberId: string;
-  tier: TierId;
-  points: number;
-  /** Spend this calendar year, in rupiah. */
-  yearSpend: number;
-  joinedAt: string;
-  reservations: MemberReservation[];
-}
-
-export const demoMember: Member = {
-  name: "Sekar Ayu",
-  memberId: "RN-2026-0142",
-  tier: "gold",
-  points: 1240,
-  yearSpend: 4_200_000,
-  joinedAt: "Maret 2026",
-  reservations: [
-    { id: "r1", date: "2026-10-04", time: "19:00", guests: 6, area: "Ruang Privat", status: "Terkonfirmasi", note: "Perayaan ulang tahun" },
-    { id: "r2", date: "2026-10-18", time: "12:30", guests: 2, area: "Area Indoor", status: "Menunggu" },
-    { id: "r3", date: "2026-09-06", time: "18:30", guests: 4, area: "Area Outdoor", status: "Selesai" },
-    { id: "r4", date: "2026-08-15", time: "19:30", guests: 3, area: "Area Indoor", status: "Dibatalkan" },
-  ],
-};
-
 export function formatRupiah(value: number): string {
   return `Rp ${value.toLocaleString("id-ID")}`;
 }
@@ -145,5 +108,5 @@ export const memberNavLinks = [
   { href: "/membership", label: "Beranda" },
   { href: "/membership/rewards", label: "Rewards" },
   { href: "/membership/benefit", label: "Benefit" },
-  { href: "/membership/reservasi", label: "Reservasi Saya" },
+  { href: "/membership/reservasi", label: "Reservasi" },
 ] as const;
