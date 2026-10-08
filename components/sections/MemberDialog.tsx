@@ -2,36 +2,27 @@
 
 import { useState, type FormEvent } from "react";
 import { Modal } from "@/components/ui/Modal";
-import {
-  CheckboxField,
-  Honeypot,
-  SubmitButton,
-  TextAreaField,
-  TextField,
-  WhatsAppButton,
-} from "@/components/ui/Field";
+import { CheckboxField, Honeypot, SubmitButton, TextAreaField, TextField } from "@/components/ui/Field";
 import { TierPicker } from "@/components/membership/TierPicker";
-import { getTier, type TierId } from "@/lib/membership";
+import type { TierId } from "@/lib/membership";
 import { submitForm, type SubmitResult } from "@/lib/submit";
-import { formatDate, formatMessage, waLink } from "@/lib/whatsapp";
 
 interface MemberDialogProps {
-  whatsappNumber: string;
   label: string;
   /** Styling for the trigger, so each caller matches its own section. */
   triggerClassName: string;
 }
 
 /**
- * Membership signup form in a modal. The signup is saved to the API (as a
- * pending member for the admin to approve); WhatsApp stays available as a
- * follow-up, and as the fallback whenever the API can't take the submission.
+ * Membership signup form in a modal. The signup is saved to the API as a
+ * pending member for the admin to approve, and the API emails the applicant
+ * a confirmation.
  */
-export function MemberDialog({ whatsappNumber, label, triggerClassName }: MemberDialogProps) {
+export function MemberDialog({ label, triggerClassName }: MemberDialogProps) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
-  const [waHref, setWaHref] = useState("");
+  const [email, setEmail] = useState("");
 
   const close = () => {
     setOpen(false);
@@ -44,19 +35,7 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
     const get = (key: string) => String(f.get(key) ?? "");
     const tier = (get("tier") || "silver") as TierId;
 
-    setWaHref(
-      waLink(
-        whatsappNumber,
-        formatMessage("Pendaftaran Member — Keluarga Rumarasa", [
-          ["Tier", getTier(tier).name],
-          ["Nama Lengkap", get("nama")],
-          ["Email", get("email")],
-          ["Nomor Telepon", get("telepon")],
-          ["Tanggal Lahir", formatDate(get("lahir"))],
-          ["Alamat Lengkap", get("alamat")],
-        ]),
-      ),
-    );
+    setEmail(get("email"));
 
     setBusy(true);
     setResult(
@@ -98,10 +77,17 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
         {result?.ok ? (
           <div className="flex flex-col gap-5">
             <p className="text-[15px] leading-relaxed font-light text-cocoa">
-              Terima kasih! Pendaftaran Anda sudah kami terima dan sedang diverifikasi. Nomor member
-              Anda akan dikirimkan setelah disetujui.
+              Terima kasih! Pendaftaran Anda sudah kami terima dan sedang diverifikasi. Konfirmasi telah
+              dikirim ke <strong className="font-medium text-espresso">{email}</strong>, dan nomor serta
+              kartu member Anda akan dikirim ke email yang sama setelah disetujui.
             </p>
-            <WhatsAppButton href={waHref}>Hubungi Kami via WhatsApp</WhatsAppButton>
+            <button
+              type="button"
+              onClick={close}
+              className="w-full cursor-pointer rounded-full bg-copper px-8 py-3.5 text-sm tracking-[2px] text-ivory uppercase transition-colors hover:bg-copper-light"
+            >
+              Tutup
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="relative flex flex-col gap-4">
@@ -148,9 +134,6 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
             </CheckboxField>
             {result && !result.ok && <p className="text-sm text-red-700">{result.message}</p>}
             <SubmitButton disabled={busy}>{busy ? "Mengirim…" : "Daftar Sekarang"}</SubmitButton>
-            {result && !result.ok && result.retryable && (
-              <WhatsAppButton href={waHref}>Daftar via WhatsApp</WhatsAppButton>
-            )}
           </form>
         )}
       </Modal>

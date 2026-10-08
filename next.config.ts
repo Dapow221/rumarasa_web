@@ -5,6 +5,10 @@ const apiUrl = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The card image route reads these with fs at request time.
+  outputFileTracingIncludes: {
+    "/kartu/[token]/image": ["./assets/fonts/**"],
+  },
   turbopack: {
     root: __dirname,
   },

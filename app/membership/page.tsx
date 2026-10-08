@@ -22,7 +22,7 @@ export default async function MembershipHomePage() {
           title="Keluarga Rumarasa"
           description="Gratis untuk bergabung. Kumpulkan poin dari setiap kunjungan, naik tingkat, dan nikmati benefit eksklusif."
         />
-        <JoinCallout whatsappNumber={d.site.whatsappNumber} />
+        <JoinCallout />
       </div>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-5">

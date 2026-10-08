@@ -197,7 +197,8 @@ export default function AdminMembersPage() {
               onUpdate={(patch, done) => void update(m, patch, done)}
               onDelete={() => void remove(m)}
               card={{
-                onCreate: () => void cardAction(m, "POST", "", "Kartu dibuat ✓ — kirim via WA"),
+                onCreate: () => void cardAction(m, "POST", "", "Kartu dibuat ✓"),
+                onEmail: () => void cardAction(m, "POST", "/email", `Kartu terkirim ke ${m.email} ✓`),
                 onSend: () => sendCard(m),
                 onCopy: () => void copyCard(m),
                 onOpen: () => window.open(memberCardUrl(m.card_token!), "_blank", "noopener"),

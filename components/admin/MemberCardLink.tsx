@@ -4,6 +4,7 @@ import { actionBtn, formatTimestamp, primaryActionBtn } from "./AdminShell";
 
 export interface MemberCardActions {
   onCreate: () => void;
+  onEmail: () => void;
   onSend: () => void;
   onCopy: () => void;
   onOpen: () => void;
@@ -19,17 +20,26 @@ interface MemberCardLinkProps {
 
 /** Card-link controls for an active member, mirroring the voucher link flow. */
 export function MemberCardLink({ token, sentAt, busy, actions: a }: MemberCardLinkProps) {
+  const emailButton = (
+    <button type="button" disabled={busy} onClick={a.onEmail} className={primaryActionBtn}>
+      Kirim Kartu via Email
+    </button>
+  );
   if (!token) {
     return (
-      <button type="button" disabled={busy} onClick={a.onCreate} className={actionBtn}>
-        Buat Kartu
-      </button>
+      <>
+        {emailButton}
+        <button type="button" disabled={busy} onClick={a.onCreate} className={actionBtn}>
+          Buat Kartu
+        </button>
+      </>
     );
   }
   return (
     <>
-      <button type="button" disabled={busy} onClick={a.onSend} className={primaryActionBtn}>
-        Kirim Kartu via WA
+      {emailButton}
+      <button type="button" disabled={busy} onClick={a.onSend} className={actionBtn}>
+        Kirim via WA
       </button>
       <button type="button" disabled={busy} onClick={a.onOpen} className={actionBtn}>
         Lihat Kartu

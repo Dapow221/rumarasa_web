@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { MembershipCard } from "@/components/membership/MembershipCard";
 import { fetchMemberCard, type MemberCardData } from "@/lib/memberCard";
-import { renderMemberCardPng } from "@/lib/memberCardImage";
 
 export default function MemberCardPage() {
   const { token } = useParams<{ token: string }>();
@@ -34,12 +33,16 @@ export default function MemberCardPage() {
   const save = async () => {
     setSaving(true);
     try {
-      const url = URL.createObjectURL(await renderMemberCardPng(card));
+      const res = await fetch(`/kartu/${token}/image`);
+      if (!res.ok) throw new Error();
+      const url = URL.createObjectURL(await res.blob());
       const a = document.createElement("a");
       a.href = url;
       a.download = `kartu-member-${card.member_no}.png`;
       a.click();
       URL.revokeObjectURL(url);
+    } catch {
+      window.location.href = `/kartu/${token}/image`;
     } finally {
       setSaving(false);
     }
