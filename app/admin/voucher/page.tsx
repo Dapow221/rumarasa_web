@@ -13,6 +13,7 @@ import {
 } from "@/components/admin/VoucherCard";
 import { Modal } from "@/components/ui/Modal";
 import { linkVoucherMessage, memberVoucherMessage, rupiah, voucherLinkUrl } from "@/lib/voucher";
+import { apiError } from "@/lib/apiError";
 
 const filters: { value: VoucherFilter | ""; label: string }[] = [
   { value: "active", label: voucherFilterLabels.active },
@@ -25,15 +26,6 @@ const filters: { value: VoucherFilter | ""; label: string }[] = [
 const inputCls = "w-full border border-line bg-cream px-3.5 py-2 text-sm outline-none focus:border-copper";
 
 /** Reads `{ error: { message } }` from a failed API response. */
-async function apiError(res: Response, fallback: string): Promise<string> {
-  try {
-    const json = (await res.json()) as { error?: { message?: string } };
-    return json.error?.message ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
 export default function AdminVouchersPage() {
   const { isAdmin, apiFetch, notify } = useAdmin();
   const [status, setStatus] = useState<VoucherFilter | "">("active");

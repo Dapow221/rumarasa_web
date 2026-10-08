@@ -10,6 +10,8 @@ import {
   TextField,
   WhatsAppButton,
 } from "@/components/ui/Field";
+import { TierPicker } from "@/components/membership/TierPicker";
+import { getTier, type TierId } from "@/lib/membership";
 import { submitForm, type SubmitResult } from "@/lib/submit";
 import { formatDate, formatMessage, waLink } from "@/lib/whatsapp";
 
@@ -40,11 +42,13 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const get = (key: string) => String(f.get(key) ?? "");
+    const tier = (get("tier") || "silver") as TierId;
 
     setWaHref(
       waLink(
         whatsappNumber,
         formatMessage("Pendaftaran Member — Keluarga Rumarasa", [
+          ["Tier", getTier(tier).name],
           ["Nama Lengkap", get("nama")],
           ["Email", get("email")],
           ["Nomor Telepon", get("telepon")],
@@ -64,6 +68,7 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
           phone: get("telepon"),
           birthday: get("lahir"),
           address: get("alamat"),
+          tier,
           consent: f.get("persetujuan") === "on",
           website: get("website"),
         },
@@ -101,6 +106,7 @@ export function MemberDialog({ whatsappNumber, label, triggerClassName }: Member
         ) : (
           <form onSubmit={handleSubmit} className="relative flex flex-col gap-4">
             <Honeypot />
+            <TierPicker name="tier" />
             <TextField
               label="Nama Lengkap"
               name="nama"

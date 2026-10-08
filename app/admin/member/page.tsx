@@ -10,6 +10,8 @@ import {
   type Member,
   type MemberStatus,
 } from "@/components/admin/MemberCard";
+import { memberCardMessage, memberCardUrl } from "@/lib/memberCard";
+import { apiError } from "@/lib/apiError";
 
 const filters: { value: MemberStatus | ""; label: string }[] = [
   { value: "pending", label: "Menunggu" },
@@ -99,6 +101,46 @@ export default function AdminMembersPage() {
     }
   };
 
+  /** Runs one card-link action for a member, then reloads the list. */
+  const cardAction = async (m: Member, method: "POST" | "DELETE", path: string, done: string) => {
+    setBusyId(m.id);
+    try {
+      const res = await apiFetch(`/api/v1/admin/members/${m.id}/card${path}`, { method });
+      if (!res.ok) {
+        notify(await apiError(res, "Gagal menyimpan"));
+        return;
+      }
+      notify(done);
+      await load();
+    } catch {
+      notify("Gagal menyimpan");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const sendCard = (m: Member) => {
+    const text = memberCardMessage(m.name, m.member_no!, memberCardUrl(m.card_token!));
+    // Open WhatsApp inside the click handler so the popup blocker allows it.
+    window.open(`https://wa.me/${m.phone}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    void cardAction(m, "POST", "/sent", "Ditandai terkirim ✓");
+  };
+
+  const copyCard = async (m: Member) => {
+    const url = memberCardUrl(m.card_token!);
+    try {
+      await navigator.clipboard.writeText(url);
+      notify("Link disalin ✓");
+    } catch {
+      window.prompt("Salin link ini:", url);
+    }
+  };
+
+  const removeCard = (m: Member) => {
+    if (!window.confirm(`Hapus link kartu ${m.name}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`)) return;
+    void cardAction(m, "DELETE", "", "Link kartu dihapus");
+  };
+
   const exportCsv = async () => {
     try {
       const res = await apiFetch(`/api/v1/admin/members/export?${params()}`);
@@ -154,6 +196,13 @@ export default function AdminMembersPage() {
               busy={busyId === m.id}
               onUpdate={(patch, done) => void update(m, patch, done)}
               onDelete={() => void remove(m)}
+              card={{
+                onCreate: () => void cardAction(m, "POST", "", "Kartu dibuat ✓ — kirim via WA"),
+                onSend: () => sendCard(m),
+                onCopy: () => void copyCard(m),
+                onOpen: () => window.open(memberCardUrl(m.card_token!), "_blank", "noopener"),
+                onRemove: () => removeCard(m),
+              }}
             />
           ))
         )}

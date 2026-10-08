@@ -8,6 +8,7 @@ import {
   primaryActionBtn,
   waChat,
 } from "./AdminShell";
+import { MemberCardLink, type MemberCardActions } from "./MemberCardLink";
 
 export type MemberStatus = "pending" | "active" | "rejected" | "suspended";
 export type MemberTier = "silver" | "gold" | "platinum";
@@ -22,6 +23,8 @@ export interface Member {
   address: string;
   status: MemberStatus;
   tier: MemberTier;
+  card_token: string | null;
+  card_sent_at: string | null;
   created_at: string;
 }
 
@@ -39,9 +42,10 @@ interface MemberCardProps {
   busy: boolean;
   onUpdate: (patch: MemberPatch, doneMessage: string) => void;
   onDelete: () => void;
+  card: MemberCardActions;
 }
 
-export function MemberCard({ member: m, busy, onUpdate, onDelete }: MemberCardProps) {
+export function MemberCard({ member: m, busy, onUpdate, onDelete, card }: MemberCardProps) {
   return (
     <article className="border border-line bg-cream-card p-4 md:p-5">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -114,7 +118,7 @@ export function MemberCard({ member: m, busy, onUpdate, onDelete }: MemberCardPr
           </button>
         )}
         <label className="flex items-center gap-2 text-xs tracking-[1px] text-cocoa uppercase">
-          Tier
+          {m.status === "pending" ? "Tier diminta" : "Tier"}
           <select
             value={m.tier}
             disabled={busy}
@@ -126,6 +130,9 @@ export function MemberCard({ member: m, busy, onUpdate, onDelete }: MemberCardPr
             <option value="platinum">Platinum</option>
           </select>
         </label>
+        {m.status === "active" && (
+          <MemberCardLink token={m.card_token} sentAt={m.card_sent_at} busy={busy} actions={card} />
+        )}
         <button
           type="button"
           disabled={busy}

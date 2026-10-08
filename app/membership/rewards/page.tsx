@@ -14,7 +14,7 @@ export default async function RewardsPage() {
       <MemberPageTitle
         eyebrow="Tukar Poin"
         title="Rewards"
-        description="Setiap Rp 10.000 transaksi memberi Anda 1 poin. Tukarkan dengan hidangan, voucher, atau pengalaman bersama kami."
+        description="Kumpulkan poin dari setiap kunjungan dan tukarkan dengan hidangan, voucher, atau pengalaman bersama kami."
       />
       <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         {rewards.map((reward) => (
@@ -26,7 +26,7 @@ export default async function RewardsPage() {
         ))}
       </div>
       <p className="mt-8 text-center text-[13px] font-light text-cocoa-muted">
-        Poin berlaku 12 bulan sejak transaksi terakhir. Tanyakan saldo poin dan konfirmasi penukaran ke tim kami via WhatsApp.
+        Tanyakan saldo poin dan konfirmasi penukaran ke tim kami via WhatsApp.
       </p>
     </>
   );

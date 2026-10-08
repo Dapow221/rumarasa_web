@@ -9,7 +9,7 @@ export function BenefitGrid({ benefits }: { benefits: Benefit[] }) {
           key={benefit.title}
           className="flex min-h-[92px] items-center gap-4 border border-line bg-cream-card px-5 py-4 transition-colors hover:border-tan"
         >
-          <BenefitIcon name={benefit.icon} badge={benefit.badge} />
+          <BenefitIcon name={benefit.icon} />
           <span className="font-serif text-lg leading-snug font-semibold text-espresso">
             {benefit.title}
           </span>

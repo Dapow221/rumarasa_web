@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatRupiah, tiers, type TierId } from "@/lib/membership";
+import { tiers, type TierId } from "@/lib/membership";
 import { BenefitGrid } from "./BenefitGrid";
 import { TierBadge } from "./TierBadge";
 
@@ -42,11 +42,6 @@ export function TierBenefits({ initialTier = "silver" }: { initialTier?: TierId 
         <div className="flex flex-col items-center gap-2 text-center">
           <TierBadge tier={tier.id} />
           <h2 className="mt-1 font-serif text-3xl font-medium">{tier.name}</h2>
-          <p className="text-sm font-light text-cocoa">
-            {tier.threshold === 0
-              ? "Otomatis saat Anda mendaftar"
-              : `Belanja ${formatRupiah(tier.threshold)} dalam satu tahun kalender`}
-          </p>
         </div>
         <div className="mt-10">
           <BenefitGrid benefits={tier.benefits} />

@@ -85,17 +85,13 @@ const paths: Record<BenefitIconName, ReactNode> = {
 
 interface BenefitIconProps {
   name: BenefitIconName;
-  badge?: string;
 }
 
 /** Line icon in a soft circle, echoing the benefit tiles of the member program. */
-export function BenefitIcon({ name, badge }: BenefitIconProps) {
+export function BenefitIcon({ name }: BenefitIconProps) {
   return (
     <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-sand text-copper">
-      {badge ? (
-        <span className="font-serif text-[15px] font-semibold">{badge}</span>
-      ) : (
-        <svg
+      <svg
           width={22}
           height={22}
           viewBox="0 0 24 24"
@@ -108,7 +104,6 @@ export function BenefitIcon({ name, badge }: BenefitIconProps) {
         >
           {paths[name]}
         </svg>
-      )}
     </span>
   );
 }

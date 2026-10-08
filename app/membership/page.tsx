@@ -4,7 +4,7 @@ import { TierBadge } from "@/components/membership/TierBadge";
 import { BenefitGrid } from "@/components/membership/BenefitGrid";
 import { RewardCard } from "@/components/membership/RewardCard";
 import { JoinCallout } from "@/components/membership/JoinCallout";
-import { formatRupiah, getTier, rewards, tiers } from "@/lib/membership";
+import { getTier, rewards, tiers } from "@/lib/membership";
 import { getPageData } from "@/lib/api";
 
 const linkClass =
@@ -30,11 +30,6 @@ export default async function MembershipHomePage() {
           <div key={tier.id} className="flex flex-col items-center gap-3 border border-line bg-cream-card p-6 text-center">
             <TierBadge tier={tier.id} />
             <h2 className="font-serif text-2xl font-medium">{tier.name}</h2>
-            <p className="text-sm text-cocoa">
-              {tier.threshold === 0
-                ? "Langsung saat bergabung"
-                : `Transaksi ${formatRupiah(tier.threshold)} per tahun`}
-            </p>
             <p className="text-[13px] text-cocoa-muted">{tier.benefits.length} benefit</p>
           </div>
         ))}
