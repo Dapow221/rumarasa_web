@@ -26,7 +26,7 @@ function jakartaToday(): string {
 }
 
 export default function AdminReservationsPage() {
-  const { isAdmin, apiFetch, notify } = useAdmin();
+  const { isAdmin, apiFetch, notify, confirm } = useAdmin();
   const [period, setPeriod] = useState<Period>("upcoming");
   const [status, setStatus] = useState<ReservationStatus | "">("");
   const [page, setPage] = useState(1);
@@ -82,8 +82,8 @@ export default function AdminReservationsPage() {
       `${reservationStatusLabels[to]} ✓`,
     );
 
-  const remove = (r: Reservation) => {
-    if (!window.confirm(`Hapus reservasi atas nama ${r.name}?`)) return;
+  const remove = async (r: Reservation) => {
+    if (!(await confirm({ message: `Hapus reservasi atas nama ${r.name}?`, confirmLabel: "Hapus", danger: true }))) return;
     void run(r, { method: "DELETE" }, "Dihapus ✓");
   };
 
@@ -130,7 +130,7 @@ export default function AdminReservationsPage() {
               reservation={r}
               busy={busyId === r.id}
               onStatus={(to) => void setReservationStatus(r, to)}
-              onDelete={() => remove(r)}
+              onDelete={() => void remove(r)}
             />
           ))
         )}

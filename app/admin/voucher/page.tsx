@@ -27,7 +27,7 @@ const inputCls = "w-full border border-line bg-cream px-3.5 py-2 text-sm outline
 
 /** Reads `{ error: { message } }` from a failed API response. */
 export default function AdminVouchersPage() {
-  const { isAdmin, apiFetch, notify } = useAdmin();
+  const { isAdmin, apiFetch, notify, confirm } = useAdmin();
   const [status, setStatus] = useState<VoucherFilter | "">("active");
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
@@ -103,27 +103,43 @@ export default function AdminVouchersPage() {
       await navigator.clipboard.writeText(voucherLinkUrl(v.link_token!));
       notify("Link disalin ✓");
     } catch {
-      window.prompt("Salin link ini:", voucherLinkUrl(v.link_token!));
+      notify("Gagal menyalin link — coba lagi");
     }
   };
 
-  const removeLink = (v: Voucher) => {
-    if (!window.confirm(`Hapus link voucher ${v.code}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`)) return;
+  const removeLink = async (v: Voucher) => {
+    const ok = await confirm({
+      message: `Hapus link voucher ${v.code}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`,
+      confirmLabel: "Hapus Link",
+      danger: true,
+    });
+    if (!ok) return;
     void act(v, "/link", { method: "DELETE" }, "Link dihapus");
   };
 
-  const redeem = (v: Voucher) => {
-    if (!window.confirm(`Pakai voucher ${v.code} senilai ${rupiah(v.amount)} untuk ${v.member!.name}?`)) return;
+  const redeem = async (v: Voucher) => {
+    const ok = await confirm({
+      message: `Pakai voucher ${v.code} senilai ${rupiah(v.amount)} untuk ${v.member!.name}?`,
+      confirmLabel: "Tandai Terpakai",
+    });
+    if (!ok) return;
     void act(v, "/redeem", { method: "POST" }, "Voucher terpakai ✓");
   };
 
-  const setVoucherStatus = (v: Voucher, s: VoucherStatus) => {
-    if (s === "void" && !window.confirm(`Batalkan voucher ${v.code}? Member tidak bisa memakainya lagi.`)) return;
+  const setVoucherStatus = async (v: Voucher, s: VoucherStatus) => {
+    if (s === "void") {
+      const ok = await confirm({
+        message: `Batalkan voucher ${v.code}? Member tidak bisa memakainya lagi.`,
+        confirmLabel: "Batalkan Voucher",
+        danger: true,
+      });
+      if (!ok) return;
+    }
     void patch(v, { status: s }, s === "void" ? "Voucher dibatalkan" : "Voucher diaktifkan ✓");
   };
 
-  const remove = (v: Voucher) => {
-    if (!window.confirm(`Hapus voucher ${v.code}?`)) return;
+  const remove = async (v: Voucher) => {
+    if (!(await confirm({ message: `Hapus voucher ${v.code}?`, confirmLabel: "Hapus", danger: true }))) return;
     void act(v, "", { method: "DELETE" }, "Dihapus ✓");
   };
 
@@ -172,13 +188,13 @@ export default function AdminVouchersPage() {
               busy={busyId === v.id}
               onAssign={() => setAssigning(v)}
               onSend={() => send(v)}
-              onRedeem={() => redeem(v)}
+              onRedeem={() => void redeem(v)}
               onCreateLink={() => void act(v, "/link", { method: "POST" }, "Link dibuat ✓ — salin atau kirim via WA")}
               onCopyLink={() => void copyLink(v)}
-              onRemoveLink={() => removeLink(v)}
-              onSetStatus={(s) => setVoucherStatus(v, s)}
+              onRemoveLink={() => void removeLink(v)}
+              onSetStatus={(s) => void setVoucherStatus(v, s)}
               onSetExpiry={(date) => patch(v, { expires_at: date }, "Masa berlaku disimpan ✓")}
-              onDelete={() => remove(v)}
+              onDelete={() => void remove(v)}
             />
           ))
         )}

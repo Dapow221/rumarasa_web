@@ -13,12 +13,17 @@ interface VoucherRedeemFormProps {
 export function VoucherRedeemForm({ token, onRedeemed }: VoucherRedeemFormProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Redeeming is single-use, so the first press only asks for confirmation.
+  const [confirming, setConfirming] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const get = (k: string) => String(f.get(k) ?? "");
-    if (!window.confirm("Pakai voucher sekarang? Voucher hanya bisa dipakai satu kali.")) return;
+    if (!confirming) {
+      setConfirming(true);
+      return;
+    }
 
     setBusy(true);
     setError(null);
@@ -30,6 +35,7 @@ export function VoucherRedeemForm({ token, onRedeemed }: VoucherRedeemFormProps)
       website: get("website"),
     });
     setBusy(false);
+    setConfirming(false);
     if (result.ok) onRedeemed(result.voucher);
     else setError(result.message);
   };
@@ -55,7 +61,23 @@ export function VoucherRedeemForm({ token, onRedeemed }: VoucherRedeemFormProps)
         Saya setuju data di atas disimpan dan digunakan oleh Rumarasa Nusantara untuk keperluan voucher ini.
       </CheckboxField>
       {error && <p className="text-sm text-red-700">{error}</p>}
-      <SubmitButton disabled={busy}>{busy ? "Memproses…" : "Pakai Voucher Sekarang"}</SubmitButton>
+      {confirming && (
+        <p role="alert" className="rounded-lg border border-copper/40 bg-sand px-4 py-3 text-center text-sm text-espresso">
+          Pakai voucher sekarang? Voucher hanya bisa dipakai <strong className="font-medium">satu kali</strong>.
+        </p>
+      )}
+      <SubmitButton disabled={busy}>
+        {busy ? "Memproses…" : confirming ? "Ya, Pakai Sekarang" : "Pakai Voucher Sekarang"}
+      </SubmitButton>
+      {confirming && !busy && (
+        <button
+          type="button"
+          onClick={() => setConfirming(false)}
+          className="cursor-pointer text-center text-xs tracking-[1.5px] text-cocoa uppercase hover:text-espresso"
+        >
+          Batal
+        </button>
+      )}
       <p className="text-center text-xs font-light text-cocoa-muted">
         Pakai saat Anda sudah di Rumarasa — tunjukkan layar konfirmasi ke kasir.
       </p>

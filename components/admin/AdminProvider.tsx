@@ -11,6 +11,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useConfirmToast, type ConfirmOptions } from "./ConfirmToast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
@@ -30,6 +31,8 @@ interface AdminContextValue {
   deleteItem: (collection: string, id: string) => Promise<boolean>;
   uploadImage: (file: File) => Promise<string | null>;
   notify: (message: string) => void;
+  /** Asks in a toast instead of window.confirm; true when the admin goes ahead. */
+  confirm: (opts: ConfirmOptions) => Promise<boolean>;
 }
 
 const AdminContext = createContext<AdminContextValue | null>(null);
@@ -49,6 +52,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { confirm, element: confirmToast } = useConfirmToast();
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -151,6 +156,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     editMode,
     setEditMode,
     notify: showToast,
+    confirm,
     login: async (username, password) => {
       try {
         const res = await fetch(`${API_URL}/api/v1/auth/login`, {
@@ -244,6 +250,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     <AdminContext.Provider value={value}>
       {children}
       {isAdmin && <AdminBar />}
+      {confirmToast}
       {toast && (
         <div className="fixed bottom-24 left-5 z-[70] rounded-full bg-espresso px-5 py-2.5 text-sm text-ivory shadow-lg">
           {toast}

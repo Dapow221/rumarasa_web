@@ -22,7 +22,7 @@ const filters: { value: MemberStatus | ""; label: string }[] = [
 ];
 
 export default function AdminMembersPage() {
-  const { isAdmin, apiFetch, notify } = useAdmin();
+  const { isAdmin, apiFetch, notify, confirm } = useAdmin();
   const [status, setStatus] = useState<MemberStatus | "">("pending");
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
@@ -86,7 +86,7 @@ export default function AdminMembersPage() {
   };
 
   const remove = async (m: Member) => {
-    if (!window.confirm(`Hapus data ${m.name} secara permanen?`)) return;
+    if (!(await confirm({ message: `Hapus data ${m.name} secara permanen?`, confirmLabel: "Hapus", danger: true }))) return;
     setBusyId(m.id);
     try {
       const res = await apiFetch(`/api/v1/admin/members/${m.id}`, { method: "DELETE" });
@@ -132,12 +132,17 @@ export default function AdminMembersPage() {
       await navigator.clipboard.writeText(url);
       notify("Link disalin ✓");
     } catch {
-      window.prompt("Salin link ini:", url);
+      notify("Gagal menyalin — buka “Lihat Kartu” lalu salin dari alamat browser");
     }
   };
 
-  const removeCard = (m: Member) => {
-    if (!window.confirm(`Hapus link kartu ${m.name}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`)) return;
+  const removeCard = async (m: Member) => {
+    const ok = await confirm({
+      message: `Hapus link kartu ${m.name}? Link yang sudah dibagikan tidak akan bisa dibuka lagi.`,
+      confirmLabel: "Hapus Link",
+      danger: true,
+    });
+    if (!ok) return;
     void cardAction(m, "DELETE", "", "Link kartu dihapus");
   };
 
@@ -202,7 +207,7 @@ export default function AdminMembersPage() {
                 onSend: () => sendCard(m),
                 onCopy: () => void copyCard(m),
                 onOpen: () => window.open(memberCardUrl(m.card_token!), "_blank", "noopener"),
-                onRemove: () => removeCard(m),
+                onRemove: () => void removeCard(m),
               }}
             />
           ))
